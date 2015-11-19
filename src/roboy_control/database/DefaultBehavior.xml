@@ -1,0 +1,11 @@
+<roboybehavior name="DefaultBehavior" behaviorid="1">
+    <motor motorid="1">
+    	<waypoint id="1" timestampt="10000">60</waypoint>
+    	<waypoint id="2" timestampt="10010">65</waypoint>
+    </motor>
+    <motor motorid="2">
+    	<waypoint id="1" timestampt="10001">80</waypoint>
+    	<waypoint id="2" timestampt="10002">81</waypoint>
+    	<waypoint id="3" timestampt="10003">82</waypoint>
+    </motor>
+</roboybehavior>
