@@ -5,35 +5,33 @@ RoboyBehaviorXmlParser::RoboyBehaviorXmlParser()
 
 }
 
-void RoboyBehaviorXmlParser::readRoboyBehavior( const RoboyBehaviorMetadata behaviorMetadata ) {
+void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * p_behavior ) {
 
-    QString path = DB_PATH + behaviorMetadata.m_sBehaviorName + ".xml";
+    QString path = DB_PATH + p_behavior->m_metadata.m_sBehaviorName + ".xml";
     QFile file( path );
 
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         LOG << "Failed to open file: " << path;
-        exit(0);
+        return;
     }
 
     LOG << "Open file successful: " << path;
 
     m_xmlReader.setDevice(&file);
 
-    RoboyBehavior behavior;
-
     LOG << "Start to parse RoboyBehavior ...";
 
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
-            readBehaviorHeader(&behavior);
+            readBehaviorHeader(p_behavior);
         } else if ( m_xmlReader.name() == "motor" ) {
-            readMotorData(&behavior);
+            readMotorData(p_behavior);
         } else {
             m_xmlReader.skipCurrentElement();
         }
     }
 
-    LOG << "Finished to read behavior: " << behaviorMetadata.m_sBehaviorName;
+    LOG << "Finished to read behavior: " << p_behavior->m_metadata.m_sBehaviorName;
 }
 
 bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehavior * p_behavior ) {

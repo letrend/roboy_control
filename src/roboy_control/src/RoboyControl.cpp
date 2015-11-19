@@ -8,15 +8,26 @@
 #include <QDebug>
 
 #include "model/RoboyBehaviorXmlParser.h"
+#include "model/XmlModelService.h"
 
 int main(int argc, char ** argv) {
 
+    RoboyBehavior behavior;
     RoboyBehaviorMetadata metadata;
     metadata.m_ulBehaviorId = 1;
     metadata.m_sBehaviorName = "DefaultBehavior";
 
+    behavior.m_metadata = metadata;
+
     RoboyBehaviorXmlParser parser;
-    parser.readRoboyBehavior( metadata );
+    parser.readRoboyBehavior( &behavior );
+
+    LOG << behavior.toString();
+
+    XmlModelService xmlModelService;
+    IModelService & modelService = xmlModelService;
+
+    modelService.getBehavior(metadata);
 
     return 0;
 }
