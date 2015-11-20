@@ -6,28 +6,41 @@
 
 #include <QFile>
 #include <QDebug>
+#include <QDateTime>
 
 #include "model/RoboyBehaviorXmlParser.h"
 #include "model/XmlModelService.h"
 
 int main(int argc, char ** argv) {
 
-    RoboyBehavior behavior;
-    RoboyBehaviorMetadata metadata;
-    metadata.m_ulBehaviorId = 1;
-    metadata.m_sBehaviorName = "DefaultBehavior";
-
-    behavior.m_metadata = metadata;
-
-    RoboyBehaviorXmlParser parser;
-    parser.readRoboyBehavior( &behavior );
-
-    LOG << behavior.toString();
-
     XmlModelService xmlModelService;
     IModelService & modelService = xmlModelService;
 
-    modelService.getBehavior(metadata);
+    RoboyBehavior newBehavior;
+    newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
+    newBehavior.m_metadata.m_ulBehaviorId = 2;
+    QList<RoboyWaypoint> wps;
+    RoboyWaypoint wp;
+    for (int i = 0; i < 5; i++) {
+        wps.clear();
+        for (int j = 0; j < 20; j++) {
+            wp.m_ulId = j;
+            wp.m_ulTimestamp = QDateTime::currentMSecsSinceEpoch();
+            wp.m_ulPosition =  j * i + (i + j);
+            wps.append(wp);
+        }
+        newBehavior.m_mapMotorWaypoints.insert(i, wps);
+    }
+
+    modelService.persistNewRoboyBehavior(newBehavior);
+
+    RoboyBehaviorMetadata metadata;
+    metadata.m_sBehaviorName = "GreetBehavior";
+    metadata.m_ulBehaviorId = 2;
+
+    RoboyBehavior behavior = modelService.getBehavior(metadata);
+
+    LOG << behavior.toString();
 
     return 0;
 }

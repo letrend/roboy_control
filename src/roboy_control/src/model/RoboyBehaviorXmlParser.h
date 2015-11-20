@@ -4,6 +4,7 @@
 #include "../DataTypes.h"
 
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #include <QFile>
 #include <QDebug>
 
@@ -15,14 +16,17 @@ class RoboyBehaviorXmlParser
 {
 private:
     QXmlStreamReader m_xmlReader;
+    QXmlStreamWriter  m_xmlWriter;
 
+    void writeMotorData( const RoboyBehavior * pBehavior );
     bool readBehaviorHeader( RoboyBehavior * p_behavior );
     bool readMotorData( RoboyBehavior * p_behavior );
 
 public:
     RoboyBehaviorXmlParser();
 
-    void readRoboyBehavior( RoboyBehavior * behaviorMetadata );
+    void persistRoboyBehavior( const RoboyBehavior * pBehavior );
+    void readRoboyBehavior( RoboyBehavior * pBehaviorMetadata );
 
 };
 

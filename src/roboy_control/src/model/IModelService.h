@@ -6,6 +6,7 @@
 class IModelService {
 
 public:
+    virtual void persistNewRoboyBehavior( const RoboyBehavior behavior ) = 0;
     virtual QList<RoboyBehavior> getBehaviorList() = 0;
     virtual RoboyBehavior getBehavior( const RoboyBehaviorMetadata metadata ) = 0;
 };

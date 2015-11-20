@@ -2,36 +2,88 @@
 
 RoboyBehaviorXmlParser::RoboyBehaviorXmlParser()
 {
-
+    LOG << "DATABASE PATH: " << DB_PATH;
 }
 
-void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * p_behavior ) {
+void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior * pBehavior ) {
+    const QString & name = pBehavior->m_metadata.m_sBehaviorName;
 
-    QString path = DB_PATH + p_behavior->m_metadata.m_sBehaviorName + ".xml";
-    QFile file( path );
+    LOG << "WRITE BEHAVIOR " << name << "TO DATABASE";
 
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG << "Failed to open file: " << path;
+    QString path = DB_PATH + pBehavior->m_metadata.m_sBehaviorName + ".xml";
+    QFile file (path);
+
+    if ( file.exists() ) {
+        LOG << " - WARNING behavior already exists -> Will replace it.";
+        file.remove();
+    }
+
+    if (!file.open(QFile::ReadWrite | QFile::Text)) {
+        LOG << " - ERROR - Failed to open file: " << path;
         return;
     }
 
-    LOG << "Open file successful: " << path;
+    LOG << " - INFO - Write file :" << name + ".xml";
+
+    m_xmlWriter.setDevice(&file);
+
+    m_xmlWriter.setAutoFormatting(true);
+    m_xmlWriter.writeStartDocument();
+    m_xmlWriter.writeStartElement("roboybehavior");
+    m_xmlWriter.writeAttribute("name", pBehavior->m_metadata.m_sBehaviorName);
+    m_xmlWriter.writeAttribute("behaviorid", QString::number(pBehavior->m_metadata.m_ulBehaviorId));
+
+    writeMotorData(pBehavior);
+
+    m_xmlWriter.writeEndElement();
+    m_xmlWriter.writeEndDocument();
+
+    LOG << " - INFO - Finished successfully";
+}
+
+void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior * pBehavior ) {
+    for (quint32 motor : pBehavior->m_mapMotorWaypoints.keys()) {
+        m_xmlWriter.writeStartElement("motor");
+        m_xmlWriter.writeAttribute("motorid", QString::number(motor));
+        for (RoboyWaypoint wp : pBehavior->m_mapMotorWaypoints.value(motor)) {
+            m_xmlWriter.writeStartElement("waypoint");
+            m_xmlWriter.writeAttribute("id", QString::number(wp.m_ulId));
+            m_xmlWriter.writeAttribute("timestamp", QString::number(wp.m_ulTimestamp));
+            m_xmlWriter.writeCharacters(QString::number(wp.m_ulPosition));
+            m_xmlWriter.writeEndElement();
+        }
+        m_xmlWriter.writeEndElement();
+    }
+}
+
+void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
+    QString & name = pBehavior->m_metadata.m_sBehaviorName;
+
+    LOG << "READ BEHAVIOR " << name;
+
+    QString path = DB_PATH + pBehavior->m_metadata.m_sBehaviorName + ".xml";
+    QFile file( path );
+
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        LOG << " - ERROR: Failed to open file: " << name + ".xml";
+        return;
+    }
 
     m_xmlReader.setDevice(&file);
 
-    LOG << "Start to parse RoboyBehavior ...";
+    LOG << " - INFO: Read file" << name + ".xml";
 
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
-            readBehaviorHeader(p_behavior);
+            readBehaviorHeader(pBehavior);
         } else if ( m_xmlReader.name() == "motor" ) {
-            readMotorData(p_behavior);
+            readMotorData(pBehavior);
         } else {
             m_xmlReader.skipCurrentElement();
         }
     }
 
-    LOG << "Finished to read behavior: " << p_behavior->m_metadata.m_sBehaviorName;
+    LOG << " - INFO: Finishd reading successfully";
 }
 
 bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehavior * p_behavior ) {
