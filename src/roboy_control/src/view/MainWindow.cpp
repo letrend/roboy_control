@@ -1,8 +1,14 @@
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-    QLabel * label = new QLabel("Hello World - Qt GUI in ROS");
-    setCentralWidget(label);
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
 }
