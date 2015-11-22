@@ -26,7 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## FIND QT
-find_package(Qt4 COMPONENTS QtCore REQUIRED)
+find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 
@@ -50,7 +50,7 @@ include_directories(
 
 qt4_wrap_cpp(moc ${HDRS})
 
-add_executable(roboy_control_node ${SRCS} ${HDRS})
+add_executable(roboy_control_node ${SRCS} ${HDRS} ${moc})
 
 set_property(TARGET roboy_control_node PROPERTY CXX_STANDARD 11)
 set_property(TARGET roboy_control_node APPEND_STRING PROPERTY COMPILE_FLAGS -Wall )

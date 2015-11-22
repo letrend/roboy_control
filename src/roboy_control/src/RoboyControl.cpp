@@ -4,14 +4,20 @@
 
 #include "ros/ros.h"
 
+#include <QApplication>
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
 
+#include "view/MainWindow.h"
 #include "model/RoboyBehaviorXmlParser.h"
 #include "model/XmlModelService.h"
 
 int main(int argc, char ** argv) {
+
+    QApplication app(argc, argv);
+    MainWindow window;
+    window.show();
 
     XmlModelService xmlModelService;
     IModelService & modelService = xmlModelService;
@@ -42,5 +48,5 @@ int main(int argc, char ** argv) {
 
     LOG << behavior.toString();
 
-    return 0;
+    return app.exec();
 }
