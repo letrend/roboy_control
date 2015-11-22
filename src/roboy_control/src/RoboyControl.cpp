@@ -48,5 +48,10 @@ int main(int argc, char ** argv) {
 
     LOG << behavior.toString();
 
+    QList <RoboyBehaviorMetadata> behaviorList = modelService.getBehaviorList();
+    for (RoboyBehaviorMetadata behavior : behaviorList) {
+        LOG << behavior.m_sBehaviorName << " ID: " << behavior.m_ulBehaviorId;
+    }
+
     return app.exec();
 }

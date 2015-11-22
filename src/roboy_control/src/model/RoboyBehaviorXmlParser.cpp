@@ -56,6 +56,25 @@ void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior * pBehavior ) {
     }
 }
 
+void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata * pBehaviorMetadata ) {
+    QString name = pBehaviorMetadata->m_sBehaviorName;
+
+    LOG << "READ BEHAVIOR META " << name;
+
+    QString path = DB_PATH + pBehaviorMetadata->m_sBehaviorName + ".xml";
+    QFile file(path);
+
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        LOG << " - ERROR: Failed to open file: " << name + ".xml";
+        return;
+    }
+
+    m_xmlReader.setDevice(&file);
+    m_xmlReader.readNextStartElement();
+    if (m_xmlReader.name() == "roboybehavior")
+        readBehaviorHeader(pBehaviorMetadata);
+}
+
 void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
     QString & name = pBehavior->m_metadata.m_sBehaviorName;
 
@@ -70,12 +89,11 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
     }
 
     m_xmlReader.setDevice(&file);
-
     LOG << " - INFO: Read file" << name + ".xml";
 
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
-            readBehaviorHeader(pBehavior);
+            readBehaviorHeader(&pBehavior->m_metadata);
         } else if ( m_xmlReader.name() == "motor" ) {
             readMotorData(pBehavior);
         } else {
@@ -86,16 +104,16 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
     LOG << " - INFO: Finishd reading successfully";
 }
 
-bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehavior * p_behavior ) {
+bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata * p_behavior ) {
     if ( m_xmlReader.name() == "roboybehavior" &&
          m_xmlReader.attributes().hasAttribute("name") &&
          m_xmlReader.attributes().hasAttribute("behaviorid") ) {
 
-        p_behavior->m_metadata.m_sBehaviorName = m_xmlReader.attributes().value("name").toString();
-        p_behavior->m_metadata.m_ulBehaviorId = m_xmlReader.attributes().value("behaviorid").toString().toULong();
+        p_behavior->m_sBehaviorName = m_xmlReader.attributes().value("name").toString();
+        p_behavior->m_ulBehaviorId = m_xmlReader.attributes().value("behaviorid").toString().toULong();
 
-        LOG << "\t- Name:\t" << p_behavior->m_metadata.m_sBehaviorName;
-        LOG << "\t- Id:\t" << p_behavior->m_metadata.m_ulBehaviorId;
+        LOG << "\t- Name:\t" << p_behavior->m_sBehaviorName;
+        LOG << "\t- Id:\t" << p_behavior->m_ulBehaviorId;
 
         return true;
     }

@@ -7,6 +7,7 @@
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QDebug>
+#include <QDir>
 
 #define LOG_MSG "[ XML Parser ]"
 #define LOG     qDebug() << LOG_MSG
@@ -19,15 +20,14 @@ private:
     QXmlStreamWriter  m_xmlWriter;
 
     void writeMotorData( const RoboyBehavior * pBehavior );
-    bool readBehaviorHeader( RoboyBehavior * p_behavior );
+    bool readBehaviorHeader( RoboyBehaviorMetadata * p_behavior );
     bool readMotorData( RoboyBehavior * p_behavior );
-
 public:
     RoboyBehaviorXmlParser();
 
     void persistRoboyBehavior( const RoboyBehavior * pBehavior );
-    void readRoboyBehavior( RoboyBehavior * pBehaviorMetadata );
-
+    void readRoboyBehavior( RoboyBehavior * pBehavior );
+    void readRoboyBehaviorMetadata( RoboyBehaviorMetadata * pBehaviorMetadata);
 };
 
 #endif // ROBOYBEHAVIORXMLPARSER_H

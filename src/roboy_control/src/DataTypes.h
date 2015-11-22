@@ -21,10 +21,8 @@ struct RoboyBehavior {
 
     QString toString() {
         QString string;
-        string.sprintf("ROBOY BEHAVIOR\n"
-                    "\t- Name:\t\t%s\n"
-                    "\t- Id:\t\t%lu \n"
-                    "\t- Motor Count:\t%i\n",
+        string.sprintf("ROBOY BEHAVIOR: "
+                    "%s\tId:%lu\tMotor Count:%i",
                     m_metadata.m_sBehaviorName.toLatin1().data(),
                     (unsigned long) m_metadata.m_ulBehaviorId,
                     m_mapMotorWaypoints.count());
