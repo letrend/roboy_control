@@ -62,3 +62,4 @@ set_property(TARGET roboy_control_node PROPERTY CXX_STANDARD 11)
 set_property(TARGET roboy_control_node APPEND_STRING PROPERTY COMPILE_FLAGS -Wall )
 
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARY})
+
