@@ -16,11 +16,12 @@
 int main(int argc, char ** argv) {
 
     QApplication app(argc, argv);
-    MainWindow window;
-    window.show();
 
     XmlModelService xmlModelService;
     IModelService & modelService = xmlModelService;
+
+    MainWindow window(0, &modelService);
+    window.show();
 
     RoboyBehavior newBehavior;
     newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
