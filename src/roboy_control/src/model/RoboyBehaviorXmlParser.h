@@ -11,7 +11,7 @@
 
 #define LOG_MSG "[ XML Parser ]"
 #define LOG     qDebug() << LOG_MSG
-#define DB_PATH "/home/matthias/roboycontrol/src/roboy_control/database/"
+#define DB_PATH "/home/bruh/catkin_workspace/src/roboy_control/database/"
 
 class RoboyBehaviorXmlParser
 {
