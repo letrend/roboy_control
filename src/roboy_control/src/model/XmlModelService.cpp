@@ -10,7 +10,7 @@ void XmlModelService::persistNewRoboyBehavior( const RoboyBehavior behavior ) {
 }
 
 QList<RoboyBehaviorMetadata> XmlModelService::getBehaviorList() {
-    QDir dbDirectory(DB_PATH);
+    QDir dbDirectory(RoboyControlConfiguration::instance().getModelConfig("databasePath"));
     QList<RoboyBehaviorMetadata> behaviorList;
     RoboyBehaviorMetadata behavior;
     for (QString fileName : dbDirectory.entryList()) {

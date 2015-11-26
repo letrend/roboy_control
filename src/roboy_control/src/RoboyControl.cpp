@@ -12,10 +12,19 @@
 #include "view/MainWindow.h"
 #include "model/RoboyBehaviorXmlParser.h"
 #include "model/XmlModelService.h"
+#include "controller/RoboyControlConfiguration.h"
 
 int main(int argc, char ** argv) {
 
     QApplication app(argc, argv);
+
+    RoboyControlConfiguration& config = RoboyControlConfiguration::instance();
+
+    DBG << RoboyControlConfiguration::instance().getModelConfig("databasePath");
+    DBG << RoboyControlConfiguration::instance().getModelConfig("databaseType");
+    if (config.getModelConfig("asdf") == QString::null) {
+        DBG << "Invalid Value";
+    }
 
     XmlModelService xmlModelService;
     IModelService & modelService = xmlModelService;

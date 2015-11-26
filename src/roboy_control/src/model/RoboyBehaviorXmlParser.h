@@ -2,20 +2,19 @@
 #define ROBOYBEHAVIORXMLPARSER_H
 
 #include "../DataTypes.h"
+#include "../controller/RoboyControlConfiguration.h"
 
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
-#include <QDebug>
 #include <QDir>
 
-#define LOG_MSG "[ XML Parser ]"
-#define LOG     qDebug() << LOG_MSG
-#define DB_PATH "/home/bruh/catkin_workspace/src/roboy_control/database/"
+#define MODEL_DBG DBG << "[ XML Parser ]"
 
 class RoboyBehaviorXmlParser
 {
 private:
+    QString m_databasePath;
     QXmlStreamReader m_xmlReader;
     QXmlStreamWriter  m_xmlWriter;
 

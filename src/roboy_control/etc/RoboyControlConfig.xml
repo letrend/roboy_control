@@ -1,0 +1,6 @@
+<RoboyControlConfiguration>
+	<DataModel
+		databaseType = "xml"
+		databasePath = "/home/bruh/catkin_workspace/src/roboy_control/database"
+	/>
+</RoboyControlConfiguration>

@@ -3,6 +3,10 @@
 
 #include <QString>
 #include <QMap>
+#include <QDebug>
+
+#define LOG         qDebug()
+#define DBG         qDebug()
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

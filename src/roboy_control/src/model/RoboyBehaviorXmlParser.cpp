@@ -2,28 +2,29 @@
 
 RoboyBehaviorXmlParser::RoboyBehaviorXmlParser()
 {
-    LOG << "DATABASE PATH: " << DB_PATH;
+    m_databasePath = RoboyControlConfiguration::instance().getModelConfig("databasePath");
+    MODEL_DBG << "DATABASE PATH: " << m_databasePath;
 }
 
 void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior * pBehavior ) {
     const QString & name = pBehavior->m_metadata.m_sBehaviorName;
 
-    LOG << "WRITE BEHAVIOR " << name << "TO DATABASE";
+    MODEL_DBG << "WRITE BEHAVIOR " << name << "TO DATABASE";
 
-    QString path = DB_PATH + pBehavior->m_metadata.m_sBehaviorName + ".xml";
+    QString path = m_databasePath + "/" + pBehavior->m_metadata.m_sBehaviorName + ".xml";
     QFile file (path);
 
     if ( file.exists() ) {
-        LOG << " - WARNING behavior already exists -> Will replace it.";
+        MODEL_DBG << " - WARNING behavior already exists -> Will replace it.";
         file.remove();
     }
 
     if (!file.open(QFile::ReadWrite | QFile::Text)) {
-        LOG << " - ERROR - Failed to open file: " << path;
+        MODEL_DBG << " - ERROR - Failed to open file: " << path;
         return;
     }
 
-    LOG << " - INFO - Write file :" << name + ".xml";
+    MODEL_DBG << " - INFO - Write file :" << name + ".xml";
 
     m_xmlWriter.setDevice(&file);
 
@@ -38,7 +39,7 @@ void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior * pBehavi
     m_xmlWriter.writeEndElement();
     m_xmlWriter.writeEndDocument();
 
-    LOG << " - INFO - Finished successfully";
+    MODEL_DBG << " - INFO - Finished successfully";
 }
 
 void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior * pBehavior ) {
@@ -59,13 +60,13 @@ void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior * pBehavior ) {
 void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata * pBehaviorMetadata ) {
     QString name = pBehaviorMetadata->m_sBehaviorName;
 
-    LOG << "READ BEHAVIOR META " << name;
+    MODEL_DBG << "READ BEHAVIOR META " << name;
 
-    QString path = DB_PATH + pBehaviorMetadata->m_sBehaviorName + ".xml";
+    QString path = m_databasePath + "/" + pBehaviorMetadata->m_sBehaviorName + ".xml";
     QFile file(path);
 
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG << " - ERROR: Failed to open file: " << name + ".xml";
+        MODEL_DBG << " - ERROR: Failed to open file: " << name + ".xml";
         return;
     }
 
@@ -78,18 +79,18 @@ void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata * 
 void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
     QString & name = pBehavior->m_metadata.m_sBehaviorName;
 
-    LOG << "READ BEHAVIOR " << name;
+    MODEL_DBG << "READ BEHAVIOR " << name;
 
-    QString path = DB_PATH + pBehavior->m_metadata.m_sBehaviorName + ".xml";
+    QString path = m_databasePath + "/" + pBehavior->m_metadata.m_sBehaviorName + ".xml";
     QFile file( path );
 
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG << " - ERROR: Failed to open file: " << name + ".xml";
+        MODEL_DBG << " - ERROR: Failed to open file: " << name + ".xml";
         return;
     }
 
     m_xmlReader.setDevice(&file);
-    LOG << " - INFO: Read file" << name + ".xml";
+    MODEL_DBG << " - INFO: Read file" << name + ".xml";
 
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
@@ -101,7 +102,7 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior * pBehavior ) {
         }
     }
 
-    LOG << " - INFO: Finishd reading successfully";
+    MODEL_DBG << " - INFO: Finishd reading successfully";
 }
 
 bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata * p_behavior ) {
@@ -112,13 +113,13 @@ bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata * p_behav
         p_behavior->m_sBehaviorName = m_xmlReader.attributes().value("name").toString();
         p_behavior->m_ulBehaviorId = m_xmlReader.attributes().value("behaviorid").toString().toULong();
 
-        LOG << "\t- Name:\t" << p_behavior->m_sBehaviorName;
-        LOG << "\t- Id:\t" << p_behavior->m_ulBehaviorId;
+        MODEL_DBG << "\t- Name:\t" << p_behavior->m_sBehaviorName;
+        MODEL_DBG << "\t- Id:\t" << p_behavior->m_ulBehaviorId;
 
         return true;
     }
 
-    LOG << "FAILED TO READ BEHAVIOR: couldn't find correct 'roboybehavior'-tag";
+    MODEL_DBG << "FAILED TO READ BEHAVIOR: couldn't find correct 'roboybehavior'-tag";
     return false;
 }
 
@@ -142,7 +143,7 @@ bool RoboyBehaviorXmlParser::readMotorData( RoboyBehavior *p_behavior ) {
 
         p_behavior->m_mapMotorWaypoints.insert(motor_id, waypointList);
 
-        LOG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << waypointList.count();
+        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << waypointList.count();
 
         return true;
     }
