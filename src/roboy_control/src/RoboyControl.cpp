@@ -29,7 +29,7 @@ int main(int argc, char ** argv) {
     XmlModelService xmlModelService;
     IModelService & modelService = xmlModelService;
 
-    MainWindow window(0, &modelService);
+    MainWindow window(&modelService);
     window.show();
 
     RoboyBehavior newBehavior;
