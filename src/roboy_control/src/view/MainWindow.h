@@ -2,35 +2,37 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QModelIndex>
+#include <QTabWidget>
 
-#include "../DataTypes.h"
+#include "EditorView.h"
+#include "PlayerView.h"
+#include "RecorderView.h"
+
+#include "../interfaces/IObserver.h"
 #include "../model/IModelService.h"
+
+
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public IObserver
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent, IModelService *modelService);
+    explicit MainWindow(IModelService *modelService, QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-	
-    void playButtonClicked();
-    void pauseButtonClicked();
-    void stopButtonClicked();
-    void addToTimelineButtonClicked();
-    void behaviorListViewItemClicked(QModelIndex index);
+    void notify();
 
 private:
-    Ui::MainWindow *ui; 
-    IModelService * modelService; 
-    void setupConnections();
+    Ui::MainWindow *ui;
+    QTabWidget *mainTabWidget;
+    EditorView *editorView;
+    PlayerView *playerView;
+    RecorderView *recorderView;
 };
 
 #endif // MAINWINDOW_H
