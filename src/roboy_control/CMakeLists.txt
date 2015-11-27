@@ -16,6 +16,11 @@ message(Headers Found:\n${ROBOY_HEADERS})
 message(Sources Found:\n${ROBOY_SOURCES})
 message(UI-Files Found:\n${ROBOY_UI_FILES})
 
+## Dummy target to add non-source files to Qt-Project Viewer
+file(GLOB ETC ${CMAKE_CURRENT_SOURCE_DIR}/etc/*)
+file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/database/*)
+add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
+
 ## Generate Qt-Files (Mocs for Headers & UI-Fieles)
 qt4_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
 qt4_wrap_ui(MOC_UI ${ROBOY_UI_FILES})

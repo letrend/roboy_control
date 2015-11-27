@@ -1,0 +1,4 @@
+set(HDRS ${HDRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/IObserver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/IObservable.h
+PARENT_SCOPE)

@@ -6,6 +6,7 @@ set(INCL ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(model)
 add_subdirectory(view)
 add_subdirectory(controller)
+add_subdirectory(interfaces)
 
 message(Include Directories:)
 foreach(include_dir ${INCL})
