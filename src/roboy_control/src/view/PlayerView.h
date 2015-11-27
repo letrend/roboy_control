@@ -1,6 +1,7 @@
 #ifndef PLAYERVIEW_H
 #define PLAYERVIEW_H
 
+#include <QModelIndex>
 #include <QWidget>
 
 #include "../DataTypes.h"
@@ -21,8 +22,20 @@ public:
 
     void notify();
 
+public slots:
+    void playButtonClicked();
+    void pauseButtonClicked();
+    void stopButtonClicked();
+    void behaviorListWidgetCurrentRowChanged(int row);
+
 private:
     Ui::PlayerView *ui;
+    IModelService *modelService;
+    QList<RoboyBehaviorMetadata> behaviorList; //list of avalaible behaviors
+    QList<RoboyBehaviorMetadata> behaviorQueue; //list of behaviors that are queued for execution
+
+    void setupConnections();
+    void updateBehaviorList();
 };
 
 #endif // PLAYERVIEW_H
