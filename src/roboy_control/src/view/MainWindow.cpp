@@ -5,6 +5,8 @@ MainWindow::MainWindow(IModelService *modelService, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) 
 {
+    modelService->subscribe(this);
+
     this->ui->setupUi(this);
     this->mainTabWidget = new QTabWidget();
     this->playerView = new PlayerView(modelService);
@@ -28,7 +30,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::notify() 
 {
-	this->playerView->notify();
+    qDebug() << "MainViewController: Notified on data changed";
+        this->playerView->notify();
 	this->recorderView->notify();
 	this->editorView->notify();
 }
