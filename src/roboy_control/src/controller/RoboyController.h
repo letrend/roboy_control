@@ -7,19 +7,24 @@
 
 #include "../model/XmlModelService.h"
 #include "../view/MainWindow/MainWindow.h"
+#include "../transceiver/ITransceiverService.h"
 
 class RoboyController {
 
 private:
-    IModelService * m_pModelService;
-    MainWindow *    m_pMainWindow;
-
-
-    void initializeComponents();
+    IModelService       * m_pModelService;
+    MainWindow          *    m_pMainWindow;
+    ITransceiverService * m_pTransceiverService;
 
 public:
     RoboyController();
     ~RoboyController();
+
+    void startExecution();
+    void pauseExecution();
+    void stopExecution();
+
+    void updateBehaviorQueue();
 };
 
 
