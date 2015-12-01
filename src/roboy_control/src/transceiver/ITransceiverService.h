@@ -1,0 +1,14 @@
+//
+// Created by bruh on 30.11.15.
+//
+
+#ifndef ROBOYCONTROL_ITRANSCEIVERSERVICE_H
+#define ROBOYCONTROL_ITRANSCEIVERSERVICE_H
+
+
+class ITransceiverService {
+
+};
+
+
+#endif //ROBOYCONTROL_ITRANSCEIVERSERVICE_H
