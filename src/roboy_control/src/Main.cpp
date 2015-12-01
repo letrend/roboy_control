@@ -2,23 +2,19 @@
 // Created by bruh on 17.11.15.
 //
 
-#include "ros/ros.h"
-
 #include <QApplication>
-#include <QFile>
-#include <QDebug>
-#include <QDateTime>
-
-#include "view/MainWindow/MainWindow.h"
-#include "model/RoboyBehaviorXmlParser.h"
-#include "model/XmlModelService.h"
-#include "controller/RoboyControlConfiguration.h"
+#include "controller/RoboyController.h"
 
 int main(int argc, char ** argv) {
-
     QApplication app(argc, argv);
 
-    RoboyControlConfiguration& config = RoboyControlConfiguration::instance();
+    RoboyController controller;
+
+    return app.exec();
+}
+
+int testCode() {
+/*    RoboyControlConfiguration& config = RoboyControlConfiguration::instance();
 
     DBG << RoboyControlConfiguration::instance().getModelConfig("databasePath");
     DBG << RoboyControlConfiguration::instance().getModelConfig("databaseType");
@@ -62,6 +58,5 @@ int main(int argc, char ** argv) {
     for (RoboyBehaviorMetadata behavior : behaviorList) {
         LOG << behavior.m_sBehaviorName << " ID: " << behavior.m_ulBehaviorId;
     }
-
-    return app.exec();
+*/
 }
