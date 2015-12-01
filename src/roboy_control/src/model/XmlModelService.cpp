@@ -7,6 +7,7 @@ XmlModelService::XmlModelService()
 
 void XmlModelService::persistNewRoboyBehavior( const RoboyBehavior behavior ) {
      m_xmlParser.persistRoboyBehavior(&behavior);
+     this->notifyAll();
 }
 
 QList<RoboyBehaviorMetadata> XmlModelService::getBehaviorList() {

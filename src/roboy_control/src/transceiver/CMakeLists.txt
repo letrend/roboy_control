@@ -1,0 +1,3 @@
+set(HDRS ${HDRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/ITransceiver.h
+PARENT_SCOPE)

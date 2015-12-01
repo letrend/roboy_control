@@ -5,15 +5,25 @@
 
 #include <QList>
 
-class Observable {
+class IObservable {
 private:
-    QList<Observer> m_listObservers;
+    QList<IObserver *> m_listObservers;
+
+protected:
+    void notifyAll() {
+        qDebug() << "Notify All: Observer List Length: " << m_listObservers.count();
+        for(IObserver * p_Observer : m_listObservers) {
+            p_Observer->notify();
+        }
+    }
 
 public:
-   void subscribe(const IObserver * p_observer) = 0;
-   void unsubscribe(const IObserver * p_observer) = 0;
-   void notifyObservers() = 0;
-
+   void subscribe(IObserver * p_observer) {
+       m_listObservers.append(p_observer);
+   }
+   void unsubscribe(IObserver * p_observer) {
+       m_listObservers.removeOne(p_observer);
+   }
 };
 
 #endif // IOBSERVABLE_H
