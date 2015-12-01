@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roboybehavior name="GreetBehavior" behaviorid="2">
     <motor motorid="0">
+<<<<<<< HEAD
+        <waypoint id="0" timestamp="1448934813659">0</waypoint>
+        <waypoint id="1" timestamp="1448934813659">1</waypoint>
+        <waypoint id="2" timestamp="1448934813659">2</waypoint>
+        <waypoint id="3" timestamp="1448934813659">3</waypoint>
+        <waypoint id="4" timestamp="1448934813659">4</waypoint>
+        <waypoint id="5" timestamp="1448934813659">5</waypoint>
+        <waypoint id="6" timestamp="1448934813659">6</waypoint>
+        <waypoint id="7" timestamp="1448934813659">7</waypoint>
+        <waypoint id="8" timestamp="1448934813659">8</waypoint>
+        <waypoint id="9" timestamp="1448934813659">9</waypoint>
+        <waypoint id="10" timestamp="1448934813659">10</waypoint>
+        <waypoint id="11" timestamp="1448934813659">11</waypoint>
+        <waypoint id="12" timestamp="1448934813659">12</waypoint>
+        <waypoint id="13" timestamp="1448934813659">13</waypoint>
+        <waypoint id="14" timestamp="1448934813659">14</waypoint>
+        <waypoint id="15" timestamp="1448934813659">15</waypoint>
+        <waypoint id="16" timestamp="1448934813659">16</waypoint>
+        <waypoint id="17" timestamp="1448934813659">17</waypoint>
+        <waypoint id="18" timestamp="1448934813659">18</waypoint>
+        <waypoint id="19" timestamp="1448934813659">19</waypoint>
+    </motor>
+    <motor motorid="1">
+        <waypoint id="0" timestamp="1448934813659">1</waypoint>
+        <waypoint id="1" timestamp="1448934813659">3</waypoint>
+        <waypoint id="2" timestamp="1448934813659">5</waypoint>
+        <waypoint id="3" timestamp="1448934813659">7</waypoint>
+        <waypoint id="4" timestamp="1448934813659">9</waypoint>
+        <waypoint id="5" timestamp="1448934813659">11</waypoint>
+        <waypoint id="6" timestamp="1448934813659">13</waypoint>
+        <waypoint id="7" timestamp="1448934813659">15</waypoint>
+        <waypoint id="8" timestamp="1448934813659">17</waypoint>
+        <waypoint id="9" timestamp="1448934813659">19</waypoint>
+        <waypoint id="10" timestamp="1448934813659">21</waypoint>
+        <waypoint id="11" timestamp="1448934813659">23</waypoint>
+        <waypoint id="12" timestamp="1448934813659">25</waypoint>
+        <waypoint id="13" timestamp="1448934813659">27</waypoint>
+        <waypoint id="14" timestamp="1448934813659">29</waypoint>
+        <waypoint id="15" timestamp="1448934813659">31</waypoint>
+        <waypoint id="16" timestamp="1448934813659">33</waypoint>
+        <waypoint id="17" timestamp="1448934813659">35</waypoint>
+        <waypoint id="18" timestamp="1448934813659">37</waypoint>
+        <waypoint id="19" timestamp="1448934813659">39</waypoint>
+    </motor>
+    <motor motorid="2">
+        <waypoint id="0" timestamp="1448934813659">2</waypoint>
+        <waypoint id="1" timestamp="1448934813659">5</waypoint>
+        <waypoint id="2" timestamp="1448934813659">8</waypoint>
+        <waypoint id="3" timestamp="1448934813659">11</waypoint>
+        <waypoint id="4" timestamp="1448934813659">14</waypoint>
+        <waypoint id="5" timestamp="1448934813659">17</waypoint>
+        <waypoint id="6" timestamp="1448934813659">20</waypoint>
+        <waypoint id="7" timestamp="1448934813659">23</waypoint>
+        <waypoint id="8" timestamp="1448934813659">26</waypoint>
+        <waypoint id="9" timestamp="1448934813659">29</waypoint>
+        <waypoint id="10" timestamp="1448934813659">32</waypoint>
+        <waypoint id="11" timestamp="1448934813659">35</waypoint>
+        <waypoint id="12" timestamp="1448934813659">38</waypoint>
+        <waypoint id="13" timestamp="1448934813659">41</waypoint>
+        <waypoint id="14" timestamp="1448934813659">44</waypoint>
+        <waypoint id="15" timestamp="1448934813659">47</waypoint>
+        <waypoint id="16" timestamp="1448934813659">50</waypoint>
+        <waypoint id="17" timestamp="1448934813659">53</waypoint>
+        <waypoint id="18" timestamp="1448934813659">56</waypoint>
+        <waypoint id="19" timestamp="1448934813659">59</waypoint>
+    </motor>
+    <motor motorid="3">
+        <waypoint id="0" timestamp="1448934813659">3</waypoint>
+        <waypoint id="1" timestamp="1448934813659">7</waypoint>
+        <waypoint id="2" timestamp="1448934813659">11</waypoint>
+        <waypoint id="3" timestamp="1448934813659">15</waypoint>
+        <waypoint id="4" timestamp="1448934813659">19</waypoint>
+        <waypoint id="5" timestamp="1448934813659">23</waypoint>
+        <waypoint id="6" timestamp="1448934813659">27</waypoint>
+        <waypoint id="7" timestamp="1448934813659">31</waypoint>
+        <waypoint id="8" timestamp="1448934813659">35</waypoint>
+        <waypoint id="9" timestamp="1448934813659">39</waypoint>
+        <waypoint id="10" timestamp="1448934813659">43</waypoint>
+        <waypoint id="11" timestamp="1448934813659">47</waypoint>
+        <waypoint id="12" timestamp="1448934813659">51</waypoint>
+        <waypoint id="13" timestamp="1448934813659">55</waypoint>
+        <waypoint id="14" timestamp="1448934813659">59</waypoint>
+        <waypoint id="15" timestamp="1448934813659">63</waypoint>
+        <waypoint id="16" timestamp="1448934813659">67</waypoint>
+        <waypoint id="17" timestamp="1448934813659">71</waypoint>
+        <waypoint id="18" timestamp="1448934813659">75</waypoint>
+        <waypoint id="19" timestamp="1448934813659">79</waypoint>
+    </motor>
+    <motor motorid="4">
+        <waypoint id="0" timestamp="1448934813659">4</waypoint>
+        <waypoint id="1" timestamp="1448934813659">9</waypoint>
+        <waypoint id="2" timestamp="1448934813659">14</waypoint>
+        <waypoint id="3" timestamp="1448934813659">19</waypoint>
+        <waypoint id="4" timestamp="1448934813659">24</waypoint>
+        <waypoint id="5" timestamp="1448934813659">29</waypoint>
+        <waypoint id="6" timestamp="1448934813659">34</waypoint>
+        <waypoint id="7" timestamp="1448934813659">39</waypoint>
+        <waypoint id="8" timestamp="1448934813659">44</waypoint>
+        <waypoint id="9" timestamp="1448934813659">49</waypoint>
+        <waypoint id="10" timestamp="1448934813659">54</waypoint>
+        <waypoint id="11" timestamp="1448934813659">59</waypoint>
+        <waypoint id="12" timestamp="1448934813659">64</waypoint>
+        <waypoint id="13" timestamp="1448934813659">69</waypoint>
+        <waypoint id="14" timestamp="1448934813659">74</waypoint>
+        <waypoint id="15" timestamp="1448934813659">79</waypoint>
+        <waypoint id="16" timestamp="1448934813659">84</waypoint>
+        <waypoint id="17" timestamp="1448934813659">89</waypoint>
+        <waypoint id="18" timestamp="1448934813659">94</waypoint>
+        <waypoint id="19" timestamp="1448934813659">99</waypoint>
+=======
         <waypoint id="0" timestamp="1448876136584">0</waypoint>
         <waypoint id="1" timestamp="1448876136584">1</waypoint>
         <waypoint id="2" timestamp="1448876136584">2</waypoint>
@@ -109,5 +219,6 @@
         <waypoint id="17" timestamp="1448876136584">89</waypoint>
         <waypoint id="18" timestamp="1448876136584">94</waypoint>
         <waypoint id="19" timestamp="1448876136584">99</waypoint>
+>>>>>>> c74623c19424c0ed3f1ce7c16e81779db43663a4
     </motor>
 </roboybehavior>

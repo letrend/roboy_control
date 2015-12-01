@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include <QTabWidget>
 
-#include "EditorView.h"
-#include "PlayerView.h"
-#include "RecorderView.h"
+#include "../EditorView/EditorView.h"
+#include "../PlayerView/PlayerView.h"
+#include "../RecorderView/RecorderView.h"
 
-#include "../interfaces/IObserver.h"
-#include "../model/IModelService.h"
+#include "../../interfaces/IObserver.h"
+#include "../../model/IModelService.h"
 
 
 

@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-#include "../DataTypes.h"
-#include "../interfaces/IObserver.h"
-#include "../model/IModelService.h"
+#include "../../DataTypes.h"
+#include "../../interfaces/IObserver.h"
+#include "../../model/IModelService.h"
 
 namespace Ui {
 class EditorView;
