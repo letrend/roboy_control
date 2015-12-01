@@ -40,6 +40,7 @@ void PlayerView::setupConnections()
 	QObject::connect(ui->playButton, SIGNAL(clicked()), this, SLOT(playButtonClicked()));
 	QObject::connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(pauseButtonClicked()));
 	QObject::connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopButtonClicked()));
+	QObject::connect(ui->skipButton, SIGNAL(clicked()), this, SLOT(skipButtonClicked()));
 	QObject::connect(ui->behaviorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(behaviorListWidgetCurrentRowChanged(int)));
 }
 
@@ -54,6 +55,11 @@ void PlayerView::pauseButtonClicked()
 }
 
 void PlayerView::stopButtonClicked()
+{
+	
+}
+
+void PlayerView::skipButtonClicked()
 {
 	
 }

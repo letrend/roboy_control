@@ -4,9 +4,9 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include "../DataTypes.h"
-#include "../interfaces/IObserver.h"
-#include "../model/IModelService.h"
+#include "../../DataTypes.h"
+#include "../../interfaces/IObserver.h"
+#include "../../model/IModelService.h"
 
 namespace Ui {
 class PlayerView;
@@ -26,6 +26,7 @@ public slots:
     void playButtonClicked();
     void pauseButtonClicked();
     void stopButtonClicked();
+    void skipButtonClicked();
     void behaviorListWidgetCurrentRowChanged(int row);
 
 private:

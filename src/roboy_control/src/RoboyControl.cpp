@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-#include "view/MainWindow.h"
+#include "view/MainWindow/MainWindow.h"
 #include "model/RoboyBehaviorXmlParser.h"
 #include "model/XmlModelService.h"
 #include "controller/RoboyControlConfiguration.h"
