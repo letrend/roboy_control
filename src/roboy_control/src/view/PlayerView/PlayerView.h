@@ -4,6 +4,8 @@
 #include <QModelIndex>
 #include <QWidget>
 
+#include "BehaviorListModel.h"
+#include "BehaviorQueueModel.h"
 #include "../../DataTypes.h"
 #include "../../interfaces/IObserver.h"
 #include "../../model/IModelService.h"
@@ -27,16 +29,20 @@ public slots:
     void pauseButtonClicked();
     void stopButtonClicked();
     void skipButtonClicked();
-    void behaviorListWidgetCurrentRowChanged(int row);
+    void addToQueueButtonClicked();
+    void behaviorQueueListViewCurrentRowChanged(const QModelIndex & index);
+    void showBehaviorListItemMenu(const QPoint& pos);
+    void showBehaviorQueueItemMenu(const QPoint& pos);
 
 private:
     Ui::PlayerView *ui;
     IModelService *modelService;
-    QList<RoboyBehaviorMetadata> behaviorList; //list of avalaible behaviors
-    QList<RoboyBehaviorMetadata> behaviorQueue; //list of behaviors that are queued for execution
+    BehaviorListModel *behaviorListModel;
+    BehaviorQueueModel *behaviorQueueModel;
+    RoboyBehaviorMetadata currentlyDisplayedBehaviorMetaData;
+    RoboyBehavior currentlyDisplayedBehavior;
 
     void setupConnections();
-    void updateBehaviorList();
 };
 
 #endif // PLAYERVIEW_H

@@ -1,6 +1,8 @@
 set(HDRS ${HDRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorQueueModel.h
         ${CMAKE_CURRENT_SOURCE_DIR}/RecorderView/RecorderView.h
         ${CMAKE_CURRENT_SOURCE_DIR}/EditorView/EditorView.h
 PARENT_SCOPE)
@@ -8,6 +10,8 @@ PARENT_SCOPE)
 set(SRCS ${SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorQueueModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/RecorderView/RecorderView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/EditorView/EditorView.cpp
 PARENT_SCOPE)

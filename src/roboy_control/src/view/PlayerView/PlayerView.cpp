@@ -1,80 +1,157 @@
 #include "PlayerView.h"
 #include "ui_PlayerView.h"
 
-#include <QDebug>
 
+/**
+* @brief constructor
+* @param the IModelService providing the roboy behaviors
+* @param non mandatory parent
+*/
 PlayerView::PlayerView(IModelService *modelService, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlayerView)
 {
     this->ui->setupUi(this);
     this->modelService = modelService;
+    this->behaviorListModel = new BehaviorListModel(this->modelService);
+    this->behaviorQueueModel = new BehaviorQueueModel();
+    this->ui->behaviorListView->setModel(this->behaviorListModel);
+    this->ui->behaviorQueueListView->setModel(this->behaviorQueueModel);
     this->setupConnections();
-    this->updateBehaviorList();
 }
 
+/**
+*@brief desctructor
+**/
 PlayerView::~PlayerView()
 {
     delete this->ui;
+    delete this->behaviorListModel;
+    delete this->behaviorQueueModel;
 }
 
+/**
+*@brief method to notify about data changes implemented from IObserver interface
+**/
 void PlayerView::notify() 
 {
-	this->updateBehaviorList();
-}
-
-void PlayerView::updateBehaviorList()
-{
-	this->behaviorList = this->modelService->getBehaviorList();
-	this->ui->behaviorListWidget->clear();
-	for(RoboyBehaviorMetadata currentBehavior : this->behaviorList)
-	{
-		this->ui->behaviorListWidget->addItem(currentBehavior.m_sBehaviorName);
-	}
+	this->behaviorListModel->notify();
 }
 
 /* ui connections */
 
+/**
+*@brief method to connect all ui controls to their handler functions
+**/
 void PlayerView::setupConnections()
 {
+	/* buttons */
 	QObject::connect(ui->playButton, SIGNAL(clicked()), this, SLOT(playButtonClicked()));
 	QObject::connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(pauseButtonClicked()));
 	QObject::connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopButtonClicked()));
 	QObject::connect(ui->skipButton, SIGNAL(clicked()), this, SLOT(skipButtonClicked()));
-	QObject::connect(ui->behaviorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(behaviorListWidgetCurrentRowChanged(int)));
+	QObject::connect(ui->addToQueueButton, SIGNAL(clicked()), this, SLOT(addToQueueButtonClicked()));
+	/* behavior listview */
+	connect(ui->behaviorListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorListItemMenu(const QPoint&)));
+	connect(ui->behaviorQueueListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorQueueItemMenu(const QPoint&)));
+	QObject::connect(ui->behaviorListView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(behaviorQueueListViewCurrentRowChanged(const QModelIndex &)));
+
 }
 
+/**
+*@brief click handler for the play button
+**/
 void PlayerView::playButtonClicked()
 {
 	
 }
 
+/**
+*@brief click handler for the pause button
+**/
 void PlayerView::pauseButtonClicked()
 {
 	
 }
 
+/**
+*@brief click handler for the stop button
+**/
 void PlayerView::stopButtonClicked()
 {
 	
 }
 
+/**
+*@brief click handler for the skip button
+**/
 void PlayerView::skipButtonClicked()
 {
 	
 }
 
-void PlayerView::behaviorListWidgetCurrentRowChanged(int row)
+/**
+*@brief click handler for the add to queue button
+**/
+void PlayerView::addToQueueButtonClicked()
 {
-	RoboyBehavior selectedBehavior = this->modelService->getBehavior(this->behaviorList[row]);
-	ui->behaviorNameValueLabel->setText(selectedBehavior.m_metadata.m_sBehaviorName);
-	ui->idValueLabel->setText(QString::number(selectedBehavior.m_metadata.m_ulBehaviorId));
-	ui->motorCountValueLabel->setText(QString::number(selectedBehavior.m_mapMotorWaypoints.count()));
+	this->behaviorQueueModel->addBehaviorMetaData(this->currentlyDisplayedBehaviorMetaData);
+}
+
+/**
+*@brief method for filling the behaviorDetailView with information about the selected behavior
+*@param index index of the currently selected behavior in the behaviorListView
+**/
+void PlayerView::behaviorQueueListViewCurrentRowChanged(const QModelIndex & index)
+{	
+	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
+	this->currentlyDisplayedBehavior = this->modelService->getBehavior(this->currentlyDisplayedBehaviorMetaData);
+	this->ui->addToQueueButton->setEnabled(true);
+	ui->behaviorNameValueLabel->setText(this->currentlyDisplayedBehavior.m_metadata.m_sBehaviorName);
+	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));
+	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.count()));
 
 	QString description;
-	for(u_int32_t iterator : selectedBehavior.m_mapMotorWaypoints.keys())
+	for(u_int32_t iterator : this->currentlyDisplayedBehavior.m_mapMotorWaypoints.keys())
 	{
-		description.append(QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(selectedBehavior.m_mapMotorWaypoints.value(iterator).count()));
+		description.append(QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.value(iterator).count()));
 	}
 	ui->descriptionValueLabel->setText(description);
+}
+
+/**
+*@brief
+**/
+void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
+{
+    QPoint globalPos = ui->behaviorListView->mapToGlobal(pos);
+    QModelIndex selectedIndex = ui->behaviorListView->indexAt(pos);
+
+    QMenu behaviorListItemMenu;
+    behaviorListItemMenu.addAction("add to queue");
+
+    QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
+
+    if (selectedItem) {
+    	if (selectedItem->text() == "add to queue") {
+    		this->behaviorQueueModel->addBehaviorMetaData(this->behaviorListModel->getBehaviorMetaData(selectedIndex.row()));
+    	}
+	}
+}
+
+void PlayerView::showBehaviorQueueItemMenu(const QPoint& pos)
+{
+    QPoint globalPos = ui->behaviorQueueListView->mapToGlobal(pos);
+    QModelIndex selectedIndex = ui->behaviorQueueListView->indexAt(pos);
+
+    QMenu behaviorQueueItemMenu;
+    behaviorQueueItemMenu.addAction("remove from queue");
+
+    QAction *selectedItem = behaviorQueueItemMenu.exec(globalPos);
+    if (selectedItem)
+    {
+     	if (selectedItem->text() == "remove from queue") {
+     		this->behaviorQueueModel->removeBehaviorMetaData(selectedIndex.row());
+     	}   
+    }
 }
