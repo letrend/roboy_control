@@ -4,11 +4,21 @@
 
 #include <QApplication>
 #include "controller/RoboyController.h"
+#include "transceiver/ROSMessageTransceiverService.h"
+#include "ros/ros.h"
 
 int main(int argc, char ** argv) {
+    ros::init(argc, argv, "roboycontrol");
     QApplication app(argc, argv);
 
     RoboyController controller;
+
+    RoboyBehavior newBehavior;
+    newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
+    newBehavior.m_metadata.m_ulBehaviorId = 2;
+
+    ROSMessageTransceiverService t;
+    t.sendRoboyBehavior(newBehavior);
 
     return app.exec();
 }
