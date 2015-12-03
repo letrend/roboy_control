@@ -111,12 +111,12 @@ void PlayerView::behaviorQueueListViewCurrentRowChanged(const QModelIndex & inde
 	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));
 	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.count()));
 
+	ui->motorListView->clear();
 	QString description;
 	for(u_int32_t iterator : this->currentlyDisplayedBehavior.m_mapMotorWaypoints.keys())
 	{
-		description.append(QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.value(iterator).count()));
+		ui->motorListView->addItem(QString("MOTOR ID %1 WAYPOINT COUNT %2").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.value(iterator).count()));
 	}
-	ui->descriptionValueLabel->setText(description);
 }
 
 /**
@@ -126,16 +126,17 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
 {
     QPoint globalPos = ui->behaviorListView->mapToGlobal(pos);
     QModelIndex selectedIndex = ui->behaviorListView->indexAt(pos);
+    
+    if (selectedIndex.isValid()) {
+    	QMenu behaviorListItemMenu;
+    	behaviorListItemMenu.addAction("add to queue");
+    	QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
 
-    QMenu behaviorListItemMenu;
-    behaviorListItemMenu.addAction("add to queue");
-
-    QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
-
-    if (selectedItem) {
-    	if (selectedItem->text() == "add to queue") {
-    		this->behaviorQueueModel->addBehaviorMetaData(this->behaviorListModel->getBehaviorMetaData(selectedIndex.row()));
-    	}
+    	if (selectedItem) {
+    		if (selectedItem->text() == "add to queue") {
+    			this->behaviorQueueModel->addBehaviorMetaData(this->behaviorListModel->getBehaviorMetaData(selectedIndex.row()));
+    		}
+		}
 	}
 }
 
@@ -144,14 +145,16 @@ void PlayerView::showBehaviorQueueItemMenu(const QPoint& pos)
     QPoint globalPos = ui->behaviorQueueListView->mapToGlobal(pos);
     QModelIndex selectedIndex = ui->behaviorQueueListView->indexAt(pos);
 
-    QMenu behaviorQueueItemMenu;
-    behaviorQueueItemMenu.addAction("remove from queue");
+    if (selectedIndex.isValid()) {
+    	QMenu behaviorQueueItemMenu;
+    	behaviorQueueItemMenu.addAction("remove from queue");
 
-    QAction *selectedItem = behaviorQueueItemMenu.exec(globalPos);
-    if (selectedItem)
-    {
-     	if (selectedItem->text() == "remove from queue") {
-     		this->behaviorQueueModel->removeBehaviorMetaData(selectedIndex.row());
-     	}   
-    }
+    	QAction *selectedItem = behaviorQueueItemMenu.exec(globalPos);
+    	if (selectedItem)
+    	{
+     		if (selectedItem->text() == "remove from queue") {
+     			this->behaviorQueueModel->removeBehaviorMetaData(selectedIndex.row());
+     		}   
+    	}
+	}
 }
