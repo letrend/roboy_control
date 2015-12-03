@@ -10,10 +10,7 @@
 class ITransceiverService {
 
 public:
-    // Exemplary implementation to evaluate other compontents
-    void sendRoboyBehavior(RoboyBehavior behavior) {
-        qDebug() << "[ TRANSCEIVER ] send behavior: " << behavior.m_metadata.m_sBehaviorName;
-    }
+    virtual void sendRoboyBehavior(const RoboyBehavior behavior) = 0;
 };
 
 

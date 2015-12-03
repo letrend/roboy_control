@@ -22,6 +22,14 @@ QVariant BehaviorQueueModel::data(const QModelIndex &index, int role) const
   	return QVariant();
 }
 
+Qt::ItemFlags BehaviorQueueModel::flags(const QModelIndex &index) const
+{
+  return QAbstractItemModel::flags(index)
+    | Qt::ItemIsEditable
+    | Qt::ItemIsDragEnabled
+    | Qt::ItemIsDropEnabled;
+}
+
 void BehaviorQueueModel::addBehaviorMetaData(RoboyBehaviorMetadata behavior)
 {
 	this->behaviorList.append(behavior);
@@ -30,9 +38,14 @@ void BehaviorQueueModel::addBehaviorMetaData(RoboyBehaviorMetadata behavior)
 	emit dataChanged(topLeft, bottomRight);
 }
 
+QList<RoboyBehaviorMetadata> BehaviorQueueModel::getBehaviorMetaDataList() const
+{
+	return this->behaviorList;
+}
+
 void BehaviorQueueModel::removeBehaviorMetaData(int index)
 {
-	if(index > 0 && index < this->behaviorList.count()-1)
+	if(index >= 0 && index < this->behaviorList.count())
 	{		
 		this->behaviorList.removeAt(index);
 		QModelIndex topLeft;

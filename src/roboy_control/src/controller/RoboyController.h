@@ -8,6 +8,7 @@
 #include "../model/XmlModelService.h"
 #include "../view/MainWindow/MainWindow.h"
 #include "../transceiver/ITransceiverService.h"
+#include "../transceiver/ROSMessageTransceiverService.h"
 
 class RoboyController {
 

@@ -11,7 +11,7 @@ RoboyController::RoboyController() {
     m_pMainWindow->show();
 
     // TODO: ITransceiverService should be abstract
-    m_pTransceiverService = new ITransceiverService();
+    m_pTransceiverService = new ROSMessageTransceiverService();
 }
 
 RoboyController::~RoboyController() {
