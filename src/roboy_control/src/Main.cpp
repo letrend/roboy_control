@@ -22,7 +22,7 @@ int testCode() {
         DBG << "Invalid Value";
     }
 
-    XmlModelService xmlModelService;
+    XmlModelService xmlModelService;vv
     IModelService & modelService = xmlModelService;
 
     MainWindow window(&modelService);

@@ -1,15 +1,26 @@
 #include "XmlModelService.h"
 
-XmlModelService::XmlModelService()
-{
-
+void XmlModelService::createRoboyBehavior ( const RoboyBehavior & behavior ) {
+    m_xmlParser.persistRoboyBehavior(behavior);
+    this->notifyAll();
 }
 
-void XmlModelService::persistNewRoboyBehavior( const RoboyBehavior behavior ) {
-     m_xmlParser.persistRoboyBehavior(&behavior);
-     this->notifyAll();
+RoboyBehavior XmlModelService::retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata ) {
+    RoboyBehavior behavior;
+    behavior.m_metadata.m_sBehaviorName  = metadata.m_sBehaviorName;
+    behavior.m_metadata.m_ulBehaviorId   = metadata.m_ulBehaviorId;
+
+    m_xmlParser.readRoboyBehavior(behavior);
+    return behavior;
+};
+
+void XmlModelService::updateRoboyBehavior ( const RoboyBehavior & behavior ) {
+    // TODO:
 }
 
+void XmlModelService::deleteRoboyBehavior ( const RoboyBehaviorMetadata & metadata ) {
+    // TODO:
+}
 QList<RoboyBehaviorMetadata> XmlModelService::getBehaviorList() {
     QDir dbDirectory(RoboyControlConfiguration::instance().getModelConfig("databasePath"));
     QList<RoboyBehaviorMetadata> behaviorList;
@@ -17,17 +28,9 @@ QList<RoboyBehaviorMetadata> XmlModelService::getBehaviorList() {
     for (QString fileName : dbDirectory.entryList()) {
         if (fileName.endsWith("Behavior.xml", Qt::CaseSensitive)) {
             behavior.m_sBehaviorName = fileName.split(".")[0];
-            m_xmlParser.readRoboyBehaviorMetadata(&behavior);
+            m_xmlParser.readRoboyBehaviorMetadata(behavior);
             behaviorList.append(behavior);
         }
     }
     return behaviorList;
-}
-
-RoboyBehavior XmlModelService::getBehavior(const RoboyBehaviorMetadata metadata) {
-    RoboyBehavior behavior;
-    behavior.m_metadata = metadata;
-
-    m_xmlParser.readRoboyBehavior( &behavior );
-    return behavior;
 }

@@ -11,11 +11,11 @@ private:
     RoboyBehaviorXmlParser m_xmlParser;
 
 public:
-    XmlModelService();
-
-    void persistNewRoboyBehavior( const RoboyBehavior behavior );
+    void            createRoboyBehavior   ( const RoboyBehavior & behavior );
+    RoboyBehavior   retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata );
+    void            updateRoboyBehavior   ( const RoboyBehavior & behavior );
+    void            deleteRoboyBehavior   ( const RoboyBehaviorMetadata & metadata );
     QList<RoboyBehaviorMetadata> getBehaviorList();
-    RoboyBehavior getBehavior(const RoboyBehaviorMetadata metadata);
 
 };
 

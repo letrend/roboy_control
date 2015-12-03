@@ -1,8 +1,8 @@
 #ifndef ROBOYBEHAVIORXMLPARSER_H
 #define ROBOYBEHAVIORXMLPARSER_H
 
-#include "../DataTypes.h"
-#include "../controller/RoboyControlConfiguration.h"
+#include "DataTypes.h"
+#include "RoboyControlConfiguration.h"
 
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -18,15 +18,15 @@ private:
     QXmlStreamReader m_xmlReader;
     QXmlStreamWriter  m_xmlWriter;
 
-    void writeMotorData( const RoboyBehavior * pBehavior );
-    bool readBehaviorHeader( RoboyBehaviorMetadata * p_behavior );
-    bool readMotorData( RoboyBehavior * p_behavior );
+    void writeMotorData( const RoboyBehavior & behavior );
+    bool readBehaviorHeader( RoboyBehaviorMetadata & behavior );
+    bool readMotorData( RoboyBehavior & behavior );
 public:
     RoboyBehaviorXmlParser();
 
-    void persistRoboyBehavior( const RoboyBehavior * pBehavior );
-    void readRoboyBehavior( RoboyBehavior * pBehavior );
-    void readRoboyBehaviorMetadata( RoboyBehaviorMetadata * pBehaviorMetadata);
+    void persistRoboyBehavior( const RoboyBehavior & behavior );
+    void readRoboyBehavior( RoboyBehavior & behavior );
+    void readRoboyBehaviorMetadata( RoboyBehaviorMetadata & metadata );
 };
 
 #endif // ROBOYBEHAVIORXMLPARSER_H

@@ -1,8 +1,8 @@
 #ifndef IMODELSERVICE_H
 #define IMODELSERVICE_H
 
-#include "../DataTypes.h"
-#include "../interfaces/IObservable.h"
+#include "DataTypes.h"
+#include "IObservable.h"
 
 /* Class IModelService defines the interface to the datamodel of Roboy Control.
  * Is derived from the interface IObservalbe, to be observable from other data-
@@ -18,9 +18,12 @@ public:
      * - Delete Behavior
      * - Get List of all Behaviors
      */
-    virtual void persistNewRoboyBehavior( const RoboyBehavior behavior ) = 0;
+    virtual void            createRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
+    virtual RoboyBehavior   retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata ) = 0;
+    virtual void            updateRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
+    virtual void            deleteRoboyBehavior   ( const RoboyBehaviorMetadata & metadata ) = 0;
     virtual QList<RoboyBehaviorMetadata> getBehaviorList() = 0;
-    virtual RoboyBehavior getBehavior( const RoboyBehaviorMetadata metadata ) = 0;
+
 };
 
 #endif // IMODELSERVICE_H

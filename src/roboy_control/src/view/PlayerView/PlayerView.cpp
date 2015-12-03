@@ -105,7 +105,7 @@ void PlayerView::addToQueueButtonClicked()
 void PlayerView::behaviorQueueListViewCurrentRowChanged(const QModelIndex & index)
 {	
 	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
-	this->currentlyDisplayedBehavior = this->modelService->getBehavior(this->currentlyDisplayedBehaviorMetaData);
+	this->currentlyDisplayedBehavior = this->modelService->retrieveRoboyBehavior(this->currentlyDisplayedBehaviorMetaData);
 	this->ui->addToQueueButton->setEnabled(true);
 	ui->behaviorNameValueLabel->setText(this->currentlyDisplayedBehavior.m_metadata.m_sBehaviorName);
 	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));

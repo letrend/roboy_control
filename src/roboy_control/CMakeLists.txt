@@ -12,6 +12,7 @@ add_definitions(${QT_DEFINITIONS})
 
 add_subdirectory(src)
 
+message(Include Dirs:\n${ROBOY_INCLUDE_DIRS})
 message(Headers Found:\n${ROBOY_HEADERS})
 message(Sources Found:\n${ROBOY_SOURCES})
 message(UI-Files Found:\n${ROBOY_UI_FILES})
