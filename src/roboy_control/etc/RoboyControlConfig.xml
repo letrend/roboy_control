@@ -1,6 +1,6 @@
 <RoboyControlConfiguration>
 	<DataModel
 		databaseType = "xml"
-                databasePath = "/home/philipp/roboy_control/database"
+                databasePath = "/home/bruh/roboy_workspace/roboycontrol/src/roboy_control/database"
 	/>
 </RoboyControlConfiguration>

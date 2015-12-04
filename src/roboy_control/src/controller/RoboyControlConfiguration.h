@@ -1,14 +1,14 @@
 #ifndef ROBOYCONTROLCONFIGURATION_H
 #define ROBOYCONTROLCONFIGURATION_H
 
-#include "../DataTypes.h"
+#include "DataTypes.h"
+#include "LogDefines.h"
 
 #include <QProcessEnvironment>
 #include <QXmlStreamReader>
 #include <QFile>
 
 #define CONFIG_FILE_NAME "RoboyControlConfig.xml"
-#define CONFIG_DBG  DBG << "[ CONFIG ]"
 
 class RoboyControlConfiguration
 {

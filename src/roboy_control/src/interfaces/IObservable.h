@@ -1,6 +1,7 @@
 #ifndef IOBSERVABLE_H
 #define IOBSERVABLE_H
 
+#include "LogDefines.h"
 #include "IObserver.h"
 
 #include <QList>
@@ -11,7 +12,7 @@ private:
 
 protected:
     void notifyAll() {
-        qDebug() << "Notify All: Observer List Length: " << m_listObservers.count();
+        OBSERVABLE_DBG << "Notify All: Observer List Length: " << m_listObservers.count();
         for(IObserver * p_Observer : m_listObservers) {
             p_Observer->notify();
         }

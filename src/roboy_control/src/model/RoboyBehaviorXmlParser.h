@@ -2,14 +2,13 @@
 #define ROBOYBEHAVIORXMLPARSER_H
 
 #include "DataTypes.h"
+#include "LogDefines.h"
 #include "RoboyControlConfiguration.h"
 
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QDir>
-
-#define MODEL_DBG DBG << "[ XML Parser ]"
 
 class RoboyBehaviorXmlParser
 {
