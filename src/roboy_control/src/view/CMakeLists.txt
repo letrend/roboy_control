@@ -23,6 +23,10 @@ set(UI_FILES ${UI_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/EditorView/EditorView.ui
 PARENT_SCOPE)
 
+set(RESOURCES ${RESOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerResources.qrc
+PARENT_SCOPE)
+
 set(INCL ${INCL}
         ${CMAKE_CURRENT_SOURCE_DIR}
 PARENT_SCOPE)

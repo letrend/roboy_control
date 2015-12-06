@@ -6,7 +6,6 @@ MainWindow::MainWindow(IModelService *modelService, QWidget *parent) :
     ui(new Ui::MainWindow) 
 {
     modelService->subscribe(this);
-
     this->ui->setupUi(this);
     this->mainTabWidget = new QTabWidget();
     this->playerView = new PlayerView(modelService);
@@ -16,7 +15,6 @@ MainWindow::MainWindow(IModelService *modelService, QWidget *parent) :
     this->mainTabWidget->addTab(playerView, "player");
     this->mainTabWidget->addTab(recorderView, "recorder");
     this->mainTabWidget->addTab(editorView, "editor");
-
 }
 
 MainWindow::~MainWindow() 
@@ -31,7 +29,7 @@ MainWindow::~MainWindow()
 void MainWindow::notify() 
 {
     qDebug() << "MainViewController: Notified on data changed";
-        this->playerView->notify();
+    this->playerView->notify();
 	this->recorderView->notify();
 	this->editorView->notify();
 }
