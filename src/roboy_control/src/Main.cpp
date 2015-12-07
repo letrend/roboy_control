@@ -9,9 +9,11 @@
 
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "roboycontrol");
+
     QApplication app(argc, argv);
 
     RoboyController controller;
+    controller.start();
 
     RoboyBehavior newBehavior;
     newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";

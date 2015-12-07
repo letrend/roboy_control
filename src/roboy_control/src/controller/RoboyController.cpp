@@ -6,31 +6,40 @@
 
 RoboyController::RoboyController() {
     m_pModelService = new XmlModelService();
-    // TODO: create Method 'setDataModelService()' in MainWindow
-    m_pMainWindow   = new MainWindow(m_pModelService);
-    m_pMainWindow->show();
-
-    // TODO: ITransceiverService should be abstract
     m_pTransceiverService = new ROSMessageTransceiverService();
+
+    m_pViewController = new ViewController(this, m_pModelService);
 }
 
 RoboyController::~RoboyController() {
-    delete m_pMainWindow;
     delete m_pModelService;
+    delete m_pTransceiverService;
+    delete m_pViewController;
 }
 
-void RoboyController::startExecution() {
+void RoboyController::run() {
 
+    CONTROLLER_DBG << "Controller Thread Started. Wait for events ... ";
+
+    while( true ) {
+        m_mutexCV.lock();
+        m_conditionView.wait(&m_mutexCV);
+
+        if( m_bStartExectution ) {
+            CONTROLLER_DBG << "Triggered 'Start Execution' from View";
+            m_bStartExectution = false;
+        } else if ( m_bStopExecution ) {
+            CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
+            m_bStopExecution = false;
+        }
+
+        m_mutexCV.unlock();
+    }
 }
 
-void RoboyController::pauseExecution() {
-
-}
-
-void RoboyController::stopExecution() {
-
-}
-
-void RoboyController::updateBehaviorQueue() {
-
+void RoboyController::fromViewController_triggerPlayPlan() {
+    m_mutexCV.lock();
+    m_bStartExectution = true;
+    m_conditionView.wakeAll();
+    m_mutexCV.unlock();
 }

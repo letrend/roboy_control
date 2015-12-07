@@ -1,5 +1,9 @@
 #include "XmlModelService.h"
 
+XmlModelService::~XmlModelService() {
+
+}
+
 void XmlModelService::createRoboyBehavior ( const RoboyBehavior & behavior ) {
     m_xmlParser.persistRoboyBehavior(behavior);
     this->notifyAll();

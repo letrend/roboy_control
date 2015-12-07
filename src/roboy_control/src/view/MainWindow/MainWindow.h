@@ -11,7 +11,7 @@
 #include "../../interfaces/IObserver.h"
 #include "../../model/IModelService.h"
 
-
+class ViewController;
 
 namespace Ui {
 class MainWindow;
@@ -22,12 +22,14 @@ class MainWindow : public QMainWindow, public IObserver
     Q_OBJECT
 
 public:
-    explicit MainWindow(IModelService *modelService, QWidget *parent = 0);
+    explicit MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent = 0);
     ~MainWindow();
 
     void notify();
 
 private:
+    ViewController * m_pViewController;
+
     Ui::MainWindow *ui;
     QTabWidget *mainTabWidget;
     EditorView *editorView;

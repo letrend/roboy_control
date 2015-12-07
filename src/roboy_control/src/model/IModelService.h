@@ -11,6 +11,9 @@
 class IModelService : public IObservable {
 
 public:
+    //TODO:
+    // virtual ~IModelService() = 0;
+
     /* Database Operations:
      * - Create Behavior
      * - Retrieve Behavior

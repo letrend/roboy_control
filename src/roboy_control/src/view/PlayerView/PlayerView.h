@@ -14,12 +14,14 @@ namespace Ui {
 class PlayerView;
 }
 
+class ViewController;
+
 class PlayerView : public QWidget, public IObserver
 {
     Q_OBJECT
 
 public:
-    explicit PlayerView(IModelService *modelService, QWidget *parent = 0);
+    explicit PlayerView(IModelService *modelService, ViewController * pViewController, QWidget *parent = 0);
     ~PlayerView();
 
     void notify();
@@ -35,6 +37,8 @@ public slots:
     void showBehaviorQueueItemMenu(const QPoint& pos);
 
 private:
+    ViewController * m_pViewController;
+
     Ui::PlayerView *ui;
     IModelService *modelService;
     BehaviorListModel *behaviorListModel;

@@ -1,4 +1,5 @@
 set(HDRS ${HDRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ViewController.h
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.h
@@ -8,6 +9,7 @@ set(HDRS ${HDRS}
 PARENT_SCOPE)
 
 set(SRCS ${SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ViewController.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.cpp

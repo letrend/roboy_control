@@ -31,4 +31,18 @@ struct RoboyBehavior {
     }
 };
 
+struct RoboyBehaviorExecution {
+    qint64          lId;
+    quint64         ulTimestamp;
+    RoboyBehavior   behavior;
+
+};
+
+struct RoboyBehaviorPlan {
+    qint64      startTimestamp;
+    qint64      stopTimestamp;
+    qint64      duration;
+    QList<RoboyBehaviorExecution>   listExecutions;
+};
+
 #endif // DATATYPES_H

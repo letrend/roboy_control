@@ -11,6 +11,8 @@ private:
     RoboyBehaviorXmlParser m_xmlParser;
 
 public:
+    ~XmlModelService();
+
     void            createRoboyBehavior   ( const RoboyBehavior & behavior );
     RoboyBehavior   retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata );
     void            updateRoboyBehavior   ( const RoboyBehavior & behavior );

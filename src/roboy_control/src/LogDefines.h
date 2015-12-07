@@ -12,8 +12,12 @@
 
 #define OBSERVABLE_DBG  DBG << "[ Observable ]"
 
-#define MODEL_DBG       DBG << "[ XML Parser ]"
+#define MODEL_DBG       DBG << "[ MODEL ]"
 
 #define CONFIG_DBG      DBG << "[ CONFIG ]"
+
+#define VIEW_DBG        DBG << "[ VIEW ]"
+
+#define CONTROLLER_DBG  DBG << "[ CONTROLLER ]"
 
 #endif //ROBOYCONTROL_LOGDEFINES_H

@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-MainWindow::MainWindow(IModelService *modelService, QWidget *parent) :
+MainWindow::MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) 
 {
@@ -9,7 +9,7 @@ MainWindow::MainWindow(IModelService *modelService, QWidget *parent) :
 
     this->ui->setupUi(this);
     this->mainTabWidget = new QTabWidget();
-    this->playerView = new PlayerView(modelService);
+    this->playerView = new PlayerView(modelService, pViewController);
     this->recorderView = new RecorderView(modelService);
     this->editorView = new EditorView(modelService);
     this->setCentralWidget(mainTabWidget);
@@ -31,7 +31,7 @@ MainWindow::~MainWindow()
 void MainWindow::notify() 
 {
     qDebug() << "MainViewController: Notified on data changed";
-        this->playerView->notify();
+    this->playerView->notify();
 	this->recorderView->notify();
 	this->editorView->notify();
 }

@@ -1,17 +1,20 @@
 #include "PlayerView.h"
 #include "ui_PlayerView.h"
 
+#include "ViewController.h"
 
 /**
 * @brief constructor
 * @param the IModelService providing the roboy behaviors
 * @param non mandatory parent
 */
-PlayerView::PlayerView(IModelService *modelService, QWidget *parent) :
+PlayerView::PlayerView(IModelService *modelService, ViewController * pViewController, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlayerView)
 {
-    this->ui->setupUi(this);
+    m_pViewController = pViewController;
+
+	this->ui->setupUi(this);
     this->modelService = modelService;
     this->behaviorListModel = new BehaviorListModel(this->modelService);
     this->behaviorQueueModel = new BehaviorQueueModel();
@@ -63,7 +66,7 @@ void PlayerView::setupConnections()
 **/
 void PlayerView::playButtonClicked()
 {
-	
+	m_pViewController->playBehaviorPlan();
 }
 
 /**
