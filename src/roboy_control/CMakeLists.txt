@@ -20,6 +20,7 @@ message(UI-Files Found:\n${ROBOY_UI_FILES})
 ## Dummy target to add non-source files to Qt-Project Viewer
 file(GLOB ETC ${CMAKE_CURRENT_SOURCE_DIR}/etc/*)
 file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/database/*)
+file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/msg/*)
 add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 
 ## Generate Qt-Files (Mocs for Headers & UI-Fieles)
@@ -38,4 +39,3 @@ include_directories(
 add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
 
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
-

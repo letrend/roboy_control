@@ -27,8 +27,9 @@ private:
     QMutex                m_mutexCV;
     QWaitCondition        m_conditionView;
 
-    bool    m_bStartExectution;
-    bool    m_bStopExecution;
+    bool    m_bStartExectution = false;
+    bool    m_bStopExecution = false;
+    bool    m_bTerminate = false;
 
 protected:
     void run();

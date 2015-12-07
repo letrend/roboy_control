@@ -7,6 +7,7 @@
 
 ViewController::ViewController(RoboyController * pRoboyController, IModelService * pModelService) {
     VIEW_DBG << "Initialize View";
+    VIEW_DBG << "View Thread ID is: " << QThread::currentThreadId();
 
     m_pRoboyController = pRoboyController;
     m_pModelSerivce = pModelService;
