@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QFrame" name="behaviorQueueFrame">
@@ -56,29 +59,72 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="playButton">
+        <property name="minimumSize">
+         <size>
+          <width>85</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>play</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PlayerResources.qrc">
+          <normaloff>:/play-img.png</normaloff>:/play-img.png</iconset>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pauseButton">
+        <property name="minimumSize">
+         <size>
+          <width>85</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>pause</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PlayerResources.qrc">
+          <normaloff>:/pause-img.png</normaloff>:/pause-img.png</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="stopButton">
+        <property name="minimumSize">
+         <size>
+          <width>85</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>stop</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PlayerResources.qrc">
+          <normaloff>:/stop-img.png</normaloff>:/stop-img.png</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="skipButton">
+        <property name="minimumSize">
+         <size>
+          <width>85</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
-         <string>skip</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PlayerResources.qrc">
+          <normaloff>:/skip-img.png</normaloff>:/skip-img.png</iconset>
         </property>
        </widget>
       </item>
@@ -225,6 +271,10 @@
            <property name="text">
             <string>add to queue</string>
            </property>
+           <property name="icon">
+            <iconset resource="PlayerResources.qrc">
+             <normaloff>:/add-img.png</normaloff>:/add-img.png</iconset>
+           </property>
           </widget>
          </item>
         </layout>
@@ -235,6 +285,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="PlayerResources.qrc"/>
+ </resources>
  <connections/>
 </ui>

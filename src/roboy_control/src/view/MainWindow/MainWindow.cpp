@@ -6,7 +6,6 @@ MainWindow::MainWindow(IModelService *modelService, ViewController * pViewContro
     ui(new Ui::MainWindow) 
 {
     modelService->subscribe(this);
-
     this->ui->setupUi(this);
     this->mainTabWidget = new QTabWidget();
     this->playerView = new PlayerView(modelService, pViewController);
@@ -16,7 +15,6 @@ MainWindow::MainWindow(IModelService *modelService, ViewController * pViewContro
     this->mainTabWidget->addTab(playerView, "player");
     this->mainTabWidget->addTab(recorderView, "recorder");
     this->mainTabWidget->addTab(editorView, "editor");
-
 }
 
 MainWindow::~MainWindow() 

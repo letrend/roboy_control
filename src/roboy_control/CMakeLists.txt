@@ -25,6 +25,7 @@ add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 ## Generate Qt-Files (Mocs for Headers & UI-Fieles)
 qt4_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
 qt4_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
+qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
 ## Build Target
 include_directories(
@@ -34,7 +35,7 @@ include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI})
+add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
 
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
 
