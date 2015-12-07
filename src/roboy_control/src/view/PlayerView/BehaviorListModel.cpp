@@ -31,7 +31,7 @@ QVariant BehaviorListModel::data(const QModelIndex &index, int role) const
 {
 	if(index.isValid())
 	{
-		if (index.column() == 0 && role == Qt::DecorationRole) return QColor("blue");
+		if (index.column() == 0 && role == Qt::DecorationRole) return QIcon(":/behavior-img.png");
   		if (index.column() == 0 && role == Qt::EditRole)       return this->behaviorList[index.row()].m_sBehaviorName;
   		if (index.column() == 0 && role == Qt::DisplayRole)    return this->behaviorList[index.row()].m_sBehaviorName;
 	}

@@ -129,7 +129,9 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
     
     if (selectedIndex.isValid()) {
     	QMenu behaviorListItemMenu;
-    	behaviorListItemMenu.addAction("add to queue");
+        QAction addAction(QIcon(":/add-img.png"), "add to queue", NULL);
+        addAction.setIconVisibleInMenu(true);
+        behaviorListItemMenu.addAction(&addAction);
     	QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
 
     	if (selectedItem) {
@@ -147,7 +149,9 @@ void PlayerView::showBehaviorQueueItemMenu(const QPoint& pos)
 
     if (selectedIndex.isValid()) {
     	QMenu behaviorQueueItemMenu;
-    	behaviorQueueItemMenu.addAction("remove from queue");
+        QAction deleteAction(QIcon(":/delete-img.png"), "remove from queue", NULL);
+        deleteAction.setIconVisibleInMenu(true);
+        behaviorQueueItemMenu.addAction(&deleteAction);
 
     	QAction *selectedItem = behaviorQueueItemMenu.exec(globalPos);
     	if (selectedItem)
