@@ -24,6 +24,7 @@ public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);
 
     void playBehaviorPlan();
+    RoboyBehaviorPlan fromController_getCurrentRoboyPlan();
 };
 
 

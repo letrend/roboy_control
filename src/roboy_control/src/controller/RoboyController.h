@@ -31,6 +31,8 @@ private:
     bool    m_bStopExecution = false;
     bool    m_bTerminate = false;
 
+    void executeCurrentRoboyPlan();
+
 protected:
     void run();
 

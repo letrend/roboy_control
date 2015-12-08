@@ -22,3 +22,8 @@ void ViewController::playBehaviorPlan() {
     m_pRoboyController->fromViewController_triggerPlayPlan();
 }
 
+RoboyBehaviorPlan ViewController::fromController_getCurrentRoboyPlan() {
+    // TODO: Get RoboyBehaviorPlan from PlayerView
+    RoboyBehaviorPlan plan;
+    return plan;
+}

@@ -10,6 +10,7 @@
 class ITransceiverService {
 
 public:
+    virtual void sendRoboyBehaviorPlan(const RoboyBehaviorPlan plan) = 0;
     virtual void sendRoboyBehavior(const RoboyBehavior behavior) = 0;
 };
 

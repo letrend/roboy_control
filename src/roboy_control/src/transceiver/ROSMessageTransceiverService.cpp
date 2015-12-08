@@ -9,6 +9,10 @@ ROSMessageTransceiverService::ROSMessageTransceiverService()
 
 }
 
+void ROSMessageTransceiverService::sendRoboyBehaviorPlan(const RoboyBehaviorPlan plan) {
+    TRANSCEIVER_LOG << "Start to send Behavior Plan";
+}
+
 // Exemplary implementation to evaluate other compontents
 void ROSMessageTransceiverService::sendRoboyBehavior(const RoboyBehavior behavior) {
     //qDebug() << "[ TRANSCEIVER ] send behavior: " << behavior.m_metadata.m_sBehaviorName;

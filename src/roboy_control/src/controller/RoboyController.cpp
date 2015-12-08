@@ -40,6 +40,7 @@ void RoboyController::run() {
         if( m_bStartExectution ) {
             CONTROLLER_DBG << "Triggered 'Start Execution' from View";
             m_bStartExectution = false;
+            executeCurrentRoboyPlan();
         } else if ( m_bStopExecution ) {
             CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
             m_bStopExecution = false;
@@ -59,4 +60,12 @@ void RoboyController::fromViewController_triggerPlayPlan() {
     m_bStartExectution = true;
     m_conditionView.wakeAll();
     m_mutexCV.unlock();
+}
+
+void RoboyController::executeCurrentRoboyPlan() {
+    CONTROLLER_DBG << "Start to execute current Roboy Plan.";
+
+    RoboyBehaviorPlan plan = m_pViewController->fromController_getCurrentRoboyPlan();
+
+    m_pTransceiverService->sendRoboyBehaviorPlan(plan);
 }
