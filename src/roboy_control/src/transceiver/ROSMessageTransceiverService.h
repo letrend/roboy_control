@@ -13,6 +13,9 @@ public:
 
     void sendRoboyBehaviorPlan(const RoboyBehaviorPlan plan);
     void sendRoboyBehavior(const RoboyBehavior behavior);
+    void sendRecordRequest(const int id);
+    void sendStopRecordRequest();
+    void sendCancelBehaviorRequest(const int id);
 
 };
 

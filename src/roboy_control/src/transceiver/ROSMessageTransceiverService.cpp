@@ -27,3 +27,15 @@ void ROSMessageTransceiverService::sendRoboyBehavior(const RoboyBehavior behavio
     pub.publish(msg);
     ros::spinOnce();
 }
+
+void ROSMessageTransceiverService::sendRecordRequest(const int id) {
+    TRANSCEIVER_LOG << "Sending start recording request";
+}
+
+void ROSMessageTransceiverService::sendStopRecordRequest(){
+    TRANSCEIVER_LOG << "Sending stop recording request";
+}
+
+void ROSMessageTransceiverService::sendCancelBehaviorRequest (const int id) {
+    TRANSCEIVER_LOG << "Sending cancel";
+}
