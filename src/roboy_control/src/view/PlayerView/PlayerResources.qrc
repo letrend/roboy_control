@@ -8,6 +8,7 @@
     <file alias="face-img.png">images/face_black_24x24.png</file>
     <file alias="speech-img.png">images/volume_up_black_24x24.png</file>
     <file alias="add-img.png">images/add_black_24x24.png</file>
+    <file alias="remove-img.png">images/remove_black_24x24.png</file>
     <file alias="delete-img.png">images/delete_black_24x24.png</file>
 </qresource>
 </RCC>
