@@ -3,6 +3,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 )
 
 ## FIND QT
@@ -27,6 +28,23 @@ add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 qt4_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
 qt4_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
 qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
+
+add_message_files(
+   FILES
+   CancelBehavior.msg
+   ExecuteBehavior.msg
+   MotorMessage.msg
+   Position.msg 
+   StartRecording.msg 
+)
+
+generate_messages(
+   DEPENDENCIES std_msgs
+)
+
+#catkin_package(
+#   CATKIN_DEPENDS message_runtime
+#)
 
 ## Build Target
 include_directories(
