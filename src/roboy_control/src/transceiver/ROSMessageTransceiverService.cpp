@@ -32,10 +32,15 @@ void ROSMessageTransceiverService::sendRecordRequest(const int id) {
     TRANSCEIVER_LOG << "Sending start recording request";
 }
 
-void ROSMessageTransceiverService::sendStopRecordRequest(){
+void ROSMessageTransceiverService::sendStopRecordRequest(const int id){
     TRANSCEIVER_LOG << "Sending stop recording request";
 }
 
 void ROSMessageTransceiverService::sendCancelBehaviorRequest (const int id) {
     TRANSCEIVER_LOG << "Sending cancel";
 }
+
+void ROSMessageTransceiverService::callback(const std_msgs::String::ConstPtr& msg){
+    TRANSCEIVER_LOG << "I heard: " << msg->data.c_str();
+}
+

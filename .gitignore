@@ -4,3 +4,4 @@ devel/
 .*
 *.user
 *~
+etc/RoboyControlConfig.xml

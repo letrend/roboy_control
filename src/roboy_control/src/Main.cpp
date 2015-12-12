@@ -7,8 +7,14 @@
 #include "transceiver/ROSMessageTransceiverService.h"
 #include "ros/ros.h"
 
+
+void callback(const std_msgs::String::ConstPtr& msg){
+    TRANSCEIVER_LOG << "I heard: " << msg->data.c_str();
+}
+
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "roboycontrol");
+    ros::NodeHandle n;
 
     QApplication app(argc, argv);
 
@@ -20,6 +26,8 @@ int main(int argc, char ** argv) {
     newBehavior.m_metadata.m_ulBehaviorId = 2;
 
     ROSMessageTransceiverService t;
+    ros::Subscriber sub = n.subscribe("sendBehavior", 1000, callback);
+    ros::spinOnce();
     t.sendRoboyBehavior(newBehavior);
 
     return app.exec();

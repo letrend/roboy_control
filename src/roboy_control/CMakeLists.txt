@@ -35,7 +35,10 @@ add_message_files(
    ExecuteBehavior.msg
    MotorMessage.msg
    Position.msg 
-   StartRecording.msg 
+   StartRecording.msg
+   Waypoint.msg 
+   Trajectory.msg
+   Steer.msg
 )
 
 generate_messages(
