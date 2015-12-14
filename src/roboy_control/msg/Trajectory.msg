@@ -1,3 +1,4 @@
 Header header
 uint32 samplerate
-Waypoint[] waypoints
+uint8 controlmode
+int32[] waypoints

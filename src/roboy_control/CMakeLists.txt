@@ -31,26 +31,24 @@ qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
 add_message_files(
    FILES
-   CancelBehavior.msg
-   ExecuteBehavior.msg
-   MotorMessage.msg
-   Position.msg 
-   StartRecording.msg
-   Waypoint.msg 
-   Trajectory.msg
+   InitializeRequest.msg
+   InitializeResponse.msg
+   Status.msg
    Steer.msg
+   Trajectory.msg
 )
 
 generate_messages(
    DEPENDENCIES std_msgs
 )
 
-#catkin_package(
-#   CATKIN_DEPENDS message_runtime
-#)
+catkin_package(
+   CATKIN_DEPENDS message_runtime
+)
 
 ## Build Target
 include_directories(
+#        ${CMAKE_INSTALL_PREFIX}/include
         ${ROBOY_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
         ${QT_INCLUDE_DIR}
@@ -58,5 +56,7 @@ include_directories(
 )
 
 add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
-
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
+
+add_executable(roboy_control_test_node src/testnode/TestNode.cpp)
+target_link_libraries(roboy_control_test_node ${catkin_LIBRARIES} ${QT_LIBRARIES})

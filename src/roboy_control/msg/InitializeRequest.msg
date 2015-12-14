@@ -1,2 +1,2 @@
 Header header
-string id
+bool[] enable

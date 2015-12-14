@@ -10,8 +10,15 @@
 class ITransceiverService {
 
 public:
-    virtual void sendRoboyBehaviorPlan(const RoboyBehaviorPlan plan) = 0;
-    virtual void sendRoboyBehavior(const RoboyBehavior behavior) = 0;
+    // MyoMaster Interface
+    virtual void sendInitializeRequest(std::vector<bool> enable) = 0;
+    virtual void receiveInitializeResponse() = 0;
+
+    // MotorController Interface
+    virtual void sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints) = 0;
+    virtual void receiveControllerStatus(u_int32_t motorId) = 0;
+
+    virtual void sendSteeringMessage() = 0;
 };
 
 

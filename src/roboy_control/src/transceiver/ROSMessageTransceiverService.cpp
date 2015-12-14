@@ -1,46 +1,50 @@
 #include "ROSMessageTransceiverService.h"
-#include "ros/ros.h"
-#include "std_msgs/String.h"
 
-#include <sstream>
-
-ROSMessageTransceiverService::ROSMessageTransceiverService()
-{
+ROSMessageTransceiverService::ROSMessageTransceiverService() {
 
 }
 
-void ROSMessageTransceiverService::sendRoboyBehaviorPlan(const RoboyBehaviorPlan plan) {
-    TRANSCEIVER_LOG << "Start to send Behavior Plan";
+// MyoMaster Interface
+void ROSMessageTransceiverService::sendInitializeRequest(std::vector<bool> enable) {
+
+}
+void ROSMessageTransceiverService::receiveInitializeResponse() {
+
 }
 
-// Exemplary implementation to evaluate other compontents
-void ROSMessageTransceiverService::sendRoboyBehavior(const RoboyBehavior behavior) {
-    //qDebug() << "[ TRANSCEIVER ] send behavior: " << behavior.m_metadata.m_sBehaviorName;
-    //qDebug() << "[ TRANSCEIVER ] send behavior: " << behavior;
-    ros::NodeHandle n;
-    ros::Publisher pub = n.advertise<std_msgs::String>("sendBehavior",1000);
-    std_msgs::String msg;
-    std::stringstream ss;
-    ss << "Behave";
-    msg.data = ss.str();
-    ROS_INFO("%s", msg.data.c_str());
-    pub.publish(msg);
-    ros::spinOnce();
+// MotorController Interface
+void ROSMessageTransceiverService::sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints) {
+    QString topic = "motor";
+
+    TRANSCEIVER_LOG << "Publish on Topic: " << topic;
+
+    roboy_control::Trajectory trajectoryMessage;
+    trajectoryMessage.waypoints.push_back(2);
+
+    ros::Publisher pub = m_nodeHandle.advertise<std_msgs::String>("motor",1000);
+
+    ros::Rate loop_rate(10);
+
+    while(ros::ok()) {
+
+        std_msgs::String msg;
+        std::stringstream ss;
+        ss << "Behave";
+        msg.data = ss.str();
+        ROS_INFO("%s", msg.data.c_str());
+
+
+        pub.publish(msg);
+        ros::spinOnce();
+
+        loop_rate.sleep();
+    }
 }
 
-void ROSMessageTransceiverService::sendRecordRequest(const int id) {
-    TRANSCEIVER_LOG << "Sending start recording request";
+void ROSMessageTransceiverService::receiveControllerStatus(u_int32_t motorId) {
+
 }
 
-void ROSMessageTransceiverService::sendStopRecordRequest(const int id){
-    TRANSCEIVER_LOG << "Sending stop recording request";
-}
+void ROSMessageTransceiverService::sendSteeringMessage() {
 
-void ROSMessageTransceiverService::sendCancelBehaviorRequest (const int id) {
-    TRANSCEIVER_LOG << "Sending cancel";
 }
-
-void ROSMessageTransceiverService::callback(const std_msgs::String::ConstPtr& msg){
-    TRANSCEIVER_LOG << "I heard: " << msg->data.c_str();
-}
-

@@ -7,13 +7,8 @@
 #include "transceiver/ROSMessageTransceiverService.h"
 #include "ros/ros.h"
 
-
-void callback(const std_msgs::String::ConstPtr& msg){
-    TRANSCEIVER_LOG << "I heard: " << msg->data.c_str();
-}
-
 int main(int argc, char ** argv) {
-    ros::init(argc, argv, "roboycontrol");
+    ros::init(argc, argv, "roboy_control");
     ros::NodeHandle n;
 
     QApplication app(argc, argv);
@@ -21,62 +16,19 @@ int main(int argc, char ** argv) {
     RoboyController controller;
     controller.start();
 
-    RoboyBehavior newBehavior;
-    newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
-    newBehavior.m_metadata.m_ulBehaviorId = 2;
-
-    ROSMessageTransceiverService t;
-    ros::Subscriber sub = n.subscribe("sendBehavior", 1000, callback);
-    ros::spinOnce();
-    t.sendRoboyBehavior(newBehavior);
+//    RoboyBehavior newBehavior;
+//    newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
+//    newBehavior.m_metadata.m_ulBehaviorId = 2;
+//
+//    ROSMessageTransceiverService t;
+//    ros::Subscriber sub = n.subscribe("motor", 1000, callback);
+//    ros::spinOnce();
+//    QList<RoboyWaypoint> list;
+//    RoboyWaypoint waypoint;
+//    waypoint.m_ulId = 1;
+//    waypoint.m_ulPosition = 1000;
+//    list.append(waypoint);
+//    t.sendTrajectory(1, list);
 
     return app.exec();
-}
-
-int testCode() {
-/*    RoboyControlConfiguration& config = RoboyControlConfiguration::instance();
-
-    DBG << RoboyControlConfiguration::instance().getModelConfig("databasePath");
-    DBG << RoboyControlConfiguration::instance().getModelConfig("databaseType");
-    if (config.getModelConfig("asdf") == QString::null) {
-        DBG << "Invalid Value";
-    }
-
-    XmlModelService xmlModelService;
-    IModelService & modelService = xmlModelService;
-
-    MainWindow window(&modelService);
-    window.show();
-
-    RoboyBehavior newBehavior;
-    newBehavior.m_metadata.m_sBehaviorName = "GreetBehavior";
-    newBehavior.m_metadata.m_ulBehaviorId = 2;
-    QList<RoboyWaypoint> wps;
-    RoboyWaypoint wp;
-    for (int i = 0; i < 5; i++) {
-        wps.clear();
-        for (int j = 0; j < 20; j++) {
-            wp.m_ulId = j;
-            wp.m_ulTimestamp = QDateTime::currentMSecsSinceEpoch();
-            wp.m_ulPosition =  j * i + (i + j);
-            wps.append(wp);
-        }
-        newBehavior.m_mapMotorWaypoints.insert(i, wps);
-    }
-
-    modelService.persistNewRoboyBehavior(newBehavior);
-
-    RoboyBehaviorMetadata metadata;
-    metadata.m_sBehaviorName = "GreetBehavior";
-    metadata.m_ulBehaviorId = 2;
-
-    RoboyBehavior behavior = modelService.getBehavior(metadata);
-
-    LOG << behavior.toString();
-
-    QList <RoboyBehaviorMetadata> behaviorList = modelService.getBehaviorList();
-    for (RoboyBehaviorMetadata behavior : behaviorList) {
-        LOG << behavior.m_sBehaviorName << " ID: " << behavior.m_ulBehaviorId;
-    }
-*/
 }

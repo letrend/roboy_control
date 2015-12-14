@@ -1,2 +1,2 @@
 Header header
-string id
+uint8[] status

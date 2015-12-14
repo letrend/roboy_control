@@ -66,6 +66,4 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
 
     RoboyBehaviorPlan plan = m_pViewController->fromController_getCurrentRoboyPlan();
-
-    m_pTransceiverService->sendRoboyBehaviorPlan(plan);
 }
