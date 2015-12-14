@@ -9,6 +9,10 @@ RoboyController::RoboyController() {
     m_pTransceiverService = new ROSMessageTransceiverService();
 
     m_pViewController = new ViewController(this, m_pModelService);
+
+    std::vector<bool> b;
+    b.push_back(true);
+    m_pTransceiverService->sendInitializeRequest(b);
 }
 
 RoboyController::~RoboyController() {

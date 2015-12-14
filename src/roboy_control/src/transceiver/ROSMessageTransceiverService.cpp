@@ -6,8 +6,21 @@ ROSMessageTransceiverService::ROSMessageTransceiverService() {
 
 // MyoMaster Interface
 void ROSMessageTransceiverService::sendInitializeRequest(std::vector<bool> enable) {
+    ros::Publisher publisher = m_nodeHandle.advertise<roboy_control::InitializeRequest>("initialize_request", 1000);
 
+    ros::Rate rollRate(10);
+    while(publisher.getNumSubscribers() == 0) {
+        rollRate.sleep();
+    }
+    roboy_control::InitializeRequest request;
+
+    for(bool b : enable) {
+        request.enable.push_back(b);
+    }
+
+    publisher.publish(request);
 }
+
 void ROSMessageTransceiverService::receiveInitializeResponse() {
 
 }

@@ -5,10 +5,11 @@
 #include <QDebug>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "roboy_control/InitializeRequest.h"
 
 
-void callback(const std_msgs::String::ConstPtr& msg){
-    qDebug() << "I heard: " << msg->data.c_str();
+void callback(const roboy_control::InitializeRequest& msg){
+    qDebug() << "I heard InitializeRequest";
 }
 int main(int argc, char ** argv) {
     qDebug() << "Test node started ...";
@@ -16,7 +17,7 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, "roboy_control_test_node");
     ros::NodeHandle n;
 
-    ros::Subscriber subscriber = n.subscribe("motor", 1000, callback);
+    ros::Subscriber subscriber = n.subscribe("initialize_request", 1000, callback);
 
     ros::spin();
 }
