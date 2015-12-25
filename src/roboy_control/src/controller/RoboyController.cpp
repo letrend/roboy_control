@@ -10,8 +10,13 @@ RoboyController::RoboyController() {
 
     m_pViewController = new ViewController(this, m_pModelService);
 
+    // sending initialize request once
+    size_t size = 10;
     std::vector<bool> b;
-    b.push_back(true);
+    for(int i=0; i<size; i++) {
+        b.push_back(true);
+    }
+    CONTROLLER_DBG << "Sending initialize request...";
     m_pTransceiverService->sendInitializeRequest(b);
 }
 
@@ -70,4 +75,21 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
 
     RoboyBehaviorPlan plan = m_pViewController->fromController_getCurrentRoboyPlan();
+
+    CONTROLLER_DBG << "Loaded plan with " << plan.listExecutions.length() << " executions.";
+    for(int i=0; i<plan.listExecutions.length(); i++){
+        // for every execution
+        RoboyBehavior rb = plan.listExecutions.at(i).behavior;
+        QList<u_int32_t> motors = rb.m_mapMotorWaypoints.keys();
+        CONTROLLER_DBG << "Processing behavior " << rb.m_metadata.m_sBehaviorName << " for " << motors.length() << " motors.";
+        for(int j=0; j< motors.length(); j++){
+            // for every motor
+            QList<RoboyWaypoint> waypoints = rb.m_mapMotorWaypoints.take(motors.at(j));
+            CONTROLLER_DBG << "Sending request for " << waypoints.length() << " waypoints.";
+            m_pTransceiverService->sendTrajectory(motors.at(j),waypoints);
+        }
+    }
+
+    m_pTransceiverService->sendSteeringMessage(1);
+
 }

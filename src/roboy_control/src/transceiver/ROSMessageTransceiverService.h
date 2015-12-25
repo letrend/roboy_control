@@ -6,7 +6,6 @@
 #include "LogDefines.h"
 
 #include "roboy_control/InitializeRequest.h"
-#include "roboy_control/InitializeResponse.h"
 #include "roboy_control/Status.h"
 #include "roboy_control/Steer.h"
 #include "roboy_control/Trajectory.h"
@@ -22,6 +21,8 @@ class ROSMessageTransceiverService : public ITransceiverService
 {
 private:
     ros::NodeHandle m_nodeHandle;
+    bool initialized;
+    bool status_received;
 
 
 public:
@@ -29,13 +30,13 @@ public:
 
     // MyoMaster Interface
     void sendInitializeRequest(std::vector<bool> enable);
-    void receiveInitializeResponse();
+    void receiveInitializeResponse(const roboy_control::InitializeResponse& msg);
 
     // MotorController Interface
     void sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints);
-    void receiveControllerStatus(u_int32_t motorId);
+    void receiveControllerStatus(const roboy_control::Status &msg);
 
-    void sendSteeringMessage();
+    void sendSteeringMessage(uint8_t steeringaction);
 };
 
 #endif // ROSMESSAGETRANSCEIVERSERVICE_H
