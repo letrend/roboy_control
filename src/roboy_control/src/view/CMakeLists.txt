@@ -8,6 +8,7 @@ set(HDRS ${HDRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewLane.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewItem.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/IMultiLaneViewModel.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/RoboyMultiLaneModel.h
         ${CMAKE_CURRENT_SOURCE_DIR}/RecorderView/RecorderView.h
         ${CMAKE_CURRENT_SOURCE_DIR}/EditorView/EditorView.h
 PARENT_SCOPE)
@@ -21,6 +22,7 @@ set(SRCS ${SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewLane.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewItem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/RoboyMultiLaneModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/RecorderView/RecorderView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/EditorView/EditorView.cpp
 PARENT_SCOPE)

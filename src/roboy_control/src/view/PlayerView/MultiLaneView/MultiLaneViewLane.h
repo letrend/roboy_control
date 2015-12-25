@@ -1,20 +1,36 @@
 #ifndef MULTILANEVIEWLANE_H
 #define MULTILANEVIEWLANE_H
 
-#include <QWidget>
+#include <QFrame>
+#include <QIcon>
+#include <QList>
 
-#include "DataTypes.h"
+#include "MultiLaneViewItem.h"
 
-class MultiLaneViewLane : public QWidget
+class MultiLaneViewLane : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit MultiLaneViewLane(QWidget *parent = 0);
+    enum multiLaneViewScaleFactor {
+        millisecond = 1,
+        centisecond = 10,
+        decisecond  = 100,
+        second      = 1000
+    };
 
-signals:
+    typedef enum multiLaneViewScaleFactor scaleFactor;
 
-public slots:
+    explicit MultiLaneViewLane(scaleFactor viewScaleFactor = scaleFactor::millisecond, QWidget *parent = 0);
+    ~MultiLaneViewLane();
+    void setScaleFactor(scaleFactor factor);
+    void itemInsertedHandler    (qint32 index, QString name, QIcon icon, quint64 timeStamp, quint64 duration64, quint64 motorCount);
+    void itemRemovedHandler     (qint32 index);
+    void paintEvent(QPaintEvent *event);
+
+private:
+    QList<MultiLaneViewItem *> items;
+    scaleFactor viewScaleFactor = scaleFactor::millisecond;
 
 };
 

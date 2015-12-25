@@ -29,19 +29,33 @@ struct RoboyBehavior {
 
         return string;
     }
+
+    quint64 getDuration() {
+        quint64 firstTs = 0;
+        quint64 lastTs  = 0;
+        for (QList<RoboyWaypoint> trajectory : m_mapMotorWaypoints) {
+            if (trajectory.first().m_ulTimestamp < firstTs) {
+                firstTs = trajectory.first().m_ulTimestamp;
+            }
+            if (trajectory.last().m_ulTimestamp > lastTs) {
+                lastTs = trajectory.last().m_ulTimestamp;
+            }
+        }
+        return lastTs-firstTs;
+    }
 };
 
 struct RoboyBehaviorExecution {
-    qint64          lId;
+    quint64          lId;
     quint64         ulTimestamp;
     RoboyBehavior   behavior;
 
 };
 
 struct RoboyBehaviorPlan {
-    qint64      startTimestamp;
-    qint64      stopTimestamp;
-    qint64      duration;
+    quint64      startTimestamp;
+    quint64      stopTimestamp;
+    quint64      duration;
     QList<RoboyBehaviorExecution>   listExecutions;
 };
 

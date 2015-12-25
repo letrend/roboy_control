@@ -5,23 +5,30 @@
 
 #include "DataTypes.h"
 
-// http://stackoverflow.com/questions/17943496/declare-abstract-signal-in-interface-class
-
 class IMultiLaneViewModel : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual int laneCount() const = 0;
-    virtual int itemCountForLane(int laneIndex) = 0;
-    virtual QVariant data(int laneIndex, int itemIndex) const = 0;
-    virtual void addLane() = 0;
-    virtual void insertBehaviorExecution(int lane, quint64 ulTimestamp, RoboyBehavior behavior) = 0;
-    virtual void removeBehaviorExecution(qint64 lId) = 0;
-    virtual RoboyBehaviorPlan getBehaviorPlan() = 0;
+    virtual void   initializeWidget   () = 0;
+    virtual qint8  addLane            () = 0;
+    virtual qint8  insertLane         (qint32 index) = 0;
+    virtual qint8  removeLane         (qint32 index) = 0;
+    virtual qint8  insertBehaviorExec (qint32 laneIndex, quint64 ulTimestamp, RoboyBehavior behavior) = 0;
+    virtual qint8  removeBehaviorExec (qint32 laneIndex, qint32 itemIndex) = 0;
+    virtual qint8  removeBehaviorExec (qint32 laneIndex, qint64 lId) = 0;
+
+    virtual qint32   laneCount () = 0;
+    virtual qint32   itemCount (qint32 laneIndex) = 0;
+    virtual QVariant data      (qint32 laneIndex, qint32 itemIndex, qint32 role) = 0;
+
+    virtual RoboyBehaviorPlan getBehaviorPlan () = 0;
 
 signals:
-    virtual void dataChanged() = 0;
+    void laneInserted   (qint32 index);
+    void laneRemoved    (qint32 index);
+    void itemInserted   (qint32 laneIndex, qint32 itemIndex);
+    void itemRemoved    (qint32 laneIndex, qint32 itemIndex);
 };
 
 Q_DECLARE_INTERFACE(IMultiLaneViewModel, "IMultiLaneViewModel")

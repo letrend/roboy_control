@@ -3,6 +3,11 @@
 
 #include "ViewController.h"
 
+#include "DataTypes.h"
+
+#include "MultiLaneView/MultiLaneView.h"
+#include "MultiLaneView/RoboyMultiLaneModel.h"
+
 /**
 * @brief constructor
 * @param the IModelService providing the roboy behaviors
@@ -21,6 +26,22 @@ PlayerView::PlayerView(IModelService *modelService, ViewController * pViewContro
     this->ui->behaviorListView->setModel(this->behaviorListModel);
     this->ui->behaviorQueueListView->setModel(this->behaviorQueueModel);
     this->setupConnections();
+
+    RoboyMultiLaneModel *model = new RoboyMultiLaneModel();
+    MultiLaneView *multi = new MultiLaneView();
+    multi->setModel(model);
+    this->ui->behaviorQueueFrame->layout()->addWidget(multi);
+
+    model->addLane();
+    model->addLane();
+    model->addLane();
+
+    QList<RoboyBehaviorMetadata> metaData = modelService->getBehaviorList();
+
+    for (int i = 0; i < metaData.count(); i++) {
+        RoboyBehavior behavior = modelService->retrieveRoboyBehavior(metaData.at(i));
+        model->insertBehaviorExec(i, i*50, behavior);
+    }
 }
 
 /**
