@@ -1,0 +1,2 @@
+set(roboy_control_MESSAGE_FILES "/home/matthias/roboycontrol/src/roboy_control/msg/InitializeRequest.msg;/home/matthias/roboycontrol/src/roboy_control/msg/InitializeResponse.msg;/home/matthias/roboycontrol/src/roboy_control/msg/Status.msg;/home/matthias/roboycontrol/src/roboy_control/msg/Steer.msg;/home/matthias/roboycontrol/src/roboy_control/msg/Trajectory.msg")
+set(roboy_control_SERVICE_FILES "")

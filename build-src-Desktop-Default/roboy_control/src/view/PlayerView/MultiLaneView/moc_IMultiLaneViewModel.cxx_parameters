@@ -1,0 +1,12 @@
+-I/usr/include/qt4
+-I/usr/include/qt4/QtGui
+-I/usr/include/qt4/QtCore
+-DROS_BUILD_SHARED_LIBS=1
+-DROS_PACKAGE_NAME="roboy_control"
+-DROSCONSOLE_BACKEND_LOG4CXX
+-DQT_NO_DEBUG
+-DQT_GUI_LIB
+-DQT_CORE_LIB
+-o
+/home/matthias/roboycontrol/build-src-Desktop-Default/roboy_control/src/view/PlayerView/MultiLaneView/moc_IMultiLaneViewModel.cxx
+/home/matthias/roboycontrol/src/roboy_control/src/view/PlayerView/MultiLaneView/IMultiLaneViewModel.h

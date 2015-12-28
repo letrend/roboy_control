@@ -5,7 +5,7 @@
 #include <QWidget>
 
 #include "BehaviorListModel.h"
-#include "BehaviorQueueModel.h"
+#include "MultiLaneView/RoboyMultiLaneModel.h"
 #include "../../DataTypes.h"
 #include "../../interfaces/IObserver.h"
 #include "../../model/IModelService.h"
@@ -31,10 +31,8 @@ public slots:
     void pauseButtonClicked();
     void stopButtonClicked();
     void skipButtonClicked();
-    void addToQueueButtonClicked();
-    void behaviorQueueListViewCurrentRowChanged(const QModelIndex & index);
+    void behaviorListViewCurrentRowChanged(const QModelIndex & index);
     void showBehaviorListItemMenu(const QPoint& pos);
-    void showBehaviorQueueItemMenu(const QPoint& pos);
 
 private:
     ViewController * m_pViewController;
@@ -42,7 +40,7 @@ private:
     Ui::PlayerView *ui;
     IModelService *modelService;
     BehaviorListModel *behaviorListModel;
-    BehaviorQueueModel *behaviorQueueModel;
+    RoboyMultiLaneModel *multiLaneModel;
     RoboyBehaviorMetadata currentlyDisplayedBehaviorMetaData;
     RoboyBehavior currentlyDisplayedBehavior;
 

@@ -3,7 +3,6 @@ set(HDRS ${HDRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorQueueModel.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneView.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewLane.h
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewItem.h
@@ -18,7 +17,6 @@ set(SRCS ${SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow/MainWindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/PlayerView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorListModel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/BehaviorQueueModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneView.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewLane.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PlayerView/MultiLaneView/MultiLaneViewItem.cpp

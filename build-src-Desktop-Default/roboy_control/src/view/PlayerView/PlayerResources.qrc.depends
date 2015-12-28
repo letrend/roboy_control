@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="play-img.png">images/play_arrow_black_24x24.png</file>
+    <file alias="pause-img.png">images/pause_black_24x24.png</file>
+    <file alias="stop-img.png">images/stop_black_24x24.png</file>
+    <file alias="skip-img.png">images/skip_next_black_24x24.png</file>
+    <file alias="behavior-img.png">images/accessibility_black_24x24.png</file>
+    <file alias="face-img.png">images/face_black_24x24.png</file>
+    <file alias="speech-img.png">images/volume_up_black_24x24.png</file>
+    <file alias="add-img.png">images/add_black_24x24.png</file>
+    <file alias="remove-img.png">images/remove_black_24x24.png</file>
+    <file alias="delete-img.png">images/delete_black_24x24.png</file>
+</qresource>
+</RCC>

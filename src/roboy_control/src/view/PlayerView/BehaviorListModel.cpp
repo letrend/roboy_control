@@ -54,7 +54,7 @@ RoboyBehaviorMetadata  BehaviorListModel::getBehaviorMetaData(int index) const
 	return this->behaviorList[index];
 }
 
-/* private methods */
+// private methods
 
 /**
 *@brief method for triggering a update of the behavior list after a change in the data

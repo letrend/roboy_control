@@ -22,25 +22,21 @@ PlayerView::PlayerView(IModelService *modelService, ViewController * pViewContro
 	this->ui->setupUi(this);
     this->modelService = modelService;
     this->behaviorListModel = new BehaviorListModel(this->modelService);
-    this->behaviorQueueModel = new BehaviorQueueModel();
     this->ui->behaviorListView->setModel(this->behaviorListModel);
-    this->ui->behaviorQueueListView->setModel(this->behaviorQueueModel);
     this->setupConnections();
 
-    RoboyMultiLaneModel *model = new RoboyMultiLaneModel();
-    MultiLaneView *multi = new MultiLaneView();
-    multi->setModel(model);
-    this->ui->behaviorQueueFrame->layout()->addWidget(multi);
+    this->multiLaneModel = new RoboyMultiLaneModel();
+    this->ui->multiLaneView->setModel(this->multiLaneModel);
 
-    model->addLane();
-    model->addLane();
-    model->addLane();
+    this->multiLaneModel->addLane();
+    this->multiLaneModel->addLane();
+    this->multiLaneModel->addLane();
 
     QList<RoboyBehaviorMetadata> metaData = modelService->getBehaviorList();
 
     for (int i = 0; i < metaData.count(); i++) {
         RoboyBehavior behavior = modelService->retrieveRoboyBehavior(metaData.at(i));
-        model->insertBehaviorExec(i, i*50, behavior);
+        this->multiLaneModel->insertBehaviorExec(i, i*50, behavior);
     }
 }
 
@@ -51,7 +47,6 @@ PlayerView::~PlayerView()
 {
     delete this->ui;
     delete this->behaviorListModel;
-    delete this->behaviorQueueModel;
 }
 
 /**
@@ -74,11 +69,9 @@ void PlayerView::setupConnections()
 	QObject::connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(pauseButtonClicked()));
 	QObject::connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopButtonClicked()));
 	QObject::connect(ui->skipButton, SIGNAL(clicked()), this, SLOT(skipButtonClicked()));
-	QObject::connect(ui->addToQueueButton, SIGNAL(clicked()), this, SLOT(addToQueueButtonClicked()));
 	/* behavior listview */
 	connect(ui->behaviorListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorListItemMenu(const QPoint&)));
-	connect(ui->behaviorQueueListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorQueueItemMenu(const QPoint&)));
-	QObject::connect(ui->behaviorListView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(behaviorQueueListViewCurrentRowChanged(const QModelIndex &)));
+    QObject::connect(ui->behaviorListView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(behaviorListViewCurrentRowChanged(const QModelIndex &)));
 
 }
 
@@ -115,18 +108,10 @@ void PlayerView::skipButtonClicked()
 }
 
 /**
-*@brief click handler for the add to queue button
-**/
-void PlayerView::addToQueueButtonClicked()
-{
-	this->behaviorQueueModel->addBehaviorMetaData(this->currentlyDisplayedBehaviorMetaData);
-}
-
-/**
 *@brief method for filling the behaviorDetailView with information about the selected behavior
 *@param index index of the currently selected behavior in the behaviorListView
 **/
-void PlayerView::behaviorQueueListViewCurrentRowChanged(const QModelIndex & index)
+void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 {	
 	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
 	this->currentlyDisplayedBehavior = this->modelService->retrieveRoboyBehavior(this->currentlyDisplayedBehaviorMetaData);
@@ -160,29 +145,8 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
 
     	if (selectedItem) {
     		if (selectedItem->text() == "add to queue") {
-    			this->behaviorQueueModel->addBehaviorMetaData(this->behaviorListModel->getBehaviorMetaData(selectedIndex.row()));
-    		}
+                // add item to multi lane view here
+            }
 		}
-	}
-}
-
-void PlayerView::showBehaviorQueueItemMenu(const QPoint& pos)
-{
-    QPoint globalPos = ui->behaviorQueueListView->mapToGlobal(pos);
-    QModelIndex selectedIndex = ui->behaviorQueueListView->indexAt(pos);
-
-    if (selectedIndex.isValid()) {
-    	QMenu behaviorQueueItemMenu;
-        QAction deleteAction(QIcon(":/delete-img.png"), "remove from queue", NULL);
-        deleteAction.setIconVisibleInMenu(true);
-        behaviorQueueItemMenu.addAction(&deleteAction);
-
-    	QAction *selectedItem = behaviorQueueItemMenu.exec(globalPos);
-    	if (selectedItem)
-    	{
-     		if (selectedItem->text() == "remove from queue") {
-     			this->behaviorQueueModel->removeBehaviorMetaData(selectedIndex.row());
-     		}   
-    	}
 	}
 }

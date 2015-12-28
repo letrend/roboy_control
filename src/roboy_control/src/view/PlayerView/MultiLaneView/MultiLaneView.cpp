@@ -27,6 +27,7 @@ MultiLaneView::MultiLaneView(QWidget *parent)
 
     laneBackground->setLayout(laneScrollAreaLayout);
 
+    multiLaneViewLayout->setMargin(0);
     multiLaneViewLayout->addWidget(laneScrollArea);
 
     this->setLayout(multiLaneViewLayout);
