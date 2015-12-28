@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "roboy_control")
-set(roboy_control_MAINTAINER "bruh <bruh@todo.todo>")
-set(roboy_control_DEPRECATED "")
-set(roboy_control_VERSION "0.0.0")
-set(roboy_control_BUILD_DEPENDS "message_generation" "roscpp" "rospy" "std_msgs")
-set(roboy_control_RUN_DEPENDS "message_runtime" "roscpp" "rospy" "std_msgs")
-set(roboy_control_BUILDTOOL_DEPENDS "catkin")
