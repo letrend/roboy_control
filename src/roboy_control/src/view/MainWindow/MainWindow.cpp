@@ -11,6 +11,7 @@ MainWindow::MainWindow(IModelService *modelService, ViewController * pViewContro
     this->playerView = new PlayerView(modelService, pViewController);
     this->recorderView = new RecorderView(modelService);
     this->editorView = new EditorView(modelService);
+    this->setContentsMargins(9,9,9,9);
     this->setCentralWidget(mainTabWidget);
     this->mainTabWidget->addTab(playerView, "player");
     this->mainTabWidget->addTab(recorderView, "recorder");

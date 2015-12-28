@@ -4830,6 +4830,7 @@ roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.c
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QApplication
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QButtonGroup
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QCleanlooksStyle
+roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QComboBox
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QCommonStyle
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QFileDialog
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QFont
@@ -4849,6 +4850,7 @@ roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.c
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QPushButton
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QScrollArea
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QSpacerItem
+roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QSplitter
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QTabWidget
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QTransform
 roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.cpp.o: /usr/include/qt4/QtGui/QVBoxLayout

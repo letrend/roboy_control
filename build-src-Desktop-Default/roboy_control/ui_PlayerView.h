@@ -13,6 +13,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QComboBox>
 #include <QtGui/QFrame>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
@@ -21,6 +22,7 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QPushButton>
 #include <QtGui/QSpacerItem>
+#include <QtGui/QSplitter>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "view/PlayerView/MultiLaneView/MultiLaneView.h"
@@ -40,9 +42,10 @@ public:
     QSpacerItem *horizontalSpacer;
     QLabel *label;
     QPushButton *pushButton_2;
+    QComboBox *comboBox;
+    QSplitter *splitter_2;
     MultiLaneView *multiLaneView;
-    QWidget *behaviorSelectionFrame;
-    QHBoxLayout *horizontalLayout;
+    QSplitter *splitter;
     QFrame *behaviorListFrame;
     QVBoxLayout *verticalLayout_3;
     QListView *behaviorListView;
@@ -126,22 +129,34 @@ public:
 
         horizontalLayout_2->addWidget(pushButton_2);
 
+        comboBox = new QComboBox(playControlsFrame);
+        comboBox->setObjectName(QString::fromUtf8("comboBox"));
+
+        horizontalLayout_2->addWidget(comboBox);
+
 
         verticalLayout->addWidget(playControlsFrame);
 
-        multiLaneView = new MultiLaneView(PlayerView);
+        splitter_2 = new QSplitter(PlayerView);
+        splitter_2->setObjectName(QString::fromUtf8("splitter_2"));
+        splitter_2->setOrientation(Qt::Vertical);
+        multiLaneView = new MultiLaneView(splitter_2);
         multiLaneView->setObjectName(QString::fromUtf8("multiLaneView"));
-        multiLaneView->setMinimumSize(QSize(0, 200));
-
-        verticalLayout->addWidget(multiLaneView);
-
-        behaviorSelectionFrame = new QWidget(PlayerView);
-        behaviorSelectionFrame->setObjectName(QString::fromUtf8("behaviorSelectionFrame"));
-        horizontalLayout = new QHBoxLayout(behaviorSelectionFrame);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        behaviorListFrame = new QFrame(behaviorSelectionFrame);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(multiLaneView->sizePolicy().hasHeightForWidth());
+        multiLaneView->setSizePolicy(sizePolicy);
+        multiLaneView->setMinimumSize(QSize(100, 100));
+        splitter_2->addWidget(multiLaneView);
+        splitter = new QSplitter(splitter_2);
+        splitter->setObjectName(QString::fromUtf8("splitter"));
+        splitter->setOrientation(Qt::Horizontal);
+        behaviorListFrame = new QFrame(splitter);
         behaviorListFrame->setObjectName(QString::fromUtf8("behaviorListFrame"));
+        sizePolicy.setHeightForWidth(behaviorListFrame->sizePolicy().hasHeightForWidth());
+        behaviorListFrame->setSizePolicy(sizePolicy);
+        behaviorListFrame->setMinimumSize(QSize(100, 100));
         behaviorListFrame->setFrameShape(QFrame::StyledPanel);
         behaviorListFrame->setFrameShadow(QFrame::Raised);
         verticalLayout_3 = new QVBoxLayout(behaviorListFrame);
@@ -152,11 +167,12 @@ public:
 
         verticalLayout_3->addWidget(behaviorListView);
 
-
-        horizontalLayout->addWidget(behaviorListFrame);
-
-        behaviorDetailFrame = new QFrame(behaviorSelectionFrame);
+        splitter->addWidget(behaviorListFrame);
+        behaviorDetailFrame = new QFrame(splitter);
         behaviorDetailFrame->setObjectName(QString::fromUtf8("behaviorDetailFrame"));
+        sizePolicy.setHeightForWidth(behaviorDetailFrame->sizePolicy().hasHeightForWidth());
+        behaviorDetailFrame->setSizePolicy(sizePolicy);
+        behaviorDetailFrame->setMinimumSize(QSize(100, 100));
         behaviorDetailFrame->setFrameShape(QFrame::StyledPanel);
         behaviorDetailFrame->setFrameShadow(QFrame::Raised);
         verticalLayout_2 = new QVBoxLayout(behaviorDetailFrame);
@@ -215,11 +231,10 @@ public:
 
         verticalLayout_2->addWidget(addToQueueButton);
 
+        splitter->addWidget(behaviorDetailFrame);
+        splitter_2->addWidget(splitter);
 
-        horizontalLayout->addWidget(behaviorDetailFrame);
-
-
-        verticalLayout->addWidget(behaviorSelectionFrame);
+        verticalLayout->addWidget(splitter_2);
 
 
         retranslateUi(PlayerView);

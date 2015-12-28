@@ -4831,6 +4831,7 @@ roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.c
  /usr/include/qt4/QtGui/QApplication
  /usr/include/qt4/QtGui/QButtonGroup
  /usr/include/qt4/QtGui/QCleanlooksStyle
+ /usr/include/qt4/QtGui/QComboBox
  /usr/include/qt4/QtGui/QCommonStyle
  /usr/include/qt4/QtGui/QFileDialog
  /usr/include/qt4/QtGui/QFont
@@ -4850,6 +4851,7 @@ roboy_control/CMakeFiles/roboy_control_node.dir/src/view/PlayerView/PlayerView.c
  /usr/include/qt4/QtGui/QPushButton
  /usr/include/qt4/QtGui/QScrollArea
  /usr/include/qt4/QtGui/QSpacerItem
+ /usr/include/qt4/QtGui/QSplitter
  /usr/include/qt4/QtGui/QTabWidget
  /usr/include/qt4/QtGui/QTransform
  /usr/include/qt4/QtGui/QVBoxLayout

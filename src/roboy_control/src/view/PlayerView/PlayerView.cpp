@@ -1,6 +1,5 @@
 #include "PlayerView.h"
 #include "ui_PlayerView.h"
-
 #include "ViewController.h"
 
 #include "DataTypes.h"
