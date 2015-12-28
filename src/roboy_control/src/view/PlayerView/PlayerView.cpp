@@ -8,10 +8,11 @@
 #include "MultiLaneView/RoboyMultiLaneModel.h"
 
 /**
-* @brief constructor
-* @param the IModelService providing the roboy behaviors
-* @param non mandatory parent
-*/
+ * @brief PlayerView::PlayerView constructor
+ * @param modelService modelService from which the RoboyBehaviors are retrieved
+ * @param pViewController controller of the ui component
+ * @param parent non mandatory parent for the MainWindow
+ */
 PlayerView::PlayerView(IModelService *modelService, ViewController * pViewController, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlayerView)
@@ -40,8 +41,8 @@ PlayerView::PlayerView(IModelService *modelService, ViewController * pViewContro
 }
 
 /**
-*@brief desctructor
-**/
+ * @brief PlayerView::~PlayerView destructor
+ */
 PlayerView::~PlayerView()
 {
     delete this->ui;
@@ -49,8 +50,8 @@ PlayerView::~PlayerView()
 }
 
 /**
-*@brief method to notify about data changes implemented from IObserver interface
-**/
+ * @brief PlayerView::notify method to notify about data changes implemented from IObserver interface
+ */
 void PlayerView::notify() 
 {
 	this->behaviorListModel->notify();
@@ -59,8 +60,8 @@ void PlayerView::notify()
 /* ui connections */
 
 /**
-*@brief method to connect all ui controls to their handler functions
-**/
+ * @brief PlayerView::setupConnections method to the signals of all ui controls to their respective handler functions
+ */
 void PlayerView::setupConnections()
 {
 	/* buttons */
@@ -75,41 +76,41 @@ void PlayerView::setupConnections()
 }
 
 /**
-*@brief click handler for the play button
-**/
+ * @brief PlayerView::playButtonClicked click handler for the play button
+ */
 void PlayerView::playButtonClicked()
 {
 	m_pViewController->playBehaviorPlan();
 }
 
 /**
-*@brief click handler for the pause button
-**/
+ * @brief PlayerView::pauseButtonClicked click handler for the pause button
+ */
 void PlayerView::pauseButtonClicked()
 {
 	
 }
 
 /**
-*@brief click handler for the stop button
-**/
+ * @brief PlayerView::stopButtonClicked click handler for the stop button
+ */
 void PlayerView::stopButtonClicked()
 {
 	
 }
 
 /**
-*@brief click handler for the skip button
-**/
+ * @brief PlayerView::skipButtonClicked click handler for the skip button
+ */
 void PlayerView::skipButtonClicked()
 {
 	
 }
 
 /**
-*@brief method for filling the behaviorDetailView with information about the selected behavior
-*@param index index of the currently selected behavior in the behaviorListView
-**/
+ * @brief PlayerView::behaviorListViewCurrentRowChanged method for filling the behaviorDetailView with information about the selected behavior
+ * @param index index of the currently selected behavior in the behaviorListView
+ */
 void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 {	
 	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
@@ -128,8 +129,9 @@ void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 }
 
 /**
-*@brief
-**/
+ * @brief PlayerView::showBehaviorListItemMenu method for invoking the behaviorListItem context menu
+ * @param pos position where the context menu has to be shown
+ */
 void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
 {
     QPoint globalPos = ui->behaviorListView->mapToGlobal(pos);

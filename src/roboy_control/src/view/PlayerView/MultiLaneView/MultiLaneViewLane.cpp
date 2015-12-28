@@ -83,6 +83,10 @@ void MultiLaneViewLane::itemRemovedHandler(qint32 index)
     delete item;
 }
 
+/**
+ * @brief MultiLaneViewLane::paintEvent paint event for the MultiLaneViewLane
+ * @param event event on which the view is painted
+ */
 void MultiLaneViewLane::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

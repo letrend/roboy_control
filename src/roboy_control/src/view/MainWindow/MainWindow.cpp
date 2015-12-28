@@ -1,6 +1,12 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+/**
+ * @brief MainWindow::MainWindow cosntructor
+ * @param modelService modelService from which the RoboyBehaviors are retrieved
+ * @param pViewController controller of the ui component
+ * @param parent non mandatory parent for the MainWindow
+ */
 MainWindow::MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) 
@@ -18,6 +24,9 @@ MainWindow::MainWindow(IModelService *modelService, ViewController * pViewContro
     this->mainTabWidget->addTab(editorView, "editor");
 }
 
+/**
+ * @brief MainWindow::~MainWindow destructor
+ */
 MainWindow::~MainWindow() 
 {
 	delete this->playerView;
@@ -27,6 +36,9 @@ MainWindow::~MainWindow()
     delete this->ui;
 }
 
+/**
+ * @brief MainWindow::notify method to notify about data changes implemented from IObserver interface
+ */
 void MainWindow::notify() 
 {
     qDebug() << "MainViewController: Notified on data changed";

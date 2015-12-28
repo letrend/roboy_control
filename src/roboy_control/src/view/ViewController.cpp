@@ -5,6 +5,11 @@
 #include "ViewController.h"
 #include "RoboyController.h"
 
+/**
+ * @brief ViewController::ViewController constructor
+ * @param pRoboyController roboy controller that is in charge of coordinating all components of the program
+ * @param pModelService modelService from which the RoboyBehaviors are retrieved
+ */
 ViewController::ViewController(RoboyController * pRoboyController, IModelService * pModelService) {
     VIEW_DBG << "Initialize View";
     VIEW_DBG << "View Thread ID is: " << QThread::currentThreadId();
@@ -16,12 +21,19 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     m_pMainWindow->show();
 }
 
+/**
+ * @brief ViewController::playBehaviorPlan method for triggering playing the current behavior plan
+ */
 void ViewController::playBehaviorPlan() {
     VIEW_DBG << "Play Behavior Plan triggered.";
 
     m_pRoboyController->fromViewController_triggerPlayPlan();
 }
 
+/**
+ * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan
+ * @return the current behavior plan
+ */
 RoboyBehaviorPlan ViewController::fromController_getCurrentRoboyPlan() {
     // TODO: Get RoboyBehaviorPlan from PlayerView
     RoboyBehaviorPlan plan;

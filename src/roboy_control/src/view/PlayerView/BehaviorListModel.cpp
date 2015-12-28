@@ -3,10 +3,10 @@
 /*constructor*/
 
 /**
-* @brief constructor
-* @param the IModelService providing the roboy behaviors
-* @param non mandatory parent
-*/
+ * @brief BehaviorListModel::BehaviorListModel constructor
+ * @param modelService modelService from which the RoboyBehaviors are retrieved
+ * @param parent non mandatory parent for the MainWindow
+ */
 BehaviorListModel::BehaviorListModel(IModelService *modelService, QObject *parent) : QAbstractListModel(parent)
 {
 	this->modelService = modelService;
@@ -14,19 +14,21 @@ BehaviorListModel::BehaviorListModel(IModelService *modelService, QObject *paren
 }
 
 /* methods implemented from IObserver interface */
+
 /**
-*@brief method to notify about data changes implemented from IObserver interface
-**/
+ * @brief BehaviorListModel::notify method to notify about data changes implemented from IObserver interface
+ */
 void BehaviorListModel::notify()
 {
 	this->updateBehaviorList();
 }
 
 /**
-*@brief implemented from QAbstracListModel
-*@param index index of selected list row
-*@param role role of the data that you have to return
-**/
+ * @brief BehaviorListModel::data implemented method from QAbstracListModel for retrieving data for the listView
+ * @param index index of selected list row
+ * @param role role role of the data that you have to return
+ * @return QVariant representing the data for specified index and role
+ */
 QVariant BehaviorListModel::data(const QModelIndex &index, int role) const
 {
 	if(index.isValid())
@@ -40,9 +42,9 @@ QVariant BehaviorListModel::data(const QModelIndex &index, int role) const
 }
 
 /**
-*@brief implemented from QAbstracListModel
-*@param index index of selected list row
-**/
+ * @brief BehaviorListModel::rowCount implemented method from QAbstractListModel for retrieving the number of rows for the listView
+ * @return number of rows for the listView
+ */
 int BehaviorListModel::rowCount(const QModelIndex &) const
 {
   return this->behaviorList.count();
@@ -57,8 +59,8 @@ RoboyBehaviorMetadata  BehaviorListModel::getBehaviorMetaData(int index) const
 // private methods
 
 /**
-*@brief method for triggering a update of the behavior list after a change in the data
-**/
+ * @brief BehaviorListModel::updateBehaviorList method for triggering a update of the behavior list after a change in the data
+ */
 void BehaviorListModel::updateBehaviorList()
 {
 	this->behaviorList = this->modelService->getBehaviorList();
