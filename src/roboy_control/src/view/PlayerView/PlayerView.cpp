@@ -139,7 +139,7 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
     
     if (selectedIndex.isValid()) {
     	QMenu behaviorListItemMenu;
-        QAction addAction(QIcon(":/add-img.png"), "add to queue", NULL);
+        QAction addAction(QIcon(":/add-img-dark.png"), "add to queue", NULL);
         addAction.setIconVisibleInMenu(true);
         behaviorListItemMenu.addAction(&addAction);
     	QAction *selectedItem = behaviorListItemMenu.exec(globalPos);

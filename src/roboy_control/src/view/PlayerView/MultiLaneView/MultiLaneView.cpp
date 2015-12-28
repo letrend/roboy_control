@@ -51,8 +51,8 @@ MultiLaneView::~MultiLaneView()
 }
 
 /**
- * @brief MultiLaneView::setModel
- * @param model
+ * @brief MultiLaneView::setModel method for setting a model for the MultiLaneView
+ * @param model the model that is set
  */
 void MultiLaneView::setModel(IMultiLaneViewModel *model)
 {
@@ -119,12 +119,11 @@ void MultiLaneView::itemInsertedHandler(qint32 laneIndex, qint32 itemIndex)
     MultiLaneViewLane *lane = this->lanes.at(laneIndex);
 
     QString bName       = this->model->data(laneIndex, itemIndex, Qt::DisplayRole       ).value<QString>();
-    bName = "Behavior";
     QIcon   bIcon       = this->model->data(laneIndex, itemIndex, Qt::DecorationRole    ).value<QIcon  >();
-    bIcon = QIcon("/Users/matthiaslehner/Dropbox/MultiLaneWidget/MultiLaneWidget/behavior-img.png");
     quint64 bTimestamp  = this->model->data(laneIndex, itemIndex, Qt::UserRole          ).value<quint64>();
     quint64 bDuration   = this->model->data(laneIndex, itemIndex, Qt::UserRole + 1      ).value<quint64>();
     quint64 bMotorCount = this->model->data(laneIndex, itemIndex, Qt::UserRole + 2      ).value<quint64>();
+    qDebug() << " THE DURATION:" << bDuration;
     bDuration = 2000;
 
     quint64 maxSize = ((bTimestamp + bDuration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);

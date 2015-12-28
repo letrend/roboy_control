@@ -39,7 +39,7 @@
         </property>
         <property name="icon">
          <iconset resource="PlayerResources.qrc">
-          <normaloff>:/play-img.png</normaloff>:/play-img.png</iconset>
+          <normaloff>:/play-img-dark.png</normaloff>:/play-img-dark.png</iconset>
         </property>
         <property name="flat">
          <bool>false</bool>
@@ -59,7 +59,7 @@
         </property>
         <property name="icon">
          <iconset resource="PlayerResources.qrc">
-          <normaloff>:/pause-img.png</normaloff>:/pause-img.png</iconset>
+          <normaloff>:/pause-img-dark.png</normaloff>:/pause-img-dark.png</iconset>
         </property>
        </widget>
       </item>
@@ -76,7 +76,7 @@
         </property>
         <property name="icon">
          <iconset resource="PlayerResources.qrc">
-          <normaloff>:/stop-img.png</normaloff>:/stop-img.png</iconset>
+          <normaloff>:/stop-img-dark.png</normaloff>:/stop-img-dark.png</iconset>
         </property>
        </widget>
       </item>
@@ -93,7 +93,7 @@
         </property>
         <property name="icon">
          <iconset resource="PlayerResources.qrc">
-          <normaloff>:/skip-img.png</normaloff>:/skip-img.png</iconset>
+          <normaloff>:/skip-img-dark.png</normaloff>:/skip-img-dark.png</iconset>
         </property>
        </widget>
       </item>
@@ -124,7 +124,7 @@
         </property>
         <property name="icon">
          <iconset resource="PlayerResources.qrc">
-          <normaloff>:/add-img.png</normaloff>:/add-img.png</iconset>
+          <normaloff>:/add-img-dark.png</normaloff>:/add-img-dark.png</iconset>
         </property>
        </widget>
       </item>
@@ -292,7 +292,7 @@
           </property>
           <property name="icon">
            <iconset resource="PlayerResources.qrc">
-            <normaloff>:/add-img.png</normaloff>:/add-img.png</iconset>
+            <normaloff>:/add-img-dark.png</normaloff>:/add-img-dark.png</iconset>
           </property>
          </widget>
         </item>

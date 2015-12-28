@@ -190,7 +190,7 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
             if (role == Qt::DisplayRole) // behavior name
                 return behaviorExec.behavior.m_metadata.m_sBehaviorName;
             else if (role == Qt::DecorationRole) // behavior icon
-                return QIcon(":/behavior-img.png");
+                return QIcon(":/behavior-img-light.png");
             else if (role == Qt::UserRole) // behavior timestamp
                 return QVariant(behaviorExec.ulTimestamp);
             else if (role == Qt::UserRole + 1) //behavior duration

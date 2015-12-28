@@ -1,14 +1,26 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file alias="play-img.png">images/play_arrow_black_24x24.png</file>
-    <file alias="pause-img.png">images/pause_black_24x24.png</file>
-    <file alias="stop-img.png">images/stop_black_24x24.png</file>
-    <file alias="skip-img.png">images/skip_next_black_24x24.png</file>
-    <file alias="behavior-img.png">images/accessibility_black_24x24.png</file>
-    <file alias="face-img.png">images/face_black_24x24.png</file>
-    <file alias="speech-img.png">images/volume_up_black_24x24.png</file>
-    <file alias="add-img.png">images/add_black_24x24.png</file>
-    <file alias="remove-img.png">images/remove_black_24x24.png</file>
-    <file alias="delete-img.png">images/delete_black_24x24.png</file>
+<!-- light ui images -->
+	<file alias="play-img-light.png">images/play_arrow_white_24x24.png</file>
+    <file alias="pause-img-light.png">images/pause_white_24x24.png</file>
+    <file alias="stop-img-light.png">images/stop_white_24x24.png</file>
+    <file alias="skip-img-light.png">images/skip_next_white_24x24.png</file>
+    <file alias="behavior-img-light.png">images/accessibility_white_24x24.png</file>
+    <file alias="face-img-light.png">images/face_white_24x24.png</file>
+    <file alias="speech-img-light.png">images/volume_up_white_24x24.png</file>
+    <file alias="add-img-light.png">images/add_white_24x24.png</file>
+    <file alias="remove-img-light.png">images/remove_white_24x24.png</file>
+    <file alias="delete-img-light.png">images/delete_white_24x24.png</file>
+    <!-- dark ui images -->
+    <file alias="play-img-dark.png">images/play_arrow_black_24x24.png</file>
+    <file alias="pause-img-dark.png">images/pause_black_24x24.png</file>
+    <file alias="stop-img-dark.png">images/stop_black_24x24.png</file>
+    <file alias="skip-img-dark.png">images/skip_next_black_24x24.png</file>
+    <file alias="behavior-img-dark.png">images/accessibility_black_24x24.png</file>
+    <file alias="face-img-dark.png">images/face_black_24x24.png</file>
+    <file alias="speech-img-dark.png">images/volume_up_black_24x24.png</file>
+    <file alias="add-img-dark.png">images/add_black_24x24.png</file>
+    <file alias="remove-img-dark.png">images/remove_black_24x24.png</file>
+    <file alias="delete-img-dark.png">images/delete_black_24x24.png</file>
 </qresource>
 </RCC>
