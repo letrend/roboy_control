@@ -1,8 +1,8 @@
+#include "DataTypes.h"
+#include "LogDefines.h"
 #include "PlayerView.h"
 #include "ui_PlayerView.h"
 #include "ViewController.h"
-
-#include "DataTypes.h"
 
 #include "MultiLaneView/MultiLaneView.h"
 #include "MultiLaneView/RoboyMultiLaneModel.h"
@@ -69,6 +69,7 @@ void PlayerView::setupConnections()
 	QObject::connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(pauseButtonClicked()));
 	QObject::connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopButtonClicked()));
 	QObject::connect(ui->skipButton, SIGNAL(clicked()), this, SLOT(skipButtonClicked()));
+    QObject::connect(ui->addLaneButton, SIGNAL(clicked()), this, SLOT(addLaneButtonClicked()));
 	/* behavior listview */
 	connect(ui->behaviorListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorListItemMenu(const QPoint&)));
     QObject::connect(ui->behaviorListView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(behaviorListViewCurrentRowChanged(const QModelIndex &)));
@@ -105,6 +106,16 @@ void PlayerView::stopButtonClicked()
 void PlayerView::skipButtonClicked()
 {
 	
+}
+
+/**
+ * @brief PlayerView::addLaneButtonClicked click handler for the add lane button
+ */
+void PlayerView::addLaneButtonClicked()
+{
+    if (this->multiLaneModel->addLane() < 0) {
+        VIEW_DBG << "adding a new lane to the MultiLaneView failed. /n";
+    }
 }
 
 /**

@@ -11,21 +11,19 @@
 #include "MultiLaneViewItem.h"
 #include "MultiLaneViewLane.h"
 
-#define LANE_HEIGHT 80
 #define ITEM_INDENT 5
 
 /**
  * @brief MultiLaneViewLane::MultiLaneViewLane constructor
  * @param parent the non mandatory parent of the widget
  */
-MultiLaneViewLane::MultiLaneViewLane(scaleFactor viewScaleFactor, QWidget *parent)
+MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, quint64 minimumLaneWidth, scaleFactor viewScaleFactor, QWidget *parent)
 {
     Q_UNUSED(parent);
 
     this->viewScaleFactor = viewScaleFactor;
 
-    this->setFixedHeight(LANE_HEIGHT);
-    this->setMinimumWidth(100);
+    this->setFixedHeight(laneHeight);
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->setSizePolicy(sizePolicy);
     QPalette lanePalette(this->palette());

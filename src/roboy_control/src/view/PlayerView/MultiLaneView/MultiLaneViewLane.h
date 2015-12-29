@@ -21,7 +21,7 @@ public:
 
     typedef enum multiLaneViewScaleFactor scaleFactor;
 
-    explicit MultiLaneViewLane(scaleFactor viewScaleFactor = scaleFactor::millisecond, QWidget *parent = 0);
+    explicit MultiLaneViewLane(quint32 laneHeight, quint64 minimumLaneWidth, scaleFactor viewScaleFactor = scaleFactor::millisecond, QWidget *parent = 0);
     ~MultiLaneViewLane();
     void setScaleFactor(scaleFactor factor);
     void itemInsertedHandler    (qint32 index, QString name, QIcon icon, quint64 timeStamp, quint64 duration64, quint64 motorCount);

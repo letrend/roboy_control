@@ -118,7 +118,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="addLaneButton">
         <property name="text">
          <string/>
         </property>
@@ -129,7 +129,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="scaleFactorComboBox"/>
       </item>
      </layout>
     </widget>
@@ -154,6 +154,12 @@
       </property>
      </widget>
      <widget class="QSplitter" name="splitter">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>120</height>
+       </size>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>

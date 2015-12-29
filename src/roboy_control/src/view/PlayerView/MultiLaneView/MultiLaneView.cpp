@@ -4,10 +4,15 @@
 #include <QLabel>
 #include <QVariant>
 #include <QVBoxLayout>
+#include <QSpacerItem>
+
 
 #include "MultiLaneView.h"
 
-#define LANE_INDENT 12
+#define LANE_INDENT         9
+#define LANE_SPACING        9
+#define LANE_HEIGHT         80
+#define MINIMUM_LANE_WIDTH  100
 
 /* public methods */
 
@@ -21,6 +26,8 @@ MultiLaneView::MultiLaneView(QWidget *parent)
 
     this->laneScrollArea = new QScrollArea();
     this->laneBackground = new QWidget();
+
+    this->laneBackground->setFixedWidth(MINIMUM_LANE_WIDTH + (LANE_INDENT << 1));
 
     QGridLayout *multiLaneViewLayout    = new QGridLayout();
     QGridLayout *laneScrollAreaLayout   = new QGridLayout();
@@ -90,11 +97,11 @@ void MultiLaneView::setScaleFactor(scaleFactor factor)
  */
 void MultiLaneView::laneInsertedHandler(qint32 index)
 {
-    MultiLaneViewLane *lane = new MultiLaneViewLane(this->viewScaleFactor);
+    MultiLaneViewLane *lane = new MultiLaneViewLane(LANE_HEIGHT, MINIMUM_LANE_WIDTH, this->viewScaleFactor, this);
     this->lanes.insert(index, lane);
+    this->laneBackground->setFixedHeight((this->lanes.count()*LANE_HEIGHT)+((this->lanes.count()+1)*LANE_SPACING));
     QGridLayout *layout = qobject_cast<QGridLayout *>(this->laneBackground->layout());
     layout->addWidget(lane, index, 0);
-    this->laneBackground->adjustSize();
 }
 
 /**
@@ -105,6 +112,7 @@ void MultiLaneView::laneRemovedHandler(qint32 index)
 {
     MultiLaneViewLane *lane = this->lanes.at(index);
     this->lanes.removeAt(index);
+    this->laneBackground->setFixedHeight((this->lanes.count()*LANE_HEIGHT)+((this->lanes.count()+1)*LANE_SPACING));
     delete lane;
     this->laneBackground->adjustSize();
 }

@@ -31,6 +31,7 @@ public slots:
     void pauseButtonClicked();
     void stopButtonClicked();
     void skipButtonClicked();
+    void addLaneButtonClicked();
     void behaviorListViewCurrentRowChanged(const QModelIndex & index);
     void showBehaviorListItemMenu(const QPoint& pos);
 
