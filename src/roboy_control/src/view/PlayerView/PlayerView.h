@@ -34,6 +34,7 @@ public slots:
     void addLaneButtonClicked();
     void behaviorListViewCurrentRowChanged(const QModelIndex & index);
     void showBehaviorListItemMenu(const QPoint& pos);
+    void scaleFactorComboxBoxIndexChanged(int index);
 
 private:
     ViewController * m_pViewController;
@@ -46,6 +47,7 @@ private:
     RoboyBehavior currentlyDisplayedBehavior;
 
     void setupConnections();
+    void setupScaleFactorComboBox();
 };
 
 #endif // PLAYERVIEW_H

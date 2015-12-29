@@ -1,4 +1,4 @@
-#include<QGraphicsDropShadowEffect>
+#include <QGraphicsDropShadowEffect>
 #include <QBoxLayout>
 
 #include "GUIColors.h"

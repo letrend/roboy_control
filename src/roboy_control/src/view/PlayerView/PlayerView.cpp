@@ -70,10 +70,24 @@ void PlayerView::setupConnections()
 	QObject::connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stopButtonClicked()));
 	QObject::connect(ui->skipButton, SIGNAL(clicked()), this, SLOT(skipButtonClicked()));
     QObject::connect(ui->addLaneButton, SIGNAL(clicked()), this, SLOT(addLaneButtonClicked()));
+
 	/* behavior listview */
 	connect(ui->behaviorListView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showBehaviorListItemMenu(const QPoint&)));
     QObject::connect(ui->behaviorListView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(behaviorListViewCurrentRowChanged(const QModelIndex &)));
+    this->setupScaleFactorComboBox();
+}
 
+/**
+ * @brief PlayerView::setupScaleFactorComboBox method to setup the ComboBox from which the scale factor for the MultiLaneView can be chosen
+ */
+void PlayerView::setupScaleFactorComboBox()
+{
+    ui->scaleFactorComboBox->addItem("scalefactor milliseconds" );
+    ui->scaleFactorComboBox->addItem("scalefactor centiseconds" );
+    ui->scaleFactorComboBox->addItem("scalefactor deciseconds"  );
+    ui->scaleFactorComboBox->addItem("scalefactor seconds"      );
+
+    QObject::connect(ui->scaleFactorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleFactorComboxBoxIndexChanged(int)));
 }
 
 /**
@@ -161,4 +175,30 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
             }
 		}
 	}
+}
+
+/**
+ * @brief PlayerView::scaleFactorComboxBoxIndexChanged indexChanged handler for the scaleFactor ComboBox
+ * @param index index of the currently selected item
+ */
+void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
+{
+    VIEW_DBG << "called";
+    switch (index) {
+    case 0:
+        ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::millisecond);
+        break;
+    case 1:
+        ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::centisecond);
+        break;
+    case 2:
+        ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::decisecond);
+        break;
+    case 3:
+        ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::second);
+        break;
+    default:
+        VIEW_DBG << "Non supported scale factor selected. /n";
+        break;
+    }
 }

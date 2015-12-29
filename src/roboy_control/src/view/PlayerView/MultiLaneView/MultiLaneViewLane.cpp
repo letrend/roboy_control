@@ -4,7 +4,6 @@
 #include <QPalette>
 #include <QStaticText>
 #include <QVBoxLayout>
-#include <QDebug>
 
 #include "GUIColors.h"
 #include "MultiLaneView.h"
