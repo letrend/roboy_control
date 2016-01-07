@@ -1,6 +1,10 @@
 <RoboyControlConfiguration>
 	<DataModel
-		databaseType = "xml"
-                databasePath = "/home/bruh/roboy_workspace/roboycontrol/src/roboy_control/database"
-	/>
+			databaseType="xml"
+			databasePath="/home/bruh/roboy_workspace/roboycontrol/src/roboy_control/database"/>
+	<Controllers>
+		<Controller id="1">true</Controller>
+		<Controller id="2">true</Controller>
+		<Controller id="3">true</Controller>
+	</Controllers>
 </RoboyControlConfiguration>

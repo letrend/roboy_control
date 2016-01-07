@@ -16,9 +16,9 @@
 #include <vector>
 #include <sstream>
 
-
 class ROSMessageTransceiverService : public ITransceiverService
 {
+
 private:
     ros::NodeHandle m_nodeHandle;
     bool initialized;
@@ -28,8 +28,10 @@ private:
 public:
     ROSMessageTransceiverService();
 
+    void run();
+
     // MyoMaster Interface
-    void sendInitializeRequest(std::vector<bool> enable);
+    void sendInitializeRequest(const std::list<qint8> initializationList);
     void receiveInitializeResponse(const roboy_control::InitializeResponse& msg);
 
     // MotorController Interface

@@ -4,31 +4,35 @@ ROSMessageTransceiverService::ROSMessageTransceiverService() {
     initialized = false;
 }
 
-// MyoMaster Interface
-void ROSMessageTransceiverService::sendInitializeRequest(std::vector<bool> enable) {
-    ros::Subscriber subscriber = m_nodeHandle.subscribe("initialize_response", 1000, &ROSMessageTransceiverService::receiveInitializeResponse,this);
-    TRANSCEIVER_LOG << "Subscribing to initialize_response...";
-    ros::Rate rollRate2(10);
-    while(subscriber.getNumPublishers() == 0) {
-        rollRate2.sleep();
-    }
-    TRANSCEIVER_LOG << "Subscribing to initialize_response, publishers: " << subscriber.getNumPublishers();
+void ROSMessageTransceiverService::run() {
 
-    TRANSCEIVER_LOG << "Preparing initialize request for " << enable.size() << " motors.";
+}
+
+// MyoMaster Interface
+void ROSMessageTransceiverService::sendInitializeRequest(const std::list<qint8> initializationList) {
+    TRANSCEIVER_LOG << "Publish on topic: 'initialize_request'";
     ros::Publisher publisher = m_nodeHandle.advertise<roboy_control::InitializeRequest>("initialize_request", 1000);
 
-    ros::Rate rollRate(10);
-    while(publisher.getNumSubscribers() == 0) {
-        rollRate.sleep();
+    TRANSCEIVER_LOG << "Subscribing to topic 'initialize_response'";
+    ros::Subscriber subscriber = m_nodeHandle.subscribe("initialize_response", 1000, &ROSMessageTransceiverService::receiveInitializeResponse,this);
+
+    TRANSCEIVER_LOG << "Wait for MYO-Master to connect";
+    ros::Rate rollRate2(10);
+    while(subscriber.getNumPublishers() == 0 || publisher.getNumSubscribers() == 0) {
+        rollRate2.sleep();
     }
+
+    TRANSCEIVER_LOG << "MYO-Master connected";
+
+    TRANSCEIVER_LOG << "Preparing Message: 'initialize_request'";
     roboy_control::InitializeRequest request;
 
-    for(bool b : enable) {
-        request.enable.push_back(b);
-    }
+    for(qint8 id : initializationList)
+        request.idList.push_back(id);
 
-    TRANSCEIVER_LOG << "Sending initialize request for " << enable.size() << " motors to " << publisher.getNumSubscribers() << " subscribers.";
+    TRANSCEIVER_LOG << "Send Message: 'initialize_request', Controller-Count: " << initializationList.size();
     publisher.publish(request);
+
     ros::Rate r(10);
     while(!initialized){
         ros::spinOnce();

@@ -20,7 +20,7 @@ RoboyControlConfiguration::RoboyControlConfiguration() {
                       "is placed in /etc of your <roboy_control_install_dir>.";
     }
 
-    CONFIG_DBG << " - INFO open successful.";
+    CONFIG_DBG << "INFO open successful: " << filename;
 
     m_xmlReader.setDevice(&configFile);
 
@@ -28,7 +28,11 @@ RoboyControlConfiguration::RoboyControlConfiguration() {
     if (m_xmlReader.name() == "RoboyControlConfiguration") {
         while(m_xmlReader.readNextStartElement()) {
             if (m_xmlReader.name() == "DataModel") {
+                CONFIG_DBG << "Read Model Config";
                 readModelConfig();
+            } else if (m_xmlReader.name() == "Controllers") {
+                CONFIG_DBG << "Read Controllers Config";
+                readControllersConfig();
             } else {
                 m_xmlReader.skipCurrentElement();
             }
@@ -42,11 +46,31 @@ void RoboyControlConfiguration::readModelConfig() {
     for (QXmlStreamAttribute attribute : m_xmlReader.attributes()) {
         m_mapModelConfig.insert(attribute.name().toString(), attribute.value().toString());
     }
+    m_xmlReader.readElementText();
 }
 
-QString RoboyControlConfiguration::getModelConfig(const QString attributeName) {
+void RoboyControlConfiguration::readControllersConfig() {
+    while(m_xmlReader.readNextStartElement()) {
+        if(m_xmlReader.name() == "Controller") {
+            qint8 id = m_xmlReader.attributes().value("id").toString().toShort();
+            bool value = false;
+            m_xmlReader.readElementText() == "true" ? value = true : value = false;
+            if (value)
+                m_listControllerConfig.append(id);
+            CONFIG_DBG << "Parsed Controller: " << id << " Value: " << value;
+        } else {
+            m_xmlReader.skipCurrentElement();
+        }
+    }
+}
+
+QString RoboyControlConfiguration::getModelConfig(const QString attributeName) const {
     if(m_mapModelConfig.contains(attributeName)) {
         return m_mapModelConfig.value(attributeName);
     }
     return QString::null;
+}
+
+const QList<qint8> & RoboyControlConfiguration::getControllersConfig() const {
+    return m_listControllerConfig;
 }

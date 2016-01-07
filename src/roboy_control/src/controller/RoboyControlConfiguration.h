@@ -4,9 +4,9 @@
 #include "DataTypes.h"
 #include "LogDefines.h"
 
+#include <QFile>
 #include <QProcessEnvironment>
 #include <QXmlStreamReader>
-#include <QFile>
 
 #define CONFIG_FILE_NAME "RoboyControlConfig.xml"
 
@@ -16,6 +16,7 @@ private:
     QXmlStreamReader m_xmlReader;
 
     QMap<QString, QString> m_mapModelConfig;
+    QList<qint8> m_listControllerConfig;
 
 public:
     static RoboyControlConfiguration& instance() {
@@ -23,12 +24,13 @@ public:
         return _instance;
     }
 
-
     RoboyControlConfiguration();
-    QString getModelConfig(const QString attributeName);
+    QString getModelConfig(const QString attributeName) const;
+    const QList<qint8> & getControllersConfig() const;
 
 private:
     void readModelConfig();
+    void readControllersConfig();
 
 };
 

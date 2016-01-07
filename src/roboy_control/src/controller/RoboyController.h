@@ -27,6 +27,7 @@ private:
     QMutex                m_mutexCV;
     QWaitCondition        m_conditionView;
 
+    bool    m_bControllersInitialized = false;
     bool    m_bStartExectution = false;
     bool    m_bStopExecution = false;
     bool    m_bTerminate = false;

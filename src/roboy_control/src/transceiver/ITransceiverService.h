@@ -14,7 +14,7 @@ class ITransceiverService {
 
 public:
     // MyoMaster Interface
-    virtual void sendInitializeRequest(std::vector<bool> enable) = 0;
+    virtual void sendInitializeRequest(const std::list<qint8> initializationList) = 0;
     virtual void receiveInitializeResponse(const roboy_control::InitializeResponse& msg) = 0;
 
     // MotorController Interface

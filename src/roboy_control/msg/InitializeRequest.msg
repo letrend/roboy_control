@@ -1,2 +1,2 @@
 Header header
-bool[] enable
+int8[] idList

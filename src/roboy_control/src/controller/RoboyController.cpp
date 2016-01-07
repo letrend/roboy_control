@@ -9,15 +9,6 @@ RoboyController::RoboyController() {
     m_pTransceiverService = new ROSMessageTransceiverService();
 
     m_pViewController = new ViewController(this, m_pModelService);
-
-    // sending initialize request once
-    size_t size = 10;
-    std::vector<bool> b;
-    for(int i=0; i<size; i++) {
-        b.push_back(true);
-    }
-    CONTROLLER_DBG << "Sending initialize request...";
-    m_pTransceiverService->sendInitializeRequest(b);
 }
 
 RoboyController::~RoboyController() {
@@ -38,6 +29,10 @@ RoboyController::~RoboyController() {
 
 void RoboyController::run() {
 
+    // Initialize RoboyControllers
+    CONTROLLER_DBG << "Initialize Controllers";
+    m_pTransceiverService->sendInitializeRequest(RoboyControlConfiguration::instance().getControllersConfig().toStdList());
+    
     CONTROLLER_DBG << "Controller Thread Started. Wait for events ... ";
     CONTROLLER_DBG << "ID is: " << this->currentThreadId();
 

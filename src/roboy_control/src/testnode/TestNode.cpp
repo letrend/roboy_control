@@ -20,10 +20,9 @@ ros::Subscriber subscriberSteer;
 void callback(const roboy_control::InitializeRequest& msg){
     qDebug() << "Heard InitializeRequest.";
 
-
     roboy_control::InitializeResponse response;
 
-    for(bool b : msg.enable) {
+    for(qint8 id : msg.idList) {
         response.status.push_back(1);
     }
     qDebug() << "Prepared response.";
