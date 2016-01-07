@@ -44,7 +44,7 @@ void ROSMessageTransceiverService::receiveInitializeResponse(const roboy_control
 }
 
 // MotorController Interface
-void ROSMessageTransceiverService::sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints) {
+void ROSMessageTransceiverService::sendTrajectory(u_int32_t motorId, const Trajectory trajectory) {
     status_received = false;
     ros::Subscriber subscriber = m_nodeHandle.subscribe("motor_status"+ boost::lexical_cast<std::string>(motorId), 1000, &ROSMessageTransceiverService::receiveControllerStatus,this);
     TRANSCEIVER_LOG << "Subscribing to motor_status...";
@@ -59,29 +59,25 @@ void ROSMessageTransceiverService::sendTrajectory(u_int32_t motorId, QList<Roboy
     TRANSCEIVER_LOG << "Publish on Topic: " << topic;
 
     ros::Publisher pub = m_nodeHandle.advertise<roboy_control::Trajectory>("motor" + boost::lexical_cast<std::string>(motorId), 1000);
-    roboy_control::Trajectory trajectory;
-    for(int k=0; k<waypoints.length(); k++){
-        // for every waypoint
-        trajectory.waypoints.push_back(waypoints.at(k).m_ulPosition);
+    roboy_control::Trajectory trajectoryMsg;
+    for (RoboyWaypoint wp : trajectory.m_listWaypoints) {
+        trajectoryMsg.waypoints.push_back(wp.m_ulValue);
     }
-    if(waypoints.length() > 1){
-        trajectory.samplerate = waypoints.at(1).m_ulTimestamp - waypoints.at(0).m_ulTimestamp;
-        TRANSCEIVER_LOG << "Estimated sample rate: " << trajectory.samplerate;
-    } else {
-        trajectory.samplerate = 100;
-        TRANSCEIVER_LOG << "Not enough waypoints, using default samplerate.";
-    }
-    trajectory.controlmode = 1;
+
+    trajectoryMsg.samplerate = trajectory.m_sampleRate;
+    trajectoryMsg.controlmode = trajectory.m_controlMode;
+
     ros::Rate rollRate(10);
     while(pub.getNumSubscribers() == 0) {
         rollRate.sleep();
     }
+
     TRANSCEIVER_LOG << "Sending trajectory message on topic "<< pub.getTopic().c_str() <<" to " << pub.getNumSubscribers() << " subscribers.";
-    pub.publish(trajectory);
-    ros::Rate r(10);
+    pub.publish(trajectoryMsg);
+
     while(!status_received){
         ros::spinOnce();
-        r.sleep();
+        rollRate.sleep();
         TRANSCEIVER_LOG << "Waiting for motor response.";
     }
     TRANSCEIVER_LOG << "Done sending trajectory.";

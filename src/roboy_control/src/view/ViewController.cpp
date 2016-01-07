@@ -37,7 +37,8 @@ void ViewController::playBehaviorPlan() {
 RoboyBehaviorPlan ViewController::fromController_getCurrentRoboyPlan() {
     // TODO: Get RoboyBehaviorPlan from PlayerView
     RoboyBehaviorPlan plan;
-    RoboyBehaviorExecution ex;
+/*    RoboyBehaviorExecution exec1;
+
     QList<RoboyWaypoint> waypoints;
     RoboyWaypoint p1;
     p1.m_ulTimestamp = 50;
@@ -48,6 +49,6 @@ RoboyBehaviorPlan ViewController::fromController_getCurrentRoboyPlan() {
     waypoints.push_back(p1);
     waypoints.push_back(p2);
     ex.behavior.m_mapMotorWaypoints.insert(1,waypoints);
-    plan.listExecutions.push_back(ex);
+    plan.listExecutions.push_back(ex);*/
     return plan;
 }

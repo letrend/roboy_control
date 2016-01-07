@@ -1,7 +1,6 @@
 #include "RoboyBehaviorXmlParser.h"
 
-RoboyBehaviorXmlParser::RoboyBehaviorXmlParser()
-{
+RoboyBehaviorXmlParser::RoboyBehaviorXmlParser() {
     m_databasePath = RoboyControlConfiguration::instance().getModelConfig("databasePath");
     MODEL_DBG << "DATABASE PATH: " << m_databasePath;
 }
@@ -43,14 +42,18 @@ void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior & behavio
 }
 
 void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior & behavior ) {
-    for (quint32 motor : behavior.m_mapMotorWaypoints.keys()) {
+    for (quint32 motor : behavior.m_mapMotorTrajectory.keys()) {
+        Trajectory currentTrajectory = behavior.m_mapMotorTrajectory.value(motor);
+
         m_xmlWriter.writeStartElement("motor");
         m_xmlWriter.writeAttribute("motorid", QString::number(motor));
-        for (RoboyWaypoint wp : behavior.m_mapMotorWaypoints.value(motor)) {
+        m_xmlWriter.writeAttribute("controlmode", QString::number(currentTrajectory.m_controlMode));
+        m_xmlWriter.writeAttribute("samplerate", QString::number(currentTrajectory.m_sampleRate));
+
+        for (RoboyWaypoint wp : currentTrajectory.m_listWaypoints) {
             m_xmlWriter.writeStartElement("waypoint");
             m_xmlWriter.writeAttribute("id", QString::number(wp.m_ulId));
-            m_xmlWriter.writeAttribute("timestamp", QString::number(wp.m_ulTimestamp));
-            m_xmlWriter.writeCharacters(QString::number(wp.m_ulPosition));
+            m_xmlWriter.writeCharacters(QString::number(wp.m_ulValue));
             m_xmlWriter.writeEndElement();
         }
         m_xmlWriter.writeEndElement();
@@ -127,23 +130,22 @@ bool RoboyBehaviorXmlParser::readMotorData( RoboyBehavior & behavior ) {
     if ( m_xmlReader.name() == "motor" ) {
         u_int32_t motor_id = m_xmlReader.attributes().value("motorid").toString().toUInt();
 
-        QList<RoboyWaypoint> waypointList;
+        Trajectory trajectory;
         RoboyWaypoint waypoint;
 
         while (m_xmlReader.readNextStartElement()) {
             if (m_xmlReader.name() == "waypoint") {
                 waypoint.m_ulId = m_xmlReader.attributes().value("id").toString().toULong();
-                waypoint.m_ulTimestamp = m_xmlReader.attributes().value("timestamp").toString().toULong();
-                waypoint.m_ulPosition = m_xmlReader.readElementText().toULong();
-                waypointList.append(waypoint);
+                waypoint.m_ulValue = m_xmlReader.readElementText().toULong();
+                trajectory.m_listWaypoints.append(waypoint);
             } else {
                 m_xmlReader.skipCurrentElement();
             }
         }
 
-        behavior.m_mapMotorWaypoints.insert(motor_id, waypointList);
+        behavior.m_mapMotorTrajectory.insert(motor_id, trajectory);
 
-        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << waypointList.count();
+        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << trajectory.m_listWaypoints.count();
 
         return true;
     }

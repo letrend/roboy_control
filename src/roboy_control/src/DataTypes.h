@@ -4,20 +4,31 @@
 #include <QString>
 #include <QMap>
 
+enum ControlMode {POSITION_CONTROL, FORCE_CONTROL};
+
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
-    QString     m_sBehaviorName;
+    QString   m_sBehaviorName;
 };
 
 struct RoboyWaypoint {
     quint64   m_ulId;
-    quint64   m_ulTimestamp;
-    quint64   m_ulPosition;
+    quint64   m_ulValue;
+};
+
+struct Trajectory {
+    ControlMode          m_controlMode;
+    qint64               m_sampleRate;
+    QList<RoboyWaypoint> m_listWaypoints;
+
+    qint32 getDuration() {
+        return m_listWaypoints.count() * m_sampleRate;
+    }
 };
 
 struct RoboyBehavior {
-    RoboyBehaviorMetadata m_metadata;
-    QMap<u_int32_t, QList<RoboyWaypoint>> m_mapMotorWaypoints;
+    RoboyBehaviorMetadata       m_metadata;
+    QMap<u_int32_t, Trajectory> m_mapMotorTrajectory;
 
     QString toString() {
         QString string;
@@ -25,28 +36,24 @@ struct RoboyBehavior {
                     "%s\tId:%lu\tMotor Count:%i",
                     m_metadata.m_sBehaviorName.toLatin1().data(),
                     (unsigned long) m_metadata.m_ulBehaviorId,
-                    m_mapMotorWaypoints.count());
+                    m_mapMotorTrajectory.count());
 
         return string;
     }
 
     quint64 getDuration() {
-        quint64 firstTs = 0;
-        quint64 lastTs  = 0;
-        for (QList<RoboyWaypoint> trajectory : m_mapMotorWaypoints) {
-            if (trajectory.first().m_ulTimestamp < firstTs) {
-                firstTs = trajectory.first().m_ulTimestamp;
-            }
-            if (trajectory.last().m_ulTimestamp > lastTs) {
-                lastTs = trajectory.last().m_ulTimestamp;
-            }
+        int maxDuration = 0;
+        int currentDuration = 0;
+        for (Trajectory trajectory : m_mapMotorTrajectory) {
+            currentDuration = trajectory.getDuration();
+            currentDuration > maxDuration ? maxDuration = currentDuration : maxDuration;
         }
-        return lastTs-firstTs;
+        return maxDuration;
     }
 };
 
 struct RoboyBehaviorExecution {
-    quint64          lId;
+    quint64         lId;
     quint64         ulTimestamp;
     RoboyBehavior   behavior;
 

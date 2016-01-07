@@ -77,7 +77,7 @@ void RoboyController::executeCurrentRoboyPlan() {
     RoboyBehaviorPlan plan = m_pViewController->fromController_getCurrentRoboyPlan();
 
     CONTROLLER_DBG << "Loaded plan with " << plan.listExecutions.length() << " executions.";
-    for(int i=0; i<plan.listExecutions.length(); i++){
+/*    for(int i=0; i<plan.listExecutions.length(); i++){
         // for every execution
         RoboyBehavior rb = plan.listExecutions.at(i).behavior;
         QList<u_int32_t> motors = rb.m_mapMotorWaypoints.keys();
@@ -89,7 +89,7 @@ void RoboyController::executeCurrentRoboyPlan() {
             m_pTransceiverService->sendTrajectory(motors.at(j),waypoints);
         }
     }
-
+*/
     m_pTransceiverService->sendSteeringMessage(1);
 
 }

@@ -143,13 +143,13 @@ void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 	this->ui->addToQueueButton->setEnabled(true);
 	ui->behaviorNameValueLabel->setText(this->currentlyDisplayedBehavior.m_metadata.m_sBehaviorName);
 	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));
-	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.count()));
+	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorTrajectory.count()));
 
 	ui->motorListView->clear();
 	QString description;
-	for(u_int32_t iterator : this->currentlyDisplayedBehavior.m_mapMotorWaypoints.keys())
+	for(u_int32_t iterator : this->currentlyDisplayedBehavior.m_mapMotorTrajectory.keys())
 	{
-		ui->motorListView->addItem(QString("MOTOR ID %1 WAYPOINT COUNT %2").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorWaypoints.value(iterator).count()));
+		ui->motorListView->addItem(QString("MOTOR ID %1 WAYPOINT COUNT %2").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorTrajectory.value(iterator).m_listWaypoints.count()));
 	}
 }
 

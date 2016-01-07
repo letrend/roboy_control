@@ -33,7 +33,7 @@ public:
     void receiveInitializeResponse(const roboy_control::InitializeResponse& msg);
 
     // MotorController Interface
-    void sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints);
+    void sendTrajectory(u_int32_t motorId, const Trajectory trajectory);
     void receiveControllerStatus(const roboy_control::Status &msg);
 
     void sendSteeringMessage(uint8_t steeringaction);

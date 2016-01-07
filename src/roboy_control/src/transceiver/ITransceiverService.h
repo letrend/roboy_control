@@ -18,7 +18,7 @@ public:
     virtual void receiveInitializeResponse(const roboy_control::InitializeResponse& msg) = 0;
 
     // MotorController Interface
-    virtual void sendTrajectory(u_int32_t motorId, QList<RoboyWaypoint> & waypoints) = 0;
+    virtual void sendTrajectory(u_int32_t motorId, const Trajectory trajectory) = 0;
     virtual void receiveControllerStatus(const roboy_control::Status &msg) = 0;
 
     virtual void sendSteeringMessage(uint8_t steeringaction) = 0;
