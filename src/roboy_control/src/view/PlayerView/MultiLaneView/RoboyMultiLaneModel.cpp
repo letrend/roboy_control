@@ -206,7 +206,7 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
  * @brief RoboyMultiLaneModel::getBehaviorPlan method to retrieve a RoboyBehaviorPlan from the MultiLaneWidget
  * @return a RoboyBehaviorPlan representing the executions displayed in the MultiLaneWidget
  */
-RoboyBehaviorPlan RoboyMultiLaneModel::getBehaviorPlan()
+RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan()
 {
-    return RoboyBehaviorPlan();
+    return RoboyBehaviorMetaplan();
 }

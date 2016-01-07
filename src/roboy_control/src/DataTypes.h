@@ -4,7 +4,7 @@
 #include <QString>
 #include <QMap>
 
-class XmlModelService;
+class IModelService;
 
 enum ControlMode {POSITION_CONTROL, FORCE_CONTROL};
 
@@ -81,43 +81,15 @@ private:
 
     qint64  lStartTimestamp = -1;
     qint64  lEndTimestamp = -1;
-    qint64  lDuration = -1;
 
 public:
-    RoboyBehaviorPlan() {
+    RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan);
 
-    }
+    qint64 getStartTimestamp();
+    qint64 getEndTimestamp();
+    qint64 getDuration();
 
-    RoboyBehaviorPlan(const XmlModelService * modelService, const RoboyBehaviorMetaplan & metaPlan) {
-        // TODO: Do initialiation
-    }
-
-    qint64 getStartTimestamp() {
-        if (lStartTimestamp == -1) {
-            qint64 currentTimestamp = -1;
-            for (RoboyBehaviorExecution exec : listExecutions) {
-                currentTimestamp = exec.lTimestamp;
-                currentTimestamp < lStartTimestamp ? lStartTimestamp = currentTimestamp : lStartTimestamp;
-            }
-        }
-        return lStartTimestamp;
-    }
-
-    qint64 getEndTimestamp() {
-        if (lEndTimestamp == -1) {
-            qint64 currentEndTimestamp = -1;
-            for (RoboyBehaviorExecution exec : listExecutions) {
-                currentEndTimestamp = exec.getEndTimestamp();
-                currentEndTimestamp > lEndTimestamp ? lEndTimestamp = currentEndTimestamp : lEndTimestamp;
-            }
-        }
-        return lEndTimestamp;
-    }
-
-    qint64 getDuration() {
-        return getEndTimestamp() - getStartTimestamp();
-    }
-
+    const QList<RoboyBehaviorExecution> & getExcutionsList() const;
 };
 
 #endif // DATATYPES_H

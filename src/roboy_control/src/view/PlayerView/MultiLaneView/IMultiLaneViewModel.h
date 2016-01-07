@@ -22,7 +22,7 @@ public:
     virtual qint32   itemCount (qint32 laneIndex) = 0;
     virtual QVariant data      (qint32 laneIndex, qint32 itemIndex, qint32 role) = 0;
 
-    virtual RoboyBehaviorPlan getBehaviorPlan () = 0;
+    virtual RoboyBehaviorMetaplan getBehaviorPlan () = 0;
 
 signals:
     void laneInserted   (qint32 index);

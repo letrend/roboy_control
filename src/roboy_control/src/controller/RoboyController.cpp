@@ -74,9 +74,14 @@ void RoboyController::fromViewController_triggerPlayPlan() {
 void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
 
-    RoboyBehaviorMetaplan plan = m_pViewController->fromController_getCurrentRoboyPlan();
+    RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
-    CONTROLLER_DBG << "Loaded plan with " << plan.listExecutions.length() << " executions.";
+    CONTROLLER_DBG << "Loaded plan with " << metaplan.listExecutions.length() << " executions.";
+
+    RoboyBehaviorPlan plan(m_pModelService, metaplan);
+
+    CONTROLLER_DBG << "Created Plan " << plan.getExcutionsList().count();
+
 /*    for(int i=0; i<plan.listExecutions.length(); i++){
         // for every execution
         RoboyBehavior rb = plan.listExecutions.at(i).behavior;

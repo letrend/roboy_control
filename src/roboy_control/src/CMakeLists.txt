@@ -2,7 +2,9 @@ set(HDRS
         ${CMAKE_CURRENT_SOURCE_DIR}/DataTypes.h
         ${CMAKE_CURRENT_SOURCE_DIR}/LogDefines.h
 )
-set(SRCS ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
+set(SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DataTypes.cpp)
 set(UI_FILES)
 set(INCL ${CMAKE_CURRENT_SOURCE_DIR})
 
