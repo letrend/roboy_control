@@ -34,21 +34,20 @@ void ViewController::playBehaviorPlan() {
  * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan
  * @return the current behavior plan
  */
-RoboyBehaviorPlan ViewController::fromController_getCurrentRoboyPlan() {
+RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     // TODO: Get RoboyBehaviorPlan from PlayerView
-    RoboyBehaviorPlan plan;
-/*    RoboyBehaviorExecution exec1;
+    RoboyBehaviorMetaplan plan;
 
-    QList<RoboyWaypoint> waypoints;
-    RoboyWaypoint p1;
-    p1.m_ulTimestamp = 50;
-    p1.m_ulPosition = 10;
-    RoboyWaypoint p2;
-    p2.m_ulTimestamp = 100;
-    p2.m_ulPosition = 30;
-    waypoints.push_back(p1);
-    waypoints.push_back(p2);
-    ex.behavior.m_mapMotorWaypoints.insert(1,waypoints);
-    plan.listExecutions.push_back(ex);*/
+    RoboyBehaviorMetadata behavior1;
+    behavior1.m_sBehaviorName = "DefaultBehavior";
+    behavior1.m_ulBehaviorId = 1;
+
+    RoboyBehaviorMetaExecution execution;
+    execution.lId = 1;
+    execution.lTimestamp = QDateTime::currentMSecsSinceEpoch();
+    execution.behaviorMetadata = behavior1;
+
+    plan.listExecutions.append(execution);
+
     return plan;
 }

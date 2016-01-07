@@ -16,7 +16,7 @@ public:
     qint8  addLane            ();
     qint8  insertLane         (qint32 index);
     qint8  removeLane         (qint32 index);
-    qint8  insertBehaviorExec (qint32 laneIndex, quint64 ulTimestamp, RoboyBehavior behavior);
+    qint8  insertBehaviorExec (qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior);
     qint8  removeBehaviorExec (qint32 laneIndex, qint32 itemIndex);
     qint8  removeBehaviorExec (qint32 laneIndex, qint64 lId);
 
@@ -27,7 +27,7 @@ public:
 
 private:
     QList< QList<RoboyBehaviorExecution> > behaviors;
-    quint64 nextAvailableId = 0;
+    qint64 nextAvailableId = 0;
 };
 
 #endif // ROBOYMULTILANEMODEL_H

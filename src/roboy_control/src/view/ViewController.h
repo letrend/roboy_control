@@ -8,6 +8,7 @@
 #include "IModelService.h"
 #include "MainWindow/MainWindow.h"
 
+#include <QDateTime>
 #include <QThread>
 
 class RoboyController;
@@ -24,7 +25,7 @@ public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);
 
     void playBehaviorPlan();
-    RoboyBehaviorPlan fromController_getCurrentRoboyPlan();
+    RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 };
 
 

@@ -69,17 +69,17 @@ qint8 RoboyMultiLaneModel::removeLane(qint32 index)
 /**
  * @brief RoboyMultiLaneModel::insertBehaviorExec method to insert a new RoboyBehaviorExecution
  * @param laneIndex index of the lane where the RoboyBehaviorExecution should be inserted
- * @param ulTimestamp timestamp at which the RoboyBehaviorExecution should be inserted
+ * @param lTimestamp timestamp at which the RoboyBehaviorExecution should be inserted
  * @param behavior RoboyBehavior for the RoboyBehaviorExecution
  * @return 0 for success, -1 on failure
  */
-qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, quint64 ulTimestamp, RoboyBehavior behavior)
+qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior)
 {
     quint64 behaviorDuration = behavior.getDuration();
     /* edge case empty list */
     if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
         if(this->behaviors[laneIndex].count() < 1) {
-            const RoboyBehaviorExecution bExec = {this->nextAvailableId++, ulTimestamp, behavior};
+            const RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].append(bExec);
             qDebug() << "ID" << bExec.lId;
             emit itemInserted(laneIndex, 0);
@@ -87,8 +87,8 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, quint64 ulTimes
         }
 
         for (int i = 0; i < this->behaviors[laneIndex].count()-1; i++) {
-            if(this->behaviors[laneIndex][i].ulTimestamp <= ulTimestamp && this->behaviors[laneIndex][i+1].ulTimestamp > ulTimestamp+behaviorDuration) {
-                RoboyBehaviorExecution bExec = {this->nextAvailableId++, ulTimestamp, behavior};
+            if(this->behaviors[laneIndex][i].lTimestamp <= lTimestamp && this->behaviors[laneIndex][i+1].lTimestamp > lTimestamp+behaviorDuration) {
+                RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
                 this->behaviors[laneIndex].insert(i, bExec);
                 emit itemInserted(laneIndex, i);
                 return 0;
@@ -96,16 +96,16 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, quint64 ulTimes
         }
         /* edge case first item */
 
-        if (ulTimestamp + behaviorDuration < this->behaviors[laneIndex].first().ulTimestamp) {
-            RoboyBehaviorExecution bExec = {this->nextAvailableId++, ulTimestamp, behavior};
+        if (lTimestamp + behaviorDuration < this->behaviors[laneIndex].first().lTimestamp) {
+            RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].insert(0, bExec);
             emit itemInserted(laneIndex, 0);
             return 0;
         }
 
         /*edge case last item */
-        if (ulTimestamp > this->behaviors[laneIndex].last().ulTimestamp) {
-            RoboyBehaviorExecution bExec = {this->nextAvailableId++, ulTimestamp, behavior};
+        if (lTimestamp > this->behaviors[laneIndex].last().lTimestamp) {
+            RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].append(bExec);
             emit itemInserted(laneIndex, this->behaviors[laneIndex].count()-1);
             return 0;
@@ -192,7 +192,7 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
             else if (role == Qt::DecorationRole) // behavior icon
                 return QIcon(":/behavior-img-light.png");
             else if (role == Qt::UserRole) // behavior timestamp
-                return QVariant(behaviorExec.ulTimestamp);
+                return QVariant(behaviorExec.lTimestamp);
             else if (role == Qt::UserRole + 1) //behavior duration
                 return QVariant(behaviorExec.behavior.getDuration());
             else if (role == Qt::UserRole + 2) // behavior motor count

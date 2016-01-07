@@ -74,7 +74,7 @@ void RoboyController::fromViewController_triggerPlayPlan() {
 void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
 
-    RoboyBehaviorPlan plan = m_pViewController->fromController_getCurrentRoboyPlan();
+    RoboyBehaviorMetaplan plan = m_pViewController->fromController_getCurrentRoboyPlan();
 
     CONTROLLER_DBG << "Loaded plan with " << plan.listExecutions.length() << " executions.";
 /*    for(int i=0; i<plan.listExecutions.length(); i++){
