@@ -1,0 +1,3 @@
+[submodule "src/roboy_control/roboycommonutils"]
+	path = src/roboy_control/roboycommonutils
+	url = https://brunenbe13@bitbucket.org/brunenbe13/roboycommonutils.git

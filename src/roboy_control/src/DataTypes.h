@@ -1,13 +1,12 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
+#include "CommonDefinitions.h"
+
 #include <QString>
 #include <QMap>
 
 class IModelService;
-
-enum ControlMode {POSITION_CONTROL, FORCE_CONTROL};
-enum ControllerState {UNDEFINED, INITIALIZED, TRAJECTORY_READY, PLAYING};
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

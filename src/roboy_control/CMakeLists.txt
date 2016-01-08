@@ -50,6 +50,7 @@ catkin_package(
 ## Build Target
 include_directories(
 #        ${CMAKE_INSTALL_PREFIX}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/roboycommonutils/include
         ${ROBOY_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
         ${QT_INCLUDE_DIR}
