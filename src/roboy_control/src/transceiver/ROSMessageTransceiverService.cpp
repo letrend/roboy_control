@@ -1,15 +1,12 @@
 #include "ROSMessageTransceiverService.h"
 
 ROSMessageTransceiverService::ROSMessageTransceiverService() {
-    initialized = false;
-}
-
-void ROSMessageTransceiverService::run() {
-
 }
 
 // MyoMaster Interface
 void ROSMessageTransceiverService::sendInitializeRequest(const std::list<qint8> initializationList) {
+    m_bReceivedInitializeResponse = false;
+
     TRANSCEIVER_LOG << "Publish on topic: 'initialize_request'";
     ros::Publisher publisher = m_nodeHandle.advertise<roboy_control::InitializeRequest>("initialize_request", 1000);
 
@@ -33,18 +30,28 @@ void ROSMessageTransceiverService::sendInitializeRequest(const std::list<qint8> 
     TRANSCEIVER_LOG << "Send Message: 'initialize_request', Controller-Count: " << initializationList.size();
     publisher.publish(request);
 
-    ros::Rate r(10);
-    while(!initialized){
+    TRANSCEIVER_LOG << "Wait for InitializeResponse";
+    ros::Rate rate(50);
+    while(!m_bReceivedInitializeResponse) {
         ros::spinOnce();
-        r.sleep();
-        TRANSCEIVER_LOG << "Waiting for initialize response.";
+        rate.sleep();
     }
-    TRANSCEIVER_LOG << "Done initializing.";
 }
 
 void ROSMessageTransceiverService::receiveInitializeResponse(const roboy_control::InitializeResponse &msg) {
-    TRANSCEIVER_LOG << "Processing InitializeResponse.";
-    initialized = true;
+    TRANSCEIVER_LOG << "Processing Message: 'InitializeResponse'";
+    QList<ROSController> controllers;
+    ROSController controller;
+    for (roboy_control::ControllerState state : msg.controllers) {
+        controller.id = state.id;
+        controller.state = (ControllerState) state.state;
+        controllers.append(controller);
+        TRANSCEIVER_LOG << " - Initialized Controller Id: " << controller.id << " status: " << controller.state;
+    }
+    if (delegate != nullptr)
+        delegate->receivedControllerStatusUpdate(controllers);
+
+    m_bReceivedInitializeResponse = true;
 }
 
 // MotorController Interface

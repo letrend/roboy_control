@@ -7,6 +7,7 @@
 class IModelService;
 
 enum ControlMode {POSITION_CONTROL, FORCE_CONTROL};
+enum ControllerState {UNDEFINED, INITIALIZED, TRAJECTORY_READY, PLAYING};
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
@@ -90,6 +91,11 @@ public:
     qint64 getDuration();
 
     const QList<RoboyBehaviorExecution> & getExcutionsList() const;
+};
+
+struct ROSController {
+    qint8               id;
+    ControllerState     state;
 };
 
 #endif // DATATYPES_H

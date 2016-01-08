@@ -5,6 +5,7 @@
 #include "ITransceiverService.h"
 #include "LogDefines.h"
 
+#include "roboy_control/ControllerState.h"
 #include "roboy_control/InitializeRequest.h"
 #include "roboy_control/Status.h"
 #include "roboy_control/Steer.h"
@@ -21,14 +22,13 @@ class ROSMessageTransceiverService : public ITransceiverService
 
 private:
     ros::NodeHandle m_nodeHandle;
-    bool initialized;
+
+    bool m_bReceivedInitializeResponse = false;
     bool status_received;
 
 
 public:
     ROSMessageTransceiverService();
-
-    void run();
 
     // MyoMaster Interface
     void sendInitializeRequest(const std::list<qint8> initializationList);

@@ -1,2 +1,2 @@
 Header header
-uint8[] status
+ControllerState[] controllers

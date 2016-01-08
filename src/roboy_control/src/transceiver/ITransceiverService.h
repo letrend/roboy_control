@@ -6,13 +6,20 @@
 #define ROBOYCONTROL_ITRANSCEIVERSERVICE_H
 
 #include "../DataTypes.h"
+#include "ITransceiverServiceDelegate.h"
 #include "roboy_control/InitializeResponse.h"
 #include "roboy_control/Status.h"
 #include <stdint.h>
 
 class ITransceiverService {
+protected:
+    ITransceiverServiceDelegate * delegate;
 
 public:
+    void setDelegate(ITransceiverServiceDelegate * delegate) {
+        this->delegate = delegate;
+    }
+
     // MyoMaster Interface
     virtual void sendInitializeRequest(const std::list<qint8> initializationList) = 0;
     virtual void receiveInitializeResponse(const roboy_control::InitializeResponse& msg) = 0;

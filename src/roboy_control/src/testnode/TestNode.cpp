@@ -22,8 +22,11 @@ void callback(const roboy_control::InitializeRequest& msg){
 
     roboy_control::InitializeResponse response;
 
+    roboy_control::ControllerState controller;
     for(qint8 id : msg.idList) {
-        response.status.push_back(1);
+        controller.id = id;
+        controller.state = 1;
+        response.controllers.push_back(controller);
     }
     qDebug() << "Prepared response.";
 

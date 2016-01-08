@@ -31,6 +31,7 @@ qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
 add_message_files(
    FILES
+   ControllerState.msg
    InitializeRequest.msg
    InitializeResponse.msg
    Status.msg

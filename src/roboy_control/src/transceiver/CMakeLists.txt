@@ -1,5 +1,6 @@
 set(HDRS ${HDRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/ITransceiverService.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ITransceiverServiceDelegate.h
         ${CMAKE_CURRENT_SOURCE_DIR}/ROSMessageTransceiverService.h
 PARENT_SCOPE)
 

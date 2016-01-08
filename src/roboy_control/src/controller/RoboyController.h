@@ -6,6 +6,7 @@
 #define ROBOYCONTROL_ROBOYCONTROLLER_H
 
 #include "ITransceiverService.h"
+#include "ITransceiverServiceDelegate.h"
 #include "ROSMessageTransceiverService.h"
 #include "ViewController.h"
 #include "XmlModelService.h"
@@ -14,7 +15,7 @@
 #include <QThread>
 #include <QWaitCondition>
 
-class RoboyController : public QThread {
+class RoboyController : public QThread, ITransceiverServiceDelegate {
 
     Q_OBJECT
 
@@ -24,15 +25,14 @@ private:
 
     ViewController      * m_pViewController;
 
-    QMutex                m_mutexCV;
+    QMutex                m_mutexCVView;
     QWaitCondition        m_conditionView;
 
-    bool    m_bControllersInitialized = false;
     bool    m_bStartExectution = false;
     bool    m_bStopExecution = false;
     bool    m_bTerminate = false;
 
-    void executeCurrentRoboyPlan();
+    QList<ROSController> m_listControllers;
 
 protected:
     void run();
@@ -42,6 +42,15 @@ public:
     ~RoboyController();
 
     void fromViewController_triggerPlayPlan();
+
+    // ITransceiverServiceDelegate - Callback-Interface Implementation
+    void receivedControllerStatusUpdate(const QList<ROSController> & controllers);
+
+private:
+    bool initialize();
+    bool checkForCorrectInitialization();
+    void executeCurrentRoboyPlan();
+
 };
 
 
