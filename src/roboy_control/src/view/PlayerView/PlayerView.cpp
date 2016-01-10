@@ -183,7 +183,6 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
  */
 void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
 {
-    VIEW_DBG << "called";
     switch (index) {
     case 0:
         ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::millisecond);
