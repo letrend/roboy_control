@@ -119,7 +119,10 @@ void PlayerView::skipButtonClicked()
 void PlayerView::addLaneButtonClicked()
 {
     if (this->multiLaneModel->addLane() < 0) {
-        VIEW_DBG << "adding a new lane to the MultiLaneView failed. /n";
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Adding lane failed");
+        msgBox.setText("Adding a new lane to the MultiLaneView failed.");
+        msgBox.exec();
     }
 }
 
@@ -199,7 +202,10 @@ void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
         ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::second);
         break;
     default:
-        VIEW_DBG << "Non supported scale factor selected. /n";
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Non supported scale factor selected.");
+        msgBox.setText("The scale factor you selected is not available.");
+        msgBox.exec();
         break;
     }
 }
