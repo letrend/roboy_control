@@ -67,6 +67,7 @@ void MultiLaneViewLane::itemInsertedHandler(qint32 index, QString name, QIcon ic
     item->setGeometry((timeStamp/this->viewScaleFactor), 20 + ITEM_INDENT, (duration/this->viewScaleFactor), this->height()-20-(ITEM_INDENT << 1));
     item->setParent(this);
     this->items.insert(index, item);
+    item->show();
 }
 
 /**
@@ -86,8 +87,7 @@ void MultiLaneViewLane::itemRemovedHandler(qint32 index)
  */
 void MultiLaneViewLane::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
-
+    QWidget::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(0,0, this->width(), 20,  lightBackgroundColor);

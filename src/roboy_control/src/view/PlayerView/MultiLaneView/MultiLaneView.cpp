@@ -5,7 +5,6 @@
 #include <QVBoxLayout>
 #include <QSpacerItem>
 
-
 #include "MultiLaneView.h"
 
 #define LANE_INDENT         9

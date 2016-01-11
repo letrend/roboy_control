@@ -81,7 +81,6 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
         if(this->behaviors[laneIndex].count() < 1) {
             const RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].append(bExec);
-            qDebug() << "ID" << bExec.lId;
             emit itemInserted(laneIndex, 0);
             return 0;
         }
@@ -184,7 +183,6 @@ qint32 RoboyMultiLaneModel::itemCount(qint32 laneIndex)
 QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 role)
 {
     if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        qDebug() << "Behavior: " << this->behaviors[laneIndex].count();
         if(itemIndex >=  0 && itemIndex < this->behaviors[laneIndex].count()) {
             RoboyBehaviorExecution behaviorExec = this->behaviors[laneIndex][itemIndex];
             if (role == Qt::DisplayRole) // behavior name

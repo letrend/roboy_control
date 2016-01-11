@@ -4,6 +4,8 @@
 #include "ui_PlayerView.h"
 #include "ViewController.h"
 
+#include "Dialogs/AddRoboyBehaviorDialog.h"
+
 #include "MultiLaneView/MultiLaneView.h"
 #include "MultiLaneView/RoboyMultiLaneModel.h"
 
@@ -27,17 +29,6 @@ PlayerView::PlayerView(IModelService *modelService, ViewController * pViewContro
 
     this->multiLaneModel = new RoboyMultiLaneModel();
     this->ui->multiLaneView->setModel(this->multiLaneModel);
-
-    this->multiLaneModel->addLane();
-    this->multiLaneModel->addLane();
-    this->multiLaneModel->addLane();
-
-    QList<RoboyBehaviorMetadata> metaData = modelService->getBehaviorList();
-
-    for (int i = 0; i < metaData.count(); i++) {
-        RoboyBehavior behavior = modelService->retrieveRoboyBehavior(metaData.at(i));
-        this->multiLaneModel->insertBehaviorExec(i, i*50, behavior);
-    }
 }
 
 /**
@@ -140,7 +131,6 @@ void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 {	
 	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
 	this->currentlyDisplayedBehavior = this->modelService->retrieveRoboyBehavior(this->currentlyDisplayedBehaviorMetaData);
-	this->ui->addToQueueButton->setEnabled(true);
 	ui->behaviorNameValueLabel->setText(this->currentlyDisplayedBehavior.m_metadata.m_sBehaviorName);
 	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));
 	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorTrajectory.count()));
@@ -171,7 +161,19 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
 
     	if (selectedItem) {
     		if (selectedItem->text() == "add to queue") {
-                // add item to multi lane view here
+                AddRoboyBehaviorDialog dialog(this->multiLaneModel->laneCount());
+                if(dialog.exec() == AddRoboyBehaviorDialog::Accepted) {
+                    qint32 laneIndex = dialog.selectedLane();
+                    qint64 timestamp = dialog.selectedTimestamp();
+                    RoboyBehaviorMetadata behaviorMetaData = this->behaviorListModel->getBehaviorMetaData(selectedIndex.row());
+                    RoboyBehavior behavior = this->modelService->retrieveRoboyBehavior(behaviorMetaData);
+                    if (this->multiLaneModel->insertBehaviorExec(laneIndex, timestamp, behavior) < 0) {
+                        QMessageBox msgBox;
+                        msgBox.setWindowTitle("Adding the behavior failed");
+                        msgBox.setText("The inserted behavior does overlap with one or more behaviors in the selected lane.");
+                        msgBox.exec();
+                    }
+                }
             }
 		}
 	}
@@ -183,7 +185,6 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
  */
 void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
 {
-    VIEW_DBG << "called";
     switch (index) {
     case 0:
         ui->multiLaneView->setScaleFactor(MultiLaneView::scaleFactor::millisecond);
