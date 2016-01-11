@@ -17,8 +17,9 @@ public:
     qint8  insertLane         (qint32 index);
     qint8  removeLane         (qint32 index);
     qint8  insertBehaviorExec (qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior);
-    qint8  removeBehaviorExec (qint32 laneIndex, qint32 itemIndex);
-    qint8  removeBehaviorExec (qint32 laneIndex, qint64 lId);
+    qint8  removeBehaviorExecWithIndex (qint32 laneIndex, qint32 itemIndex);
+    qint8  removeBehaviorExecWithID (qint32 laneIndex, qint64 lId);
+    qint8  removeBehaviorExecWithTimestamp (qint32 laneIndex, qint64 timestamp);
 
     qint32              laneCount ();
     qint32              itemCount (qint32 laneIndex);

@@ -75,7 +75,7 @@ qint8 RoboyMultiLaneModel::removeLane(qint32 index)
  */
 qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior)
 {
-    quint64 behaviorDuration = behavior.getDuration();
+    qint64 behaviorDuration = behavior.getDuration();
     /* edge case empty list */
     if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
         if(this->behaviors[laneIndex].count() < 1) {
@@ -119,7 +119,7 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
  * @param itemIndex index of the RoboyBehaviorExecution in the lane
  * @return 0 for success, -1 on failure
  */
-qint8 RoboyMultiLaneModel::removeBehaviorExec(qint32 laneIndex, qint32 itemIndex)
+qint8 RoboyMultiLaneModel::removeBehaviorExecWithIndex(qint32 laneIndex, qint32 itemIndex)
 {
     if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
         if(itemIndex >= 0 && itemIndex < this->behaviors[laneIndex].count()) {
@@ -134,14 +134,34 @@ qint8 RoboyMultiLaneModel::removeBehaviorExec(qint32 laneIndex, qint32 itemIndex
 /**
  * @brief RoboyMultiLaneModel::removeBehaviorExec method to remove a previously inserted RoboyBehaviorExecution
  * @param laneIndex index of the lane of the RoboyBehaviorExecution
- * @param lId timestamp of the RoboyBehaviorExecution that should be removed
+ * @param lId ID of the RoboyBehaviorExecution that should be removed
  * @return 0 for success, -1 on failure
  */
-qint8 RoboyMultiLaneModel::removeBehaviorExec(qint32 laneIndex, qint64 lId)
+qint8 RoboyMultiLaneModel::removeBehaviorExecWithID(qint32 laneIndex, qint64 lId)
 {
     if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
         for (int i = 0; i < this->behaviors[laneIndex].count(); i++) {
             if (this->behaviors[laneIndex][i].lId == lId) {
+                this->behaviors[laneIndex].removeAt(i);
+                emit itemRemoved(laneIndex, i);
+                return 0;
+            }
+        }
+    }
+    return -1;
+}
+
+/**
+ * @brief RoboyMultiLaneModel::removeBehaviorExec method to remove a previously inserted RoboyBehaviorExecution
+ * @param laneIndex index of the lane of the RoboyBehaviorExecution
+ * @param timestamp
+ * @return 0 for success, -1 on failure
+ */
+qint8 RoboyMultiLaneModel::removeBehaviorExecWithTimestamp(qint32 laneIndex, qint64 timestamp)
+{
+    if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
+        for (int i = 0; i < this->behaviors[laneIndex].count(); i++) {
+            if (this->behaviors[laneIndex][i].lTimestamp == timestamp) {
                 this->behaviors[laneIndex].removeAt(i);
                 emit itemRemoved(laneIndex, i);
                 return 0;

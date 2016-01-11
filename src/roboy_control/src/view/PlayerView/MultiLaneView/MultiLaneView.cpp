@@ -1,6 +1,7 @@
 #include <QGridLayout>
 #include <QIcon>
 #include <QLabel>
+#include <QMessageBox>
 #include <QVariant>
 #include <QVBoxLayout>
 #include <QSpacerItem>
@@ -94,7 +95,9 @@ void MultiLaneView::setScaleFactor(scaleFactor factor)
  */
 void MultiLaneView::laneInsertedHandler(qint32 index)
 {
-    MultiLaneViewLane *lane = new MultiLaneViewLane(LANE_HEIGHT, MINIMUM_LANE_WIDTH, this->viewScaleFactor, this);
+    MultiLaneViewLane *lane = new MultiLaneViewLane(LANE_HEIGHT, MINIMUM_LANE_WIDTH, this->viewScaleFactor, this->nextAvailableLaneID++, this);
+    connect(lane, SIGNAL(removeLaneWithLaneID(qint64)), this, SLOT(removeLaneWithLaneID(qint64)));
+
     this->lanes.insert(index, lane);
     this->laneBackground->setFixedHeight((this->lanes.count()*LANE_HEIGHT)+((this->lanes.count()+1)*LANE_SPACING));
     QGridLayout *layout = qobject_cast<QGridLayout *>(this->laneBackground->layout());
@@ -125,13 +128,16 @@ void MultiLaneView::itemInsertedHandler(qint32 laneIndex, qint32 itemIndex)
 
     QString bName       = this->model->data(laneIndex, itemIndex, Qt::DisplayRole       ).value<QString>();
     QIcon   bIcon       = this->model->data(laneIndex, itemIndex, Qt::DecorationRole    ).value<QIcon  >();
-    quint64 bTimestamp  = this->model->data(laneIndex, itemIndex, Qt::UserRole          ).value<quint64>();
-    quint64 bDuration   = this->model->data(laneIndex, itemIndex, Qt::UserRole + 1      ).value<quint64>();
-    quint64 bMotorCount = this->model->data(laneIndex, itemIndex, Qt::UserRole + 2      ).value<quint64>();
-    bDuration = 2000;
+    qint64  bTimestamp  = this->model->data(laneIndex, itemIndex, Qt::UserRole          ).value<qint64>();
+    qint64  bDuration   = this->model->data(laneIndex, itemIndex, Qt::UserRole + 1      ).value<qint64>();
+    qint64  bMotorCount = this->model->data(laneIndex, itemIndex, Qt::UserRole + 2      ).value<qint64>();
 
-    quint64 maxSize = ((bTimestamp + bDuration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
-    this->laneBackground->setFixedWidth(maxSize);
+    connect(lane, SIGNAL(removeItemWithTimestampAndLaneID(qint64,qint64)), this, SLOT(removeItemWithTimestampAndLaneID(qint64,qint64)));
+
+    qint64 maxSize = ((bTimestamp + bDuration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
+    if(maxSize > this->laneBackground->width()) {
+        this->laneBackground->setFixedWidth(maxSize);
+    }
 
     lane->itemInsertedHandler(itemIndex, bName, bIcon, bTimestamp, bDuration, bMotorCount);
 }
@@ -146,18 +152,52 @@ void MultiLaneView::itemRemovedHandler(qint32 laneIndex, qint32 itemIndex)
     MultiLaneViewLane *lane = this->lanes.at(laneIndex);
     lane->itemRemovedHandler(itemIndex);
 
-    quint64 maxSize = 0;
+    qint64 maxSize = 0;
     for (int i = 0; i < this->model->laneCount(); i++) {
         qint32 itemCount  = this->model->itemCount(i);
-        quint64 timestamp = this->model->data(i, itemCount-1, Qt::UserRole    ).value<quint64>();
-        quint64 duration  = this->model->data(i, itemCount-1, Qt::UserRole + 1).value<quint64>();
-        quint64 newMaxSize = ((timestamp + duration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
-        if (newMaxSize> maxSize) {
+        qint64 timestamp = this->model->data(i, itemCount-1, Qt::UserRole    ).value<qint64>();
+        qint64 duration  = this->model->data(i, itemCount-1, Qt::UserRole + 1).value<qint64>();
+        qint64 newMaxSize = ((timestamp + duration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
+        if (newMaxSize > maxSize) {
             maxSize = newMaxSize;
         }
     }
 
     this->laneBackground->setFixedWidth(maxSize);
+}
+
+/**
+ * @brief MultiLaneView::removeItemWithTimestampAndLaneID
+ * @param timestamp
+ * @param laneID
+ */
+void MultiLaneView::removeItemWithTimestampAndLaneID(qint64 timestamp, qint64 laneID)
+{
+   for (int i = 0; i < this->lanes.count(); i++) {
+       if (this->lanes[i]->getLaneID() == laneID) {
+           this->model->removeBehaviorExecWithTimestamp(i, timestamp);
+       }
+   }
+}
+
+void MultiLaneView::removeLaneWithLaneID(qint64 laneID)
+{
+    for (int i = 0; i < this->lanes.count(); i++) {
+        if (this->lanes[i]->getLaneID() == laneID) {
+            if (this->lanes[i]->children().count() > 0) {
+                QMessageBox::StandardButton reply;
+                  reply = QMessageBox::question(this, "Deleting Lane", QString("The lane you are about to delete is not empty. ") +
+                                                                       QString("If you continue, all behaviors in it ") +
+                                                                       QString("will also be deleted. Are you sure you want to continue?"),
+                                                                       QMessageBox::Yes|QMessageBox::No);
+                  if (reply == QMessageBox::Yes) {
+                      this->model->removeLane(i);
+                  }
+            } else {
+                this->model->removeLane(i);
+            }
+        }
+    }
 }
 
 /* private methods */

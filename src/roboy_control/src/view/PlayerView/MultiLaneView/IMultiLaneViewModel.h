@@ -15,8 +15,10 @@ public:
     virtual qint8  insertLane         (qint32 index) = 0;
     virtual qint8  removeLane         (qint32 index) = 0;
     virtual qint8  insertBehaviorExec (qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior) = 0;
-    virtual qint8  removeBehaviorExec (qint32 laneIndex, qint32 itemIndex) = 0;
-    virtual qint8  removeBehaviorExec (qint32 laneIndex, qint64 lId) = 0;
+
+    virtual qint8  removeBehaviorExecWithIndex     (qint32 laneIndex, qint32 itemIndex) = 0;
+    virtual qint8  removeBehaviorExecWithID         (qint32 laneIndex, qint64 lId) = 0;
+    virtual qint8  removeBehaviorExecWithTimestamp  (qint32 laneIndex, qint64 timestamp) = 0;
 
     virtual qint32   laneCount () = 0;
     virtual qint32   itemCount (qint32 laneIndex) = 0;
