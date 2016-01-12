@@ -10,13 +10,20 @@ class MultiLaneViewItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, QWidget *parent = 0);
-    quint64  getTimestamp();
+    explicit MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, qint64 timestamp, QWidget *parent = 0);
+    qint64  getTimestamp();
+
+public slots:
+        void showMultiLaneViewItemMenu(const QPoint& pos);
+signals:
+        void removeItemWithTimestamp(qint64 timestamp);
 private:
-    quint64 timestamp;
+    qint64 timestamp;
     QLabel *iconLabel;
     QLabel *behaviorNameLabel;
 
+private slots:
+    void removeItemHandler();
 };
 
 #endif // MULTILANEVIEWITEM_H

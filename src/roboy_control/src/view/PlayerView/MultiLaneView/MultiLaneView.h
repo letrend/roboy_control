@@ -26,12 +26,16 @@ public slots:
     void itemInsertedHandler    (qint32 laneIndex, qint32 itemIndex);
     void itemRemovedHandler     (qint32 laneIndex, qint32 itemIndex);
 
+    void removeItemWithTimestampAndLaneID(qint64 timestamp, qint64 laneID);
+    void removeLaneWithLaneID(qint64 laneID);
+
 private:
     IMultiLaneViewModel *model;
     QScrollArea         *laneScrollArea;
     QWidget             *laneBackground;
     QList<MultiLaneViewLane *> lanes;
     scaleFactor viewScaleFactor = scaleFactor::millisecond;
+    qint64 nextAvailableLaneID = 0;
 
     void setupConnections();
 };

@@ -1,6 +1,8 @@
+#include <QAction>
 #include <QGraphicsDropShadowEffect>
 #include <QBoxLayout>
-
+#include <QMenu>
+#include "LogDefines.h"
 #include "GUIColors.h"
 #include "MultiLaneViewItem.h"
 
@@ -10,8 +12,10 @@
  * @param icon icon of the MultiLaneViewItem
  * @param parent non mandatory parent of the item
  */
-MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, QWidget *parent) : QWidget(parent)
+MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, qint64 timestamp, QWidget *parent) : QWidget(parent)
 {
+    this->timestamp = timestamp;
+
     QBoxLayout *layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
     this->iconLabel = new QLabel();
     this->iconLabel->setPixmap(icon.pixmap(icon.availableSizes().first()));
@@ -37,14 +41,39 @@ MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon ico
     shadow->setXOffset(0);
     shadow->setYOffset(0);
     this->setGraphicsEffect(shadow);
+
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMultiLaneViewItemMenu(const QPoint&)));
+}
+
+/**
+ * @brief MultiLaneViewItem::showMultiLaneViewItemMenu method to handle the invokation of a context menu on the MultiLaneViewItem
+ * @param pos position at which the context menu is invoked
+ */
+void MultiLaneViewItem::showMultiLaneViewItemMenu(const QPoint &pos)
+{
+    QMenu behaviorListItemMenu;
+    QAction removeItemAction(QIcon(":/delete-img-dark.png"), "remove behavior", NULL);
+    connect(&removeItemAction, SIGNAL(triggered()), this, SLOT(removeItemHandler()));
+    removeItemAction.setIconVisibleInMenu(true);
+    behaviorListItemMenu.addAction(&removeItemAction);
+    QPoint globalPos = this->mapToGlobal(pos);
+    QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
 }
 
 /**
  * @brief MultiLaneViewItem::getTimestamp method for retrieving the timestamp of the MultiLaneViewItem
  * @return the timestamp of the MultiLaneViewItem
  */
-quint64 MultiLaneViewItem::getTimestamp()
+qint64 MultiLaneViewItem::getTimestamp()
 {
     return this->timestamp;
 }
 
+/**
+ * @brief MultiLaneViewItem::removeItemHandler handler function for the remove item action in the items contextmenu
+ */
+void MultiLaneViewItem::removeItemHandler()
+{
+    emit removeItemWithTimestamp(this->timestamp);
+}
