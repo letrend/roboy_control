@@ -3,26 +3,30 @@
 //
 
 #include <QDebug>
+
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "roboy_control/InitializeRequest.h"
-#include "roboy_control/InitializeResponse.h"
-#include "roboy_control/Trajectory.h"
-#include "roboy_control/Steer.h"
-#include "roboy_control/Status.h"
+
+#include "common_utilities/InitializeRequest.h"
+#include "common_utilities/InitializeResponse.h"
+#include "common_utilities/Trajectory.h"
+#include "common_utilities/Steer.h"
+#include "common_utilities/Status.h"
+
+#include "CommonDefinitions.h"
 
 ros::Publisher publisher;
-ros::Publisher publisherMotor1;
+ros::Publisher publisherStatus;
 ros::Subscriber subscriber;
 ros::Subscriber subscriberMotor1;
 ros::Subscriber subscriberSteer;
 
-void callback(const roboy_control::InitializeRequest& msg){
+void callback(const common_utilities::InitializeRequest& msg){
     qDebug() << "Heard InitializeRequest.";
 
-    roboy_control::InitializeResponse response;
+    common_utilities::InitializeResponse response;
 
-    roboy_control::ControllerState controller;
+    common_utilities::ControllerState controller;
     for(qint8 id : msg.idList) {
         controller.id = id;
         controller.state = 1;
@@ -40,24 +44,22 @@ void callback(const roboy_control::InitializeRequest& msg){
     publisher.publish(response);
 }
 
-void callbackMotor1(const roboy_control::Trajectory& msg){
-    qDebug() << "Heard Trajectory message.";
-    roboy_control::Status response;
-
-    response.statusCode = 1;
-    qDebug() << "Prepared response.";
-
-    ros::Rate rollRate(10);
-    while(publisherMotor1.getNumSubscribers() == 0) {
-        rollRate.sleep();
+void callbackMotor1(const common_utilities::Trajectory& msg){
+    qDebug() << "Received Message: TRAJECTORY on topic 'motor1'";
+    qDebug() << "TRAJECTORY: [samplerate:" << msg.samplerate << "][controlmode:" << msg.controlmode << "]";
+    qint32 index = 0;
+    for(qint32 wp : msg.waypoints) {
+        qDebug() << " - WAYPOINT" << ++index << ": [value:" << wp << "]";
     }
-    qDebug() << "Motor status subscribers: " << publisherMotor1.getNumSubscribers();
 
-    qDebug() << "Publishing MotorStatus.";
-    publisherMotor1.publish(response);
+    qDebug() << "Send Message on topic 'motor_status': 'ControllerState'";
+    common_utilities::ControllerState response;
+    response.id = 1;
+    response.state = ControllerState::TRAJECTORY_READY;
+    publisherStatus.publish(response);
 }
 
-void callbackSteer(const roboy_control::Steer& msg){
+void callbackSteer(const common_utilities::Steer& msg){
     qDebug() << "Heard steering message: " << msg.steeringaction;
 }
 
@@ -70,8 +72,8 @@ int main(int argc, char ** argv) {
     subscriber = m_nodeHandle.subscribe("initialize_request", 1000, callback);
     subscriberMotor1 = m_nodeHandle.subscribe("motor1", 1000, callbackMotor1);
     subscriberSteer = m_nodeHandle.subscribe("steeringaction", 1000, callbackSteer);
-    publisher = m_nodeHandle2.advertise<roboy_control::InitializeResponse>("initialize_response", 1000);
-    publisherMotor1 = m_nodeHandle2.advertise<roboy_control::Status>("motor_status1", 1000);
+    publisher = m_nodeHandle2.advertise<common_utilities::InitializeResponse>("initialize_response", 1000);
+    publisherStatus = m_nodeHandle2.advertise<common_utilities::ControllerState>("motor_status", 1000);
 
     ros::spin();
 }

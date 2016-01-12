@@ -61,6 +61,37 @@ void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Interrupted. Quit.";
 }
 
+// ViewController - Interface
+void RoboyController::fromViewController_triggerPlayPlan() {
+    m_mutexCVView.lock();
+    m_bStartExectution = true;
+    m_conditionView.wakeAll();
+    m_mutexCVView.unlock();
+}
+
+// ITransceiverServiceDelegate - Callback-Interface Implementation
+void RoboyController::receivedControllerStatusUpdate(const QList<ROSController> & controllers) {
+    for(ROSController receivedController : controllers) {
+        for(ROSController & localController : m_listControllers) {
+            if (receivedController.id == localController.id) {
+                localController.state = ControllerState::INITIALIZED;
+                CONTROLLER_DBG << "Update Controller Status: " << localController.id << " state: " << localController.state;
+                break;
+            }
+        }
+    }
+}
+
+void RoboyController::receivedControllerStatusUpdate(const ROSController & controller) {
+    CONTROLLER_DBG << "Update Controller Status: " << controller.id << " state: " << controller.state;
+    for(ROSController & localController : m_listControllers) {
+        if (localController.id == controller.id) {
+            localController.state = controller.state;
+            break;
+        }
+    }
+}
+
 // Private Interface
 bool RoboyController::initialize() {
     bool result = false;
@@ -97,50 +128,24 @@ bool RoboyController::checkForCorrectInitialization() {
     return true;
 }
 
-void RoboyController::fromViewController_triggerPlayPlan() {
-    m_mutexCVView.lock();
-    m_bStartExectution = true;
-    m_conditionView.wakeAll();
-    m_mutexCVView.unlock();
-}
-
 void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
-
+    CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
-    CONTROLLER_DBG << "Loaded plan with " << metaplan.listExecutions.length() << " executions.";
-
+    CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
 
-    CONTROLLER_DBG << "Created Plan " << plan.getExcutionsList().count();
+    CONTROLLER_DBG << "Get Flattended Trajectories";
+    QMap<qint32, Trajectory> mapTrajectories = plan.getTrajectories();
 
-/*    for(int i=0; i<plan.listExecutions.length(); i++){
-        // for every execution
-        RoboyBehavior rb = plan.listExecutions.at(i).behavior;
-        QList<u_int32_t> motors = rb.m_mapMotorWaypoints.keys();
-        CONTROLLER_DBG << "Processing behavior " << rb.m_metadata.m_sBehaviorName << " for " << motors.length() << " motors.";
-        for(int j=0; j< motors.length(); j++){
-            // for every motor
-            QList<RoboyWaypoint> waypoints = rb.m_mapMotorWaypoints.take(motors.at(j));
-            CONTROLLER_DBG << "Sending request for " << waypoints.length() << " waypoints.";
-            m_pTransceiverService->sendTrajectory(motors.at(j),waypoints);
-        }
+    CONTROLLER_DBG << "Send Trajectories";
+    for(qint32 id : mapTrajectories.keys()) {
+        CONTROLLER_DBG << "Motor Id: " << id << mapTrajectories.value(id).toString();
+        // TODO: Do Multi-Threaded asynchronous send/wait for response
+        m_pTransceiverService->sendTrajectory(id, mapTrajectories.value(id));
     }
-*/
-    m_pTransceiverService->sendSteeringMessage(1);
 
-}
 
-// ITransceiverServiceDelegate - Callback-Interface Implementation
-void RoboyController::receivedControllerStatusUpdate(const QList<ROSController> & controllers) {
-    for(ROSController receivedController : controllers) {
-        for(ROSController & localController : m_listControllers) {
-            if (receivedController.id == localController.id) {
-                localController.state = ControllerState::INITIALIZED;
-                CONTROLLER_DBG << "Update Controller Status: " << localController.id << " state: " << localController.state;
-                break;
-            }
-        }
-    }
+
 }

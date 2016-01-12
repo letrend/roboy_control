@@ -3,7 +3,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  message_generation
 )
 
 ## FIND QT
@@ -29,28 +28,13 @@ qt4_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
 qt4_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
 qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
-add_message_files(
-   FILES
-   ControllerState.msg
-   InitializeRequest.msg
-   InitializeResponse.msg
-   Status.msg
-   Steer.msg
-   Trajectory.msg
-)
-
-generate_messages(
-   DEPENDENCIES std_msgs
-)
-
 catkin_package(
    CATKIN_DEPENDS message_runtime
 )
 
 ## Build Target
 include_directories(
-#        ${CMAKE_INSTALL_PREFIX}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/roboycommonutils/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../common_utilities/include
         ${ROBOY_INCLUDE_DIRS}
         ${catkin_INCLUDE_DIRS}
         ${QT_INCLUDE_DIR}
@@ -58,6 +42,7 @@ include_directories(
 )
 
 add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
+add_dependencies(roboy_control_node common_utilities_generate_messages_cpp)
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
 
 add_executable(roboy_control_test_node src/testnode/TestNode.cpp)

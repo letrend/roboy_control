@@ -12,6 +12,7 @@ RoboyBehaviorPlan::RoboyBehaviorPlan(IModelService * modelService, const RoboyBe
     for (RoboyBehaviorMetaExecution metaExecution : metaPlan.listExecutions) {
         execution.lId = metaExecution.lId;
         execution.lTimestamp = metaExecution.lTimestamp;
+        // TODO: Check result -> Whether Behavior exists
         execution.behavior = modelService->retrieveRoboyBehavior(metaExecution.behaviorMetadata);
         listExecutions.append(execution);
     }
@@ -45,4 +46,18 @@ qint64 RoboyBehaviorPlan::getDuration() {
 
 const QList<RoboyBehaviorExecution> & RoboyBehaviorPlan::getExcutionsList() const {
     return listExecutions;
+}
+
+QMap<qint32, Trajectory> RoboyBehaviorPlan::getTrajectories() {
+    QMap<qint32, Trajectory> mapTrajectories;
+    for(RoboyBehaviorExecution execution : listExecutions) {
+        for(qint32 motor : execution.behavior.m_mapMotorTrajectory.keys()) {
+            if(mapTrajectories.contains(motor)) {
+                CONTROLLER_DBG << "Motor-Id clash when building flattened trajectories";
+            } else {
+                mapTrajectories.insert(motor, execution.behavior.m_mapMotorTrajectory.value(motor));
+            }
+        }
+    }
+    return mapTrajectories;
 }

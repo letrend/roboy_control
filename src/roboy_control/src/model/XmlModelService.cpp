@@ -30,7 +30,7 @@ QList<RoboyBehaviorMetadata> XmlModelService::getBehaviorList() {
     QList<RoboyBehaviorMetadata> behaviorList;
     RoboyBehaviorMetadata behavior;
     for (QString fileName : dbDirectory.entryList()) {
-        if (fileName.endsWith("Behavior.xml", Qt::CaseSensitive)) {
+        if (fileName.endsWith(".xml", Qt::CaseSensitive)) {
             behavior.m_sBehaviorName = fileName.split(".")[0];
             m_xmlParser.readRoboyBehaviorMetadata(behavior);
             behaviorList.append(behavior);

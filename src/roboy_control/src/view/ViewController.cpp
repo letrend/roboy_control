@@ -39,7 +39,7 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     RoboyBehaviorMetaplan plan;
 
     RoboyBehaviorMetadata behavior1;
-    behavior1.m_sBehaviorName = "DefaultBehavior";
+    behavior1.m_sBehaviorName = "TestBehavior1";
     behavior1.m_ulBehaviorId = 1;
 
     RoboyBehaviorMetaExecution execution;

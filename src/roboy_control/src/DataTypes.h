@@ -20,17 +20,26 @@ struct RoboyWaypoint {
 
 struct Trajectory {
     ControlMode          m_controlMode;
-    qint64               m_sampleRate;
+    qint32               m_sampleRate;
     QList<RoboyWaypoint> m_listWaypoints;
 
     qint32 getDuration() {
         return m_listWaypoints.count() * m_sampleRate;
     }
+
+    QString toString() const {
+        QString string;
+        string.sprintf("TRAJECTORY [controlMode:%i][sampleRate:%i][wp-count:%i]",
+                       (int) m_controlMode,
+                       (int) m_sampleRate,
+                       m_listWaypoints.size());
+        return string;
+    }
 };
 
 struct RoboyBehavior {
     RoboyBehaviorMetadata       m_metadata;
-    QMap<u_int32_t, Trajectory> m_mapMotorTrajectory;
+    QMap<qint32, Trajectory> m_mapMotorTrajectory;
 
     QString toString() {
         QString string;
@@ -90,6 +99,8 @@ public:
     qint64 getDuration();
 
     const QList<RoboyBehaviorExecution> & getExcutionsList() const;
+
+    QMap<qint32, Trajectory> getTrajectories();
 };
 
 struct ROSController {

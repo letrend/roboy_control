@@ -10,6 +10,7 @@ class ITransceiverServiceDelegate {
 
 public:
     virtual void receivedControllerStatusUpdate(const QList<ROSController> & controllers) = 0;
+    virtual void receivedControllerStatusUpdate(const ROSController & controller) = 0;
 
 };
 

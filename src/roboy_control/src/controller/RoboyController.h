@@ -41,10 +41,12 @@ public:
     RoboyController();
     ~RoboyController();
 
+    // ViewController - Interface
     void fromViewController_triggerPlayPlan();
 
     // ITransceiverServiceDelegate - Callback-Interface Implementation
     void receivedControllerStatusUpdate(const QList<ROSController> & controllers);
+    void receivedControllerStatusUpdate(const ROSController & controller);
 
 private:
     bool initialize();

@@ -128,9 +128,13 @@ bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata & metadat
 
 bool RoboyBehaviorXmlParser::readMotorData( RoboyBehavior & behavior ) {
     if ( m_xmlReader.name() == "motor" ) {
-        u_int32_t motor_id = m_xmlReader.attributes().value("motorid").toString().toUInt();
+        quint32 motor_id = m_xmlReader.attributes().value("motorid").toString().toUInt();
+        qint32 controlMode = m_xmlReader.attributes().value("controlmode").toString().toInt();
+        qint32 sampleRate = m_xmlReader.attributes().value("samplerate").toString().toInt();
 
         Trajectory trajectory;
+        trajectory.m_controlMode = (ControlMode) controlMode;
+        trajectory.m_sampleRate = sampleRate;
         RoboyWaypoint waypoint;
 
         while (m_xmlReader.readNextStartElement()) {
