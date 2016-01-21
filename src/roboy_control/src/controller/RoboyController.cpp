@@ -6,9 +6,6 @@
 
 RoboyController::RoboyController() {
     m_pModelService = new XmlModelService();
-    m_pTransceiverService = new ROSMessageTransceiverService();
-    m_pTransceiverService->setDelegate(this);
-
     m_pViewController = new ViewController(this, m_pModelService);
 }
 
@@ -31,6 +28,13 @@ RoboyController::~RoboyController() {
 void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Started";
     CONTROLLER_DBG << "ID is: " << this->currentThreadId();
+
+    m_pTransceiverService = new ROSMessageTransceiverService(1);
+    m_pTransceiverService->setDelegate(this);
+    m_pTransceiverService->start();
+
+    msleep(1000);
+
     CONTROLLER_DBG << "Initialize Controllers";
 
     bool run = false;
@@ -74,22 +78,34 @@ void RoboyController::receivedControllerStatusUpdate(const QList<ROSController> 
     for(ROSController receivedController : controllers) {
         for(ROSController & localController : m_listControllers) {
             if (receivedController.id == localController.id) {
+                m_mutexData.lock();
                 localController.state = ControllerState::INITIALIZED;
                 CONTROLLER_DBG << "Update Controller Status: " << localController.id << " state: " << localController.state;
+                m_mutexData.unlock();
                 break;
             }
         }
     }
+    m_mutexCVTransceiver.lock();
+    m_bInitializationComplete = true;
+    m_conditionTransceiver.wakeAll();
+    m_mutexCVTransceiver.unlock();
 }
 
 void RoboyController::receivedControllerStatusUpdate(const ROSController & controller) {
     CONTROLLER_DBG << "Update Controller Status: " << controller.id << " state: " << controller.state;
     for(ROSController & localController : m_listControllers) {
         if (localController.id == controller.id) {
+            m_mutexData.lock();
             localController.state = controller.state;
+            m_mutexData.unlock();
             break;
         }
     }
+    m_mutexCVTransceiver.lock();
+    m_bReceivedAllControllerStates = true;
+    m_conditionTransceiver.wakeAll();
+    m_mutexCVTransceiver.unlock();
 }
 
 // Private Interface
@@ -104,6 +120,12 @@ bool RoboyController::initialize() {
     }
 
     m_pTransceiverService->sendInitializeRequest(controllerIds.toStdList());
+
+    while(!m_bInitializationComplete){
+        m_mutexCVTransceiver.lock();
+        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
+        m_mutexCVTransceiver.unlock();
+    }
 
     if(checkForCorrectInitialization()) {
         CONTROLLER_DBG << "Initialization completed successful" ;
@@ -142,10 +164,14 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Send Trajectories";
     for(qint32 id : mapTrajectories.keys()) {
         CONTROLLER_DBG << "Motor Id: " << id << mapTrajectories.value(id).toString();
-        // TODO: Do Multi-Threaded asynchronous send/wait for response
         m_pTransceiverService->sendTrajectory(id, mapTrajectories.value(id));
     }
 
-
-
+    while(!m_bReceivedAllControllerStates) {
+        m_mutexCVTransceiver.lock();
+        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
+        m_mutexCVTransceiver.unlock();
+    }
+    TRANSCEIVER_LOG << "Received all Controller Status Updates";
+    m_bReceivedAllControllerStates = false;
 }

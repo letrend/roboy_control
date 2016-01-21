@@ -28,10 +28,17 @@ private:
     QMutex                m_mutexCVView;
     QWaitCondition        m_conditionView;
 
+    QMutex                m_mutexCVTransceiver;
+    QWaitCondition        m_conditionTransceiver;
+
     bool    m_bStartExectution = false;
     bool    m_bStopExecution = false;
     bool    m_bTerminate = false;
 
+    bool    m_bInitializationComplete = false;
+    bool    m_bReceivedAllControllerStates = false;
+
+    QMutex               m_mutexData;
     QList<ROSController> m_listControllers;
 
 protected:

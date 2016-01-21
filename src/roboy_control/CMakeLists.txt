@@ -42,8 +42,9 @@ include_directories(
 )
 
 add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
-add_dependencies(roboy_control_node common_utilities_generate_messages_cpp)
 target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
+add_dependencies(roboy_control_node common_utilities_generate_messages_cpp)
 
 add_executable(roboy_control_test_node src/testnode/TestNode.cpp)
 target_link_libraries(roboy_control_test_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
+add_dependencies(roboy_control_test_node common_utilities_generate_messages_cpp)

@@ -1,12 +1,12 @@
 #ifndef ROSMESSAGETRANSCEIVERSERVICE_H
 #define ROSMESSAGETRANSCEIVERSERVICE_H
 
-#include "DataTypes.h"
 #include "ITransceiverService.h"
-#include "LogDefines.h"
+
+#include "common_utilities/Initialize.h"
 
 #include "common_utilities/ControllerState.h"
-#include "common_utilities/InitializeRequest.h"
+//#include "common_utilities/InitializeRequest.h"
 #include "common_utilities/Status.h"
 #include "common_utilities/Steer.h"
 #include "common_utilities/Trajectory.h"
@@ -19,25 +19,15 @@
 
 class ROSMessageTransceiverService : public ITransceiverService
 {
-
 private:
     ros::NodeHandle m_nodeHandle;
 
-    bool m_bReceivedInitializeResponse = false;
-    bool m_bStatusReceived = false;
-
 public:
-    ROSMessageTransceiverService();
+    ROSMessageTransceiverService(qint32 motorId);
 
-    // MyoMaster Interface
-    void sendInitializeRequest(const std::list<qint8> initializationList);
-    void receiveInitializeResponse(const common_utilities::InitializeResponse& msg);
-
-    // MotorController Interface
-    void sendTrajectory(quint32 motorId, const Trajectory trajectory);
-    void receiveControllerStatus(const common_utilities::ControllerState &msg);
-
-    void sendSteeringMessage(uint8_t steeringaction);
+    void sendInitializeRequest();
+    void sendTrajectory();
+    void sendSteeringMessage();
 };
 
 #endif // ROSMESSAGETRANSCEIVERSERVICE_H
