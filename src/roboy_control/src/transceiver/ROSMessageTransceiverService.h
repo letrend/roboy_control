@@ -23,7 +23,7 @@ private:
     ros::NodeHandle m_nodeHandle;
 
 public:
-    ROSMessageTransceiverService(qint32 motorId);
+    ROSMessageTransceiverService(qint32 motorId, QString name = QString());
 
     void sendInitializeRequest();
     void sendTrajectory();

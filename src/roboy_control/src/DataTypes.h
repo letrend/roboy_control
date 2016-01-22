@@ -7,6 +7,7 @@
 #include <QMap>
 
 class IModelService;
+class ITransceiverService;
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
@@ -22,7 +23,6 @@ struct Trajectory {
     ControlMode          m_controlMode;
     qint32               m_sampleRate;
     QList<RoboyWaypoint> m_listWaypoints;
-
     qint32 getDuration() {
         return m_listWaypoints.count() * m_sampleRate;
     }
@@ -104,8 +104,15 @@ public:
 };
 
 struct ROSController {
-    qint8               id;
-    ControllerState     state;
+    qint8                 id;
+    ControllerState       state;
+    ITransceiverService * transceiver;
+
+    QString toString() {
+        QString string;
+        string.sprintf("ROSController: [id:%i][state:%i]", id, state);
+        return string;
+    }
 };
 
 #endif // DATATYPES_H

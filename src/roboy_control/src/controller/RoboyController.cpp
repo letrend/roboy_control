@@ -17,30 +17,29 @@ RoboyController::~RoboyController() {
 
     QThread::wait();
 
+    delete m_pMyoController;
+    delete m_pModelService;
+    delete m_pViewController;
+
     if (this->isFinished())
         CONTROLLER_DBG << "Thread terminated";
-
-    delete m_pModelService;
-    delete m_pTransceiverService;
-    delete m_pViewController;
 }
 
 void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Started";
     CONTROLLER_DBG << "ID is: " << this->currentThreadId();
 
-    m_pTransceiverService = new ROSMessageTransceiverService(1);
-    m_pTransceiverService->setDelegate(this);
-    m_pTransceiverService->start();
-
+    m_pMyoController = new MyoController();
     msleep(1000);
 
     CONTROLLER_DBG << "Initialize Controllers";
 
     bool run = false;
-    if(initialize()) {
+    if(m_pMyoController->initializeControllers()) {
         CONTROLLER_DBG << "Controller Thread wait for events";
         run = true;
+    } else {
+        CONTROLLER_DBG << "Initialization failed. Exit.";
     }
 
     while( run ) {
@@ -65,7 +64,7 @@ void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Interrupted. Quit.";
 }
 
-// ViewController - Interface
+// ViewController Interface
 void RoboyController::fromViewController_triggerPlayPlan() {
     m_mutexCVView.lock();
     m_bStartExectution = true;
@@ -73,83 +72,7 @@ void RoboyController::fromViewController_triggerPlayPlan() {
     m_mutexCVView.unlock();
 }
 
-// ITransceiverServiceDelegate - Callback-Interface Implementation
-void RoboyController::receivedControllerStatusUpdate(const QList<ROSController> & controllers) {
-    for(ROSController receivedController : controllers) {
-        for(ROSController & localController : m_listControllers) {
-            if (receivedController.id == localController.id) {
-                m_mutexData.lock();
-                localController.state = ControllerState::INITIALIZED;
-                CONTROLLER_DBG << "Update Controller Status: " << localController.id << " state: " << localController.state;
-                m_mutexData.unlock();
-                break;
-            }
-        }
-    }
-    m_mutexCVTransceiver.lock();
-    m_bInitializationComplete = true;
-    m_conditionTransceiver.wakeAll();
-    m_mutexCVTransceiver.unlock();
-}
-
-void RoboyController::receivedControllerStatusUpdate(const ROSController & controller) {
-    CONTROLLER_DBG << "Update Controller Status: " << controller.id << " state: " << controller.state;
-    for(ROSController & localController : m_listControllers) {
-        if (localController.id == controller.id) {
-            m_mutexData.lock();
-            localController.state = controller.state;
-            m_mutexData.unlock();
-            break;
-        }
-    }
-    m_mutexCVTransceiver.lock();
-    m_bReceivedAllControllerStates = true;
-    m_conditionTransceiver.wakeAll();
-    m_mutexCVTransceiver.unlock();
-}
-
 // Private Interface
-bool RoboyController::initialize() {
-    bool result = false;
-    QList<qint8> controllerIds = RoboyControlConfiguration::instance().getControllersConfig();
-    ROSController controller;
-    for(qint8 id : controllerIds) {
-        controller.id = id;
-        controller.state = ControllerState::UNDEFINED;
-        m_listControllers.append(controller);
-    }
-
-    m_pTransceiverService->sendInitializeRequest(controllerIds.toStdList());
-
-    while(!m_bInitializationComplete){
-        m_mutexCVTransceiver.lock();
-        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
-        m_mutexCVTransceiver.unlock();
-    }
-
-    if(checkForCorrectInitialization()) {
-        CONTROLLER_DBG << "Initialization completed successful" ;
-        result = true;
-    } else {
-        CONTROLLER_DBG << "Initialization failed";
-        CONTROLLER_DBG << "INITIALIZATION RESULT:";
-        for(ROSController controller : m_listControllers) {
-            CONTROLLER_DBG << " - Controller: " << controller.id << " state: " << controller.state;
-        }
-        result = false;
-    }
-    return result;
-}
-
-bool RoboyController::checkForCorrectInitialization() {
-    bool invalidState = false;
-    for(ROSController & controller : m_listControllers)
-        if (controller.state != ControllerState::INITIALIZED)
-            return false;
-
-    return true;
-}
-
 void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
     CONTROLLER_DBG << "Get Metaplan from ViewController";
@@ -164,14 +87,14 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Send Trajectories";
     for(qint32 id : mapTrajectories.keys()) {
         CONTROLLER_DBG << "Motor Id: " << id << mapTrajectories.value(id).toString();
-        m_pTransceiverService->sendTrajectory(id, mapTrajectories.value(id));
+//        m_pTransceiverService->sendTrajectory(id, mapTrajectories.value(id));
     }
 
-    while(!m_bReceivedAllControllerStates) {
-        m_mutexCVTransceiver.lock();
-        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
-        m_mutexCVTransceiver.unlock();
-    }
-    TRANSCEIVER_LOG << "Received all Controller Status Updates";
-    m_bReceivedAllControllerStates = false;
+//    while(!m_bReceivedAllControllerStates) {
+//        m_mutexCVTransceiver.lock();
+//        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
+//        m_mutexCVTransceiver.unlock();
+//    }
+//    TRANSCEIVER_LOG << "Received all Controller Status Updates";
+//    m_bReceivedAllControllerStates = false;
 }

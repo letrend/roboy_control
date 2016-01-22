@@ -1,6 +1,6 @@
 #include "ROSMessageTransceiverService.h"
 
-ROSMessageTransceiverService::ROSMessageTransceiverService(qint32 motorId) : ITransceiverService(motorId) {
+ROSMessageTransceiverService::ROSMessageTransceiverService(qint32 motorId, QString name) : ITransceiverService(motorId, name) {
 
 }
 

@@ -20,6 +20,8 @@
 
 #define CONTROLLER_DBG  DBG << "[ CONTROLLER ]"
 
-#define TRANSCEIVER_LOG DBG << "[ TRANSCEIVER ]"
+#define TRANSCEIVER_LOG DBG << "[ TRANSCEIVER | " << m_name << " ] "
+
+#define MYOCONTROLLER_DBG DBG << "[ MYO ]"
 
 #endif //ROBOYCONTROL_LOGDEFINES_H

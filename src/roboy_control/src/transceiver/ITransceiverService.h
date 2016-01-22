@@ -19,6 +19,7 @@ class ITransceiverService : public QThread {
 
 protected:
     qint32          m_motorId;
+    QString         m_name;
     ITransceiverServiceDelegate * delegate;
 
     QMutex           m_mutexData;
@@ -32,15 +33,31 @@ protected:
     bool            m_bTerminate = false;
 
 public:
-    ITransceiverService(qint32 motorId) {
+    ITransceiverService(qint32 motorId, QString name = QString()) {
         m_motorId = motorId;
+        if(name.isEmpty())
+            m_name.sprintf("%i", motorId);
+        else
+            m_name = name;
+    }
+
+    ~ITransceiverService() {
+        m_mutexCV.lock();
+        m_bTerminate = true;
+        m_condition.wakeAll();
+        m_mutexCV.unlock();
+
+        QThread::wait();
+
+        TRANSCEIVER_LOG << "Thread terminated regularly";
     }
 
     void run() {
+        bool run = true;
         TRANSCEIVER_LOG << "Transceiver Thread started";
         TRANSCEIVER_LOG << "Wait for Events";
 
-        while(true) {
+        while(run) {
             m_mutexCV.lock();
             m_condition.wait(&m_mutexCV);
 
@@ -54,9 +71,11 @@ public:
                 sendInitializeRequest();
             } else if (m_bTerminate) {
                 TRANSCEIVER_LOG << "Received: Terminate Thread";
+                run = false;
             }
             m_mutexCV.unlock();
         }
+        TRANSCEIVER_LOG << "Thread interrupted. Exit.";
     }
 
     void setDelegate(ITransceiverServiceDelegate * delegate) {
