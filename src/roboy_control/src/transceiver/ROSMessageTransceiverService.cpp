@@ -66,15 +66,13 @@ void ROSMessageTransceiverService::sendTrajectory() {
 }
 
 void ROSMessageTransceiverService::sendSteeringMessage() {
-/*    ros::Publisher pub = m_nodeHandle.advertise<common_utilities::Steer>("steeringaction", 1000);
+    ros::Publisher pub = m_nodeHandle.advertise<common_utilities::Steer>("steering", 1000);
     common_utilities::Steer steer;
-    steer.steeringaction = steeringaction;
+    steer.steeringCommand = m_steeringCommand;
     ros::Rate rollRate(10);
     while(pub.getNumSubscribers() == 0) {
         rollRate.sleep();
     }
     TRANSCEIVER_LOG << "Sending steering message to " << pub.getNumSubscribers() << " subscribers.";
     pub.publish(steer);
-    rollRate.sleep();
-    ros::spinOnce();*/
 }

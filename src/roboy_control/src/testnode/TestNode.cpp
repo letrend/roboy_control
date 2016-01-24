@@ -54,8 +54,8 @@ bool callbackMotor1(common_utilities::Trajectory::Request & req, common_utilitie
     return true;
 }
 
-void callbackSteer(const common_utilities::Steer& msg){
-    qDebug() << "Heard steering message: " << msg.steeringaction;
+void callbackSteering(const common_utilities::Steer & msg){
+    qDebug() << "Heard steering message: " << msg.steeringCommand;
 }
 
 int main(int argc, char ** argv) {
@@ -67,6 +67,8 @@ int main(int argc, char ** argv) {
 
     ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("initialize", callbackInitialize);
     ros::ServiceServer motor1Server = m_nodeHandle2.advertiseService("motor1", callbackMotor1);
+
+    ros::Subscriber steeringSubscriber = m_nodeHandle.subscribe("steering", 1000, callbackSteering);
 
     ros::spin();
 }

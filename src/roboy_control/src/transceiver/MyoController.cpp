@@ -88,7 +88,8 @@ bool MyoController::sendRoboyPlan(const RoboyBehaviorPlan & behaviorPlan) {
     if(isReadyToPlay(behaviorPlan)) {
         MYOCONTROLLER_SUC << "Plan ready to play.";
         result = true;
-
+        MYOCONTROLLER_DBG << "Send Steering Message: PLAY";
+        m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
     } else {
         MYOCONTROLLER_WAR << "Failed to Transmit Plan. Abort.";
         for(ROSController & controller : m_mapControllers.values())
