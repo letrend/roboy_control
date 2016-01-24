@@ -58,6 +58,10 @@ void ROSMessageTransceiverService::sendTrajectory() {
         delegate->receivedControllerStatusUpdate(controller);
     } else {
         TRANSCEIVER_LOG << "Call " << topic << "failed";
+        ROSController controller;
+        controller.id = m_motorId;
+        controller.state = ControllerState::TRAJECTORY_FAILED;
+        delegate->receivedControllerStatusUpdate(controller);
     }
 }
 

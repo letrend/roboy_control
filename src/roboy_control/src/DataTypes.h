@@ -100,7 +100,7 @@ public:
 
     const QList<RoboyBehaviorExecution> & getExcutionsList() const;
 
-    QMap<qint32, Trajectory> getTrajectories();
+    QMap<qint32, Trajectory> getTrajectories() const;
 };
 
 struct ROSController {
@@ -108,7 +108,7 @@ struct ROSController {
     ControllerState       state;
     ITransceiverService * transceiver;
 
-    QString toString() {
+    QString toString() const {
         QString string;
         string.sprintf("ROSController: [id:%i][state:%i]", id, state);
         return string;

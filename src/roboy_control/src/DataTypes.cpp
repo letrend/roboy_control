@@ -48,7 +48,7 @@ const QList<RoboyBehaviorExecution> & RoboyBehaviorPlan::getExcutionsList() cons
     return listExecutions;
 }
 
-QMap<qint32, Trajectory> RoboyBehaviorPlan::getTrajectories() {
+QMap<qint32, Trajectory> RoboyBehaviorPlan::getTrajectories() const {
     QMap<qint32, Trajectory> mapTrajectories;
     for(RoboyBehaviorExecution execution : listExecutions) {
         for(qint32 motor : execution.behavior.m_mapMotorTrajectory.keys()) {

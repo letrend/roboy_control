@@ -36,10 +36,11 @@ void RoboyController::run() {
 
     bool run = false;
     if(m_pMyoController->initializeControllers()) {
+        CONTROLLER_SUC << "Initialization Complete";
         CONTROLLER_DBG << "Controller Thread wait for events";
         run = true;
     } else {
-        CONTROLLER_DBG << "Initialization failed. Exit.";
+        CONTROLLER_WAR << "Initialization failed. Exit.";
     }
 
     while( run ) {
@@ -81,20 +82,10 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
 
-    CONTROLLER_DBG << "Get Flattended Trajectories";
-    QMap<qint32, Trajectory> mapTrajectories = plan.getTrajectories();
-
-    CONTROLLER_DBG << "Send Trajectories";
-    for(qint32 id : mapTrajectories.keys()) {
-        CONTROLLER_DBG << "Motor Id: " << id << mapTrajectories.value(id).toString();
-//        m_pTransceiverService->sendTrajectory(id, mapTrajectories.value(id));
+    if(m_pMyoController->sendRoboyPlan(plan)) {
+        CONTROLLER_SUC << "Plan is now executed on Roboy";
+        CONTROLLER_SUC << "<3";
+    } else {
+        CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
     }
-
-//    while(!m_bReceivedAllControllerStates) {
-//        m_mutexCVTransceiver.lock();
-//        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
-//        m_mutexCVTransceiver.unlock();
-//    }
-//    TRANSCEIVER_LOG << "Received all Controller Status Updates";
-//    m_bReceivedAllControllerStates = false;
 }

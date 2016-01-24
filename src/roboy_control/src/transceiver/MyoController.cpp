@@ -50,10 +50,10 @@ bool MyoController::initializeControllers() {
     }
 
     if(isInitializedCorrectly()) {
-        MYOCONTROLLER_DBG << "Initialization completed successful" ;
+        MYOCONTROLLER_SUC << "Initialization completed successful" ;
         result = true;
     } else {
-        MYOCONTROLLER_DBG << "Initialization failed";
+        MYOCONTROLLER_WAR << "Initialization failed";
         result = false;
     }
 
@@ -61,6 +61,40 @@ bool MyoController::initializeControllers() {
     for(ROSController controller : m_mapControllers.values())
         MYOCONTROLLER_DBG << "\t- " << controller.toString();
 
+    return result;
+}
+
+bool MyoController::sendRoboyPlan(const RoboyBehaviorPlan & behaviorPlan) {
+    bool result = false;
+    MYOCONTROLLER_DBG << "Send Behavior Plan";
+    MYOCONTROLLER_DBG << "Get Flattended Trajectories";
+    QMap<qint32, Trajectory> mapTrajectories = behaviorPlan.getTrajectories();
+
+    for(qint32 id : mapTrajectories.keys()) {
+        ROSController & controller = m_mapControllers[id];
+        controller.state = ControllerState::PREPROCESS_TRAJECTORY;
+        controller.transceiver->sendTrajectory(mapTrajectories.value(id));
+    }
+
+    while(!m_bReceivedAllControllerStates) {
+        m_mutexCVTransceiver.lock();
+        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
+        m_mutexCVTransceiver.unlock();
+    }
+
+    MYOCONTROLLER_DBG << "Received all Controller Status Updates";
+    m_bReceivedAllControllerStates = false;
+
+    if(isReadyToPlay(behaviorPlan)) {
+        MYOCONTROLLER_SUC << "Plan ready to play.";
+        result = true;
+
+    } else {
+        MYOCONTROLLER_WAR << "Failed to Transmit Plan. Abort.";
+        for(ROSController & controller : m_mapControllers.values())
+            controller.state = ControllerState::INITIALIZED;
+        result = false;
+    }
     return result;
 }
 
@@ -78,7 +112,15 @@ void MyoController::receivedControllerStatusUpdate(const QList<ROSController> & 
 }
 
 void MyoController::receivedControllerStatusUpdate(const ROSController &controller) {
-    // TODO
+    MYOCONTROLLER_DBG << "Update Controller: " << controller.toString();
+    m_mapControllers[controller.id].state = controller.state;
+
+    if(didReceiveAllStatusUpdates()) {
+        m_mutexCVTransceiver.lock();
+        m_bReceivedAllControllerStates = true;
+        m_conditionTransceiver.wakeAll();
+        m_mutexCVTransceiver.unlock();
+    }
 }
 
 // private
@@ -87,5 +129,24 @@ bool MyoController::isInitializedCorrectly() {
         if (controller.state != ControllerState::INITIALIZED)
             return false;
 
+    return true;
+}
+
+bool MyoController::didReceiveAllStatusUpdates() {
+    for(ROSController & controller : m_mapControllers.values()) {
+        if(controller.state == ControllerState::PREPROCESS_TRAJECTORY)
+            return false;
+    }
+    return true;
+}
+
+bool MyoController::isReadyToPlay(const RoboyBehaviorPlan & plan) {
+    for(qint32 motorId : plan.getTrajectories().keys()) {
+        if(m_mapControllers[motorId].state != ControllerState::TRAJECTORY_READY){
+            MYOCONTROLLER_WAR << "Cannot run plan: Controller not ready";
+            MYOCONTROLLER_WAR << m_mapControllers[motorId].toString();
+            return false;
+        }
+    }
     return true;
 }

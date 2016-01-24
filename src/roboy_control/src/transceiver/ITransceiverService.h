@@ -23,13 +23,15 @@ protected:
     ITransceiverServiceDelegate * delegate;
 
     QMutex           m_mutexData;
-    Trajectory       m_trajectory;
     std::list<qint8> m_initializationList;
+    Trajectory       m_trajectory;
+    qint8            m_steeringCommand;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
     bool            m_bSendInitialize = false;
     bool            m_bSendTrajectory = false;
+    bool            m_bSendSteering = false;
     bool            m_bTerminate = false;
 
 public:
@@ -69,6 +71,10 @@ public:
                 TRANSCEIVER_LOG << "Triggered 'Send Initialize'";
                 m_bSendInitialize = false;
                 sendInitializeRequest();
+            } else if (m_bSendSteering) {
+                TRANSCEIVER_LOG << "Triggered 'Send Steering Command'";
+                m_bSendSteering = false;
+                sendSteeringMessage();
             } else if (m_bTerminate) {
                 TRANSCEIVER_LOG << "Received: Terminate Thread";
                 run = false;
@@ -93,7 +99,7 @@ public:
         m_mutexCV.unlock();
     }
 
-    void sendTrajectory(quint32 motorId, Trajectory trajectory) {
+    void sendTrajectory(Trajectory trajectory) {
         m_mutexData.lock();
         m_trajectory = trajectory;
         m_mutexData.unlock();
@@ -104,8 +110,15 @@ public:
         m_mutexCV.unlock();
     }
 
-    void sendSteeringMessage(qint8 steeringaction) {
+    void sendSteeringMessage(SteeringCommand command) {
+        m_mutexData.lock();
+        m_steeringCommand = command;
+        m_mutexData.unlock();
 
+        m_mutexCV.lock();
+        m_bSendSteering = true;
+        m_condition.wakeAll();
+        m_mutexCV.unlock();
     }
 
 protected:

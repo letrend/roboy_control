@@ -5,13 +5,32 @@
 #include <QApplication>
 #include "ros/ros.h"
 
-#include "RoboyController.h"
 #include "IModelService.h"
+#include "RoboyController.h"
 #include "XmlModelService.h"
 
 void initializeDatabase();
 
+void myMessageOutput(QtMsgType type, const char * msg) {
+    switch(type) {
+        case QtDebugMsg:
+            fprintf(stderr, "\033[0m%s\n", msg);
+            break;
+        case QtWarningMsg:
+            fprintf(stderr, "\033[33m%s\n", msg);
+            break;
+        case QtCriticalMsg:
+            fprintf(stderr, "\033[32m%s\n", msg);
+            break;
+        case QtFatalMsg:
+            fprintf(stderr, "\033[31m%s\n", msg);
+            break;
+    }
+}
+
 int main(int argc, char ** argv) {
+    qInstallMsgHandler(myMessageOutput);
+
     ros::init(argc, argv, "roboy_control");
     ros::NodeHandle n;
 

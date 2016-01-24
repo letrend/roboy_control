@@ -47,9 +47,11 @@ bool callbackMotor1(common_utilities::Trajectory::Request & req, common_utilitie
     }
 
     qDebug() << "Send Service Response on topic 'motor1'";
-    qDebug() << "\t- Update Controller State: [id:" << 1 << "][state:" << 1 << "]";
     res.state.id = 1;
-    res.state.state = 1;
+    res.state.state = ControllerState::TRAJECTORY_READY ;
+    qDebug() << "\t- Update Controller State: [id:" << res.state.id << "][state:" << res.state.state << "]";
+
+    return true;
 }
 
 void callbackSteer(const common_utilities::Steer& msg){
@@ -65,10 +67,6 @@ int main(int argc, char ** argv) {
 
     ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("initialize", callbackInitialize);
     ros::ServiceServer motor1Server = m_nodeHandle2.advertiseService("motor1", callbackMotor1);
-
-//    subscriberMotor1 = m_nodeHandle.subscribe("motor1", 1000, callbackMotor1);
-//    subscriberSteer = m_nodeHandle.subscribe("steeringaction", 1000, callbackSteer);
-//    publisherStatus = m_nodeHandle2.advertise<common_utilities::ControllerState>("motor_status", 1000);
 
     ros::spin();
 }
