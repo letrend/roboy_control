@@ -3,6 +3,10 @@
 //
 
 #include <QDebug>
+#include <DataTypes.h>
+#include <QtCore/qprocess.h>
+#include <QtCore/qxmlstream.h>
+#include <QtCore/qfile.h>
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -23,40 +27,45 @@ ros::Subscriber subscriber;
 ros::Subscriber subscriberMotor1;
 ros::Subscriber subscriberSteer;
 
+bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
+void startNode(QString name);
+
+QString fileName = "ControllerStub.launch";
+
+QList<ROSController> m_listControllers;
+QMap<qint32, ros::NodeHandle *> m_mapNodeHandles;
+
 bool callbackInitialize(common_utilities::Initialize::Request & req, common_utilities::Initialize::Response & res){
     qDebug() << "Process 'initialize' request";
-
     qDebug() << "Build 'initialize' response";
-    common_utilities::ControllerState controller;
+
+    ROSController controller;
+    common_utilities::ControllerState responseMessage;
     for(qint8 id : req.idList) {
         controller.id = id;
-        controller.state = 1;
-        res.controllers.push_back(controller);
-        qDebug() << "\t- Update Controller State: [id:" << id << "][state:" << controller.state << "]";
+        controller.state = ControllerState::INITIALIZED;
+        m_listControllers.append(controller);
+
+        QString serviceName;
+        serviceName.sprintf("motor%i", id);
+
+//        startNode(serviceName);
+
+        responseMessage.id = id;
+        responseMessage.state = 1;
+        res.controllers.push_back(responseMessage);
+
+        qDebug() << "\t- Update Controller: " << controller.toString();
     }
 
     return true;
 }
 
-bool callbackMotor1(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res){
-    qDebug() << "Received Service Call: TRAJECTORY on topic 'motor1'";
-    qDebug() << "TRAJECTORY: [samplerate:" << req.samplerate << "][controlmode:" << req.controlmode << "]";
-    qint32 index = 0;
-    for(qint32 wp : req.waypoints) {
-        qDebug() << " - WAYPOINT" << ++index << ": [value:" << wp << "]";
-    }
-
-    qDebug() << "Send Service Response on topic 'motor1'";
-    res.state.id = 1;
-    res.state.state = ControllerState::TRAJECTORY_READY ;
-    qDebug() << "\t- Update Controller State: [id:" << res.state.id << "][state:" << res.state.state << "]";
-
-    return true;
-}
 
 void callbackSteering(const common_utilities::Steer & msg){
     qDebug() << "Heard steering message: " << msg.steeringCommand;
 }
+
 
 int main(int argc, char ** argv) {
     qDebug() << "Test node started ...";
@@ -66,9 +75,47 @@ int main(int argc, char ** argv) {
     ros::NodeHandle m_nodeHandle2;
 
     ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("initialize", callbackInitialize);
-    ros::ServiceServer motor1Server = m_nodeHandle2.advertiseService("motor1", callbackMotor1);
 
-    ros::Subscriber steeringSubscriber = m_nodeHandle.subscribe("steering", 1000, callbackSteering);
+    //ros::Subscriber steeringSubscriber = m_nodeHandle.subscribe("steering", 1000, callbackSteering);
 
     ros::spin();
+}
+
+void startNode(QString name) {
+    QString roboyControlHome = QProcessEnvironment::systemEnvironment().value("ROBOY_CONTROL_HOME");
+
+    QXmlStreamWriter writer;
+    QString launchFile = roboyControlHome + "/etc/" + fileName;
+    QFile file(launchFile);
+
+    if (file.exists())
+        file.remove();
+
+    file.open(QFile::ReadWrite | QFile::Text);
+    writer.setDevice(&file);
+    writer.setAutoFormatting(true);
+
+    writer.writeStartElement("launch");
+    writer.writeStartElement("node");
+    writer.writeAttribute("name", "controller_stub");
+    writer.writeAttribute("pkg", "roboy_control");
+    writer.writeAttribute("type", "controller_stub");
+    writer.writeAttribute("args", name);
+    writer.writeEndElement();
+    writer.writeEndElement();
+
+    file.close();
+
+    QString startScript = roboyControlHome + "/etc/StartNode.sh";
+    qDebug() << "Run Node start script: " << startScript;
+    pid_t pid = fork();
+    if (pid == 0) {
+        // CHILD
+        system(startScript.toStdString().data());
+
+    } else if (pid < 0) {
+        qDebug() << "Fork failed";
+    } else {
+        // RARENT
+    }
 }
