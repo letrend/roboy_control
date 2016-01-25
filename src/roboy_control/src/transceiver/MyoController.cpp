@@ -20,7 +20,7 @@ MyoController::MyoController() {
     ROSController controller;
     for(qint8 id : controllerIds) {
         controller.id = id;
-        controller.state = ControllerState::UNDEFINED;
+        controller.state = STATUS::UNDEFINED;
         name.clear();
         name.sprintf("motor%i", id);
         controller.transceiver = new ROSMessageTransceiverService(id, name);
@@ -72,7 +72,7 @@ bool MyoController::sendRoboyPlan(const RoboyBehaviorPlan & behaviorPlan) {
 
     for(qint32 id : mapTrajectories.keys()) {
         ROSController & controller = m_mapControllers[id];
-        controller.state = ControllerState::PREPROCESS_TRAJECTORY;
+        controller.state = STATUS::PREPROCESS_TRAJECTORY;
         controller.transceiver->sendTrajectory(mapTrajectories.value(id));
     }
 
@@ -93,7 +93,7 @@ bool MyoController::sendRoboyPlan(const RoboyBehaviorPlan & behaviorPlan) {
     } else {
         MYOCONTROLLER_WAR << "Failed to Transmit Plan. Abort.";
         for(ROSController & controller : m_mapControllers.values())
-            controller.state = ControllerState::INITIALIZED;
+            controller.state = STATUS::INITIALIZED;
         result = false;
     }
     return result;
@@ -127,7 +127,7 @@ void MyoController::receivedControllerStatusUpdate(const ROSController &controll
 // private
 bool MyoController::isInitializedCorrectly() {
     for(ROSController & controller : m_mapControllers.values())
-        if (controller.state != ControllerState::INITIALIZED)
+        if (controller.state != STATUS::INITIALIZED)
             return false;
 
     return true;
@@ -135,7 +135,7 @@ bool MyoController::isInitializedCorrectly() {
 
 bool MyoController::didReceiveAllStatusUpdates() {
     for(ROSController & controller : m_mapControllers.values()) {
-        if(controller.state == ControllerState::PREPROCESS_TRAJECTORY)
+        if(controller.state == STATUS::PREPROCESS_TRAJECTORY)
             return false;
     }
     return true;
@@ -143,7 +143,7 @@ bool MyoController::didReceiveAllStatusUpdates() {
 
 bool MyoController::isReadyToPlay(const RoboyBehaviorPlan & plan) {
     for(qint32 motorId : plan.getTrajectories().keys()) {
-        if(m_mapControllers[motorId].state != ControllerState::TRAJECTORY_READY){
+        if(m_mapControllers[motorId].state != STATUS::TRAJECTORY_READY){
             MYOCONTROLLER_WAR << "Cannot run plan: Controller not ready";
             MYOCONTROLLER_WAR << m_mapControllers[motorId].toString();
             return false;

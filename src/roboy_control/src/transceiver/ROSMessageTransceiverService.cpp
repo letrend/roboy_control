@@ -7,7 +7,7 @@ ROSMessageTransceiverService::ROSMessageTransceiverService(qint32 motorId, QStri
 // MyoMaster Interface
 void ROSMessageTransceiverService::sendInitializeRequest() {
     TRANSCEIVER_LOG << "Consume Service 'initialize'";
-    ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::Initialize>("initialize");
+    ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::Initialize>("/roboy/initialize");
 
     common_utilities::Initialize initialize;
 
@@ -20,9 +20,9 @@ void ROSMessageTransceiverService::sendInitializeRequest() {
         TRANSCEIVER_LOG << "Processing Message: 'initialize' response";
         QList<ROSController> controllers;
         ROSController controller;
-        for (common_utilities::ControllerState state : initialize.response.controllers) {
+        for (common_utilities::ControllerState state : initialize.response.states) {
             controller.id = state.id;
-            controller.state = (ControllerState) state.state;
+            controller.state = (STATUS) state.state;
             controllers.append(controller);
             TRANSCEIVER_LOG << " - Initialized Controller Id: " << controller.id << " status: " << controller.state;
         }
@@ -37,7 +37,7 @@ void ROSMessageTransceiverService::sendInitializeRequest() {
 // MotorController Interface
 void ROSMessageTransceiverService::sendTrajectory() {
     QString topic;
-    topic.sprintf("motor%u", m_motorId);
+    topic.sprintf("/roboy/trajectory_motor%u", m_motorId);
     TRANSCEIVER_LOG << "Send Trajectory to motor: " << m_motorId << "on topic: " << topic;
     ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::Trajectory>(topic.toStdString());
 
@@ -54,19 +54,19 @@ void ROSMessageTransceiverService::sendTrajectory() {
 
         ROSController controller;
         controller.id = srv.response.state.id;
-        controller.state = (ControllerState) srv.response.state.state;
+        controller.state = (STATUS) srv.response.state.state;
         delegate->receivedControllerStatusUpdate(controller);
     } else {
         TRANSCEIVER_LOG << "Call " << topic << "failed";
         ROSController controller;
         controller.id = m_motorId;
-        controller.state = ControllerState::TRAJECTORY_FAILED;
+        controller.state = STATUS::TRAJECTORY_FAILED;
         delegate->receivedControllerStatusUpdate(controller);
     }
 }
 
 void ROSMessageTransceiverService::sendSteeringMessage() {
-    ros::Publisher pub = m_nodeHandle.advertise<common_utilities::Steer>("steering", 1000);
+    ros::Publisher pub = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steering", 1000);
     common_utilities::Steer steer;
     steer.steeringCommand = m_steeringCommand;
     ros::Rate rollRate(10);

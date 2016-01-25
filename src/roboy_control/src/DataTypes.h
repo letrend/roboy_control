@@ -105,7 +105,7 @@ public:
 
 struct ROSController {
     qint8                 id;
-    ControllerState       state;
+    STATUS                state;
     ITransceiverService * transceiver;
 
     QString toString() const {

@@ -10,7 +10,7 @@
 #include "ros/ros.h"
 
 QString nodeName;
-ControllerState state;
+STATUS state;
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
 
@@ -25,7 +25,7 @@ int main(int argc, char ** argv) {
     qDebug() << "Started ControllerStub-Node: " << argv[1];
     ros::NodeHandle n;
 
-    state = ControllerState::INITIALIZED;
+    state = STATUS::INITIALIZED;
 
     nodeName = argv[1];
 
@@ -45,7 +45,7 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
 
     qDebug() << "[" << nodeName << "] " << "Send Service Response on topic 'motor1'";
     res.state.id = 1;
-    res.state.state = ControllerState::TRAJECTORY_READY ;
+    res.state.state = STATUS::TRAJECTORY_READY ;
     qDebug() << "\t- Update Controller State: [id:" << res.state.id << "][state:" << res.state.state << "]";
 
     return true;

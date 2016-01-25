@@ -43,7 +43,7 @@ bool callbackInitialize(common_utilities::Initialize::Request & req, common_util
     common_utilities::ControllerState responseMessage;
     for(qint8 id : req.idList) {
         controller.id = id;
-        controller.state = ControllerState::INITIALIZED;
+        controller.state = STATUS::INITIALIZED;
         m_listControllers.append(controller);
 
         QString serviceName;
@@ -53,7 +53,7 @@ bool callbackInitialize(common_utilities::Initialize::Request & req, common_util
 
         responseMessage.id = id;
         responseMessage.state = 1;
-        res.controllers.push_back(responseMessage);
+        res.states.push_back(responseMessage);
 
         qDebug() << "\t- Update Controller: " << controller.toString();
     }
