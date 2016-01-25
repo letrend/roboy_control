@@ -1,7 +1,5 @@
-database/
 build/
 devel/
 .*
 *.user
 *~
-etc/RoboyControlConfig.xml
