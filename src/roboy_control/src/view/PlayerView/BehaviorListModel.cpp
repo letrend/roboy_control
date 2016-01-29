@@ -34,8 +34,8 @@ QVariant BehaviorListModel::data(const QModelIndex &index, int role) const
 	if(index.isValid())
 	{
         if (index.column() == 0 && role == Qt::DecorationRole) return QIcon(":/behavior-img-dark.png");
-  		if (index.column() == 0 && role == Qt::EditRole)       return this->behaviorList[index.row()].m_sBehaviorName;
-  		if (index.column() == 0 && role == Qt::DisplayRole)    return this->behaviorList[index.row()].m_sBehaviorName;
+        if (index.column() == 0 && role == Qt::EditRole)       return this->behaviorList[index.row()].m_metadata.m_sBehaviorName;
+        if (index.column() == 0 && role == Qt::DisplayRole)    return this->behaviorList[index.row()].m_metadata.m_sBehaviorName;
 	}
 
   	return QVariant();
@@ -50,7 +50,12 @@ int BehaviorListModel::rowCount(const QModelIndex &) const
   return this->behaviorList.count();
 }
 
-RoboyBehaviorMetadata  BehaviorListModel::getBehaviorMetaData(int index) const
+/**
+ * @brief BehaviorListModel::getBehavior method to retrieve a behavior for a certain index
+ * @param index index for which the behavior should be retrieved
+ * @return behavior for given index
+ */
+RoboyBehavior BehaviorListModel::getBehavior(int index) const
 {
 	Q_ASSERT_X((index >= 0) && (index < this->behaviorList.count()), "BehaviorListModel::getBehaviorData", "index out of range");
 	return this->behaviorList[index];
@@ -63,5 +68,9 @@ RoboyBehaviorMetadata  BehaviorListModel::getBehaviorMetaData(int index) const
  */
 void BehaviorListModel::updateBehaviorList()
 {
-	this->behaviorList = this->modelService->getBehaviorList();
+    this->behaviorList = QList<RoboyBehavior>();
+    QList<RoboyBehaviorMetadata> metaDataList = this->modelService->getBehaviorList();
+    for (RoboyBehaviorMetadata metaData : metaDataList) {
+        this->behaviorList.append(this->modelService->retrieveRoboyBehavior(metaData));
+    }
 }

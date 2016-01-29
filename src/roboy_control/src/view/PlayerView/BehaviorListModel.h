@@ -20,10 +20,10 @@ public:
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
   /* BehaviorListModel methods */
-  RoboyBehaviorMetadata getBehaviorMetaData(int index) const;
+  RoboyBehavior getBehavior(int index) const;
 
 private:
-  QList<RoboyBehaviorMetadata> behaviorList;
+  QList<RoboyBehavior> behaviorList;
   IModelService *modelService;
 
   void updateBehaviorList();

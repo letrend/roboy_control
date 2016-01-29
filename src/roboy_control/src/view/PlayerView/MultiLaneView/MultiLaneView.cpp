@@ -75,7 +75,7 @@ void MultiLaneView::setScaleFactor(scaleFactor factor)
     /* set new scale factor */
     this->viewScaleFactor = factor;
 
-    /*dispose old view hierachy */
+    /* dispose old view hierachy */
 
     for (MultiLaneViewLane *lane : this->lanes) {
         delete lane;
@@ -83,7 +83,7 @@ void MultiLaneView::setScaleFactor(scaleFactor factor)
 
     this->lanes.clear();
 
-    /*initialize widget with new scale factor */
+    /* initialize widget with new scale factor */
     this->model->initializeWidget();
 }
 
@@ -135,9 +135,8 @@ void MultiLaneView::itemInsertedHandler(qint32 laneIndex, qint32 itemIndex)
     connect(lane, SIGNAL(removeItemWithTimestampAndLaneID(qint64,qint64)), this, SLOT(removeItemWithTimestampAndLaneID(qint64,qint64)));
 
     qint64 maxSize = ((bTimestamp + bDuration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
-    if(maxSize > this->laneBackground->width()) {
-        this->laneBackground->setFixedWidth(maxSize);
-    }
+    this->laneBackground->setFixedWidth(maxSize);
+
 
     lane->itemInsertedHandler(itemIndex, bName, bIcon, bTimestamp, bDuration, bMotorCount);
 }

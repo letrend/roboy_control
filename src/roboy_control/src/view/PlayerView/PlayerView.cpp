@@ -132,14 +132,12 @@ void PlayerView::addLaneButtonClicked()
  */
 void PlayerView::behaviorListViewCurrentRowChanged(const QModelIndex & index)
 {	
-	this->currentlyDisplayedBehaviorMetaData = this->behaviorListModel->getBehaviorMetaData(index.row());
-	this->currentlyDisplayedBehavior = this->modelService->retrieveRoboyBehavior(this->currentlyDisplayedBehaviorMetaData);
+    this->currentlyDisplayedBehavior = this->behaviorListModel->getBehavior(index.row());
 	ui->behaviorNameValueLabel->setText(this->currentlyDisplayedBehavior.m_metadata.m_sBehaviorName);
 	ui->idValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_metadata.m_ulBehaviorId));
 	ui->motorCountValueLabel->setText(QString::number(this->currentlyDisplayedBehavior.m_mapMotorTrajectory.count()));
 
 	ui->motorListView->clear();
-	QString description;
 	for(u_int32_t iterator : this->currentlyDisplayedBehavior.m_mapMotorTrajectory.keys())
 	{
 		ui->motorListView->addItem(QString("MOTOR ID %1 WAYPOINT COUNT %2").arg(iterator).arg(this->currentlyDisplayedBehavior.m_mapMotorTrajectory.value(iterator).m_listWaypoints.count()));
@@ -168,13 +166,23 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
                 if(dialog.exec() == AddRoboyBehaviorDialog::Accepted) {
                     qint32 laneIndex = dialog.selectedLane();
                     qint64 timestamp = dialog.selectedTimestamp();
-                    RoboyBehaviorMetadata behaviorMetaData = this->behaviorListModel->getBehaviorMetaData(selectedIndex.row());
-                    RoboyBehavior behavior = this->modelService->retrieveRoboyBehavior(behaviorMetaData);
-                    if (this->multiLaneModel->insertBehaviorExec(laneIndex, timestamp, behavior) < 0) {
+                    RoboyBehavior behavior = this->behaviorListModel->getBehavior(selectedIndex.row());
+                    int success = this->multiLaneModel->insertBehaviorExec(laneIndex, timestamp, behavior);
+                    switch(success) {
+                    case -2: {
                         QMessageBox msgBox;
                         msgBox.setWindowTitle("Adding the behavior failed");
                         msgBox.setText("The inserted behavior does overlap with one or more behaviors in the selected lane.");
                         msgBox.exec();
+                    }
+                    break;
+                    case -1: {
+                        QMessageBox msgBox;
+                        msgBox.setWindowTitle("Invalid timestamp");
+                        msgBox.setText("The given timestamp must be a multiple of the samplerate which is 100ms.");
+                        msgBox.exec();
+                    }
+                    break;
                     }
                 }
             }
@@ -203,7 +211,7 @@ void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
         break;
     default:
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Non supported scale factor selected.");
+        msgBox.setWindowTitle("Non supported scale factor selected");
         msgBox.setText("The scale factor you selected is not available.");
         msgBox.exec();
         break;

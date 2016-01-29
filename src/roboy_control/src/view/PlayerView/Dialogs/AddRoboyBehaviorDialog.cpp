@@ -1,6 +1,8 @@
 #include "AddRoboyBehaviorDialog.h"
 #include "ui_AddRoboyBehaviorDialog.h"
 
+#include <QLineEdit>
+
 AddRoboyBehaviorDialog::AddRoboyBehaviorDialog(qint32 laneCount, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddRoboyBehaviorDialog)

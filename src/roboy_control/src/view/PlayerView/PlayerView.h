@@ -45,7 +45,6 @@ private:
     IModelService *modelService;
     BehaviorListModel *behaviorListModel;
     IMultiLaneViewModel *multiLaneModel;
-    RoboyBehaviorMetadata currentlyDisplayedBehaviorMetaData;
     RoboyBehavior currentlyDisplayedBehavior;
 
     void setupConnections();

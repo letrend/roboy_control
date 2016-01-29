@@ -1,8 +1,9 @@
 #include <QtCore>
 #include <QIcon>
 
-#include "RoboyMultiLaneModel.h"
+#include "LogDefines.h"
 #include "MultiLaneViewLane.h"
+#include "RoboyMultiLaneModel.h"
 
 /* public methods */
 
@@ -70,10 +71,16 @@ qint8 RoboyMultiLaneModel::removeLane(qint32 index)
  * @param laneIndex index of the lane where the RoboyBehaviorExecution should be inserted
  * @param lTimestamp timestamp at which the RoboyBehaviorExecution should be inserted
  * @param behavior RoboyBehavior for the RoboyBehaviorExecution
- * @return 0 for success, -1 on failure
+ * @return 0 for success, -1 if timestamp is no multiple of 100, -2 if behaviors would overlap
  */
 qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimestamp, RoboyBehavior behavior)
 {
+    /* the timestamp can only be a multiple of the sample rate which is 100ms */
+    if (lTimestamp%100 != 0) {
+        VIEW_DBG << "The timestamp at which a item is inserted into the multilane model must be a multiple of the sample rate";
+        return -1;
+    }
+
     qint64 behaviorDuration = behavior.getDuration();
     /* edge case empty list */
     if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
@@ -109,7 +116,7 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
             return 0;
         }
     }
-    return -1;
+    return -2;
 }
 
 /**
