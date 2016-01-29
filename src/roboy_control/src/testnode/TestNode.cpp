@@ -74,7 +74,7 @@ int main(int argc, char ** argv) {
     ros::NodeHandle m_nodeHandle;
     ros::NodeHandle m_nodeHandle2;
 
-    ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("initialize", callbackInitialize);
+    ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("roboy/initialize", callbackInitialize);
 
     //ros::Subscriber steeringSubscriber = m_nodeHandle.subscribe("steering", 1000, callbackSteering);
 

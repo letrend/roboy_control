@@ -34,4 +34,8 @@
 #define MYOCONTROLLER_WAR WAR << "[ MYO ]"
 #define MYOCONTROLLER_SUC SUC << "[ MYO ]"
 
+#define PLAN_DBG        DBG << "[ PLAN ]"
+#define PLAN_WAR        WAR << "[ PLAN ]"
+#define PLAN_SUC        SUC << "[ PLAN ]"
+
 #endif //ROBOYCONTROL_LOGDEFINES_H

@@ -15,7 +15,7 @@ MyoController::MyoController() {
     m_myoMasterTransceiver->start();
 
     // Create Controller Status Structs
-    MYOCONTROLLER_DBG << "Instantialte ROSControllers:";
+    MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
     QList<qint8> controllerIds = RoboyControlConfiguration::instance().getControllersConfig();
     ROSController controller;
     for(qint8 id : controllerIds) {
@@ -64,7 +64,7 @@ bool MyoController::initializeControllers() {
     return result;
 }
 
-bool MyoController::sendRoboyPlan(const RoboyBehaviorPlan & behaviorPlan) {
+bool MyoController::sendRoboyPlan(RoboyBehaviorPlan & behaviorPlan) {
     bool result = false;
     MYOCONTROLLER_DBG << "Send Behavior Plan";
     MYOCONTROLLER_DBG << "Get Flattended Trajectories";
@@ -141,7 +141,7 @@ bool MyoController::didReceiveAllStatusUpdates() {
     return true;
 }
 
-bool MyoController::isReadyToPlay(const RoboyBehaviorPlan & plan) {
+bool MyoController::isReadyToPlay(RoboyBehaviorPlan & plan) {
     for(qint32 motorId : plan.getTrajectories().keys()) {
         if(m_mapControllers[motorId].state != STATUS::TRAJECTORY_READY){
             MYOCONTROLLER_WAR << "Cannot run plan: Controller not ready";

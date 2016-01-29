@@ -81,11 +81,14 @@ void RoboyController::executeCurrentRoboyPlan() {
 
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
-
-    if(m_pMyoController->sendRoboyPlan(plan)) {
-        CONTROLLER_SUC << "Plan is now executed on Roboy";
-        CONTROLLER_SUC << "<3";
+    if(plan.isValid()){
+        if(m_pMyoController->sendRoboyPlan(plan)) {
+            CONTROLLER_SUC << "Plan is now executed on Roboy";
+            CONTROLLER_SUC << "<3";
+        } else {
+            CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
+        }
     } else {
-        CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
+        CONTROLLER_WAR << "Could not build valid plan. Abort.";
     }
 }

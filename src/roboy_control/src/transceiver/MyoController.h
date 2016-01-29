@@ -31,7 +31,7 @@ public:
 
     // RoboyController Interface
     bool initializeControllers();
-    bool sendRoboyPlan(const RoboyBehaviorPlan & roboyPlan);
+    bool sendRoboyPlan(RoboyBehaviorPlan & roboyPlan);
 
     // ITransceiverServiceDelegate - Callback-Interface Implementation
     void receivedControllerStatusUpdate(const QList<ROSController> & controllers);
@@ -40,7 +40,7 @@ public:
 private:
     bool isInitializedCorrectly();
     bool didReceiveAllStatusUpdates();
-    bool isReadyToPlay(const RoboyBehaviorPlan & plan);
+    bool isReadyToPlay(RoboyBehaviorPlan & plan);
 };
 
 

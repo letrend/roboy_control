@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roboybehavior name="TestBehavior2" behaviorid="2">
-    <motor motorid="1" controlmode="0" samplerate="100">
+    <motor motorid="2" controlmode="0" samplerate="100">
         <waypoint id="0">0</waypoint>
         <waypoint id="1">2</waypoint>
         <waypoint id="2">6</waypoint>
