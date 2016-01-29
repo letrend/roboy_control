@@ -44,7 +44,7 @@ private:
     Ui::PlayerView *ui;
     IModelService *modelService;
     BehaviorListModel *behaviorListModel;
-    RoboyMultiLaneModel *multiLaneModel;
+    IMultiLaneViewModel *multiLaneModel;
     RoboyBehaviorMetadata currentlyDisplayedBehaviorMetaData;
     RoboyBehavior currentlyDisplayedBehavior;
 

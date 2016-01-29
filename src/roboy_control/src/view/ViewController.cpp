@@ -70,6 +70,6 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
 
     return plan;
     */
-    VIEW_DBG << "getCurrentRoboyPlan called";
+    VIEW_DBG << "fromController_getCurrentRoboyPlan triggered" << this->m_pMainWindow->fromMainWindow_getCurrentRoboyPlan().listExecutions.length();
     return this->m_pMainWindow->fromMainWindow_getCurrentRoboyPlan();
 }

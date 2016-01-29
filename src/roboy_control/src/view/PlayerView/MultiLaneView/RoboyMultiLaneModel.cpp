@@ -3,8 +3,6 @@
 
 #include "RoboyMultiLaneModel.h"
 #include "MultiLaneViewLane.h"
-#include "LogDefines.h"
-
 
 /* public methods */
 
@@ -227,38 +225,27 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
  */
 RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan()
 {
+    struct BehaviorExecComparator
+    {
+      bool operator()(RoboyBehaviorMetaExecution a, RoboyBehaviorMetaExecution b) const
+      {
+        return a.lTimestamp < b.lTimestamp;
+      }
+    };
+
     RoboyBehaviorMetaplan metaPlan;
 
-    int numBehaviors = 0;
-
-    for(QList<RoboyBehaviorExecution> behaviorsList : this->behaviors) {
-        numBehaviors += behaviorsList.length();
-    }
-
-     VIEW_DBG << numBehaviors;
-
-    for (int i = 0; i < numBehaviors; i++) {
-        int indexOfLaneWithNextBehavior = -1;
-        for(int j = 0; j < this->behaviors.length(); j++) {
-            if (!this->behaviors[j].isEmpty()) {
-                if (indexOfLaneWithNextBehavior > -1) {
-                    if (this->behaviors[j].first().lTimestamp < this->behaviors[indexOfLaneWithNextBehavior].first().lTimestamp) {
-                        indexOfLaneWithNextBehavior = j;
-                    }
-                }else{
-                    indexOfLaneWithNextBehavior = j;
-                }
-            }
+    for(QList<RoboyBehaviorExecution> behaviorList : this->behaviors) {
+        for(RoboyBehaviorExecution behaviorExec : behaviorList) {
+            RoboyBehaviorMetaExecution metaExec;
+            metaExec.lId                = behaviorExec.lId;
+            metaExec.lTimestamp         = behaviorExec.lTimestamp;
+            metaExec.behaviorMetadata   = behaviorExec.behavior.m_metadata;
+            metaPlan.listExecutions.append(metaExec);
         }
-        RoboyBehaviorExecution nextExec = this->behaviors[indexOfLaneWithNextBehavior].first();
-        this->behaviors[indexOfLaneWithNextBehavior].removeFirst();
-
-        RoboyBehaviorMetaExecution metaExec;
-        metaExec.lId                = nextExec.lId;
-        metaExec.lTimestamp         = nextExec.lTimestamp;
-        metaExec.behaviorMetadata   = nextExec.behavior.m_metadata;
-        metaPlan.listExecutions.append(metaExec);
     }
+
+    qSort(metaPlan.listExecutions.begin(), metaPlan.listExecutions.end(), BehaviorExecComparator());
 
     return metaPlan;
 }
