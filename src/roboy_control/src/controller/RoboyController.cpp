@@ -79,6 +79,11 @@ void RoboyController::executeCurrentRoboyPlan() {
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
+    if(metaplan.listExecutions.isEmpty()) {
+        CONTROLLER_WAR << "Empty Execution-List. Nothing to execute. Abort.";
+        return;
+    }
+
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
     if(plan.isValid()){
