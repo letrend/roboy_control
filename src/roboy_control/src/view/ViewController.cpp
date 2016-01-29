@@ -50,6 +50,24 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
 
     plan.listExecutions.append(execution);
 
+    behavior1.m_sBehaviorName = "TestBehavior2";
+    behavior1.m_ulBehaviorId = 2;
+
+    execution.lId = 2;
+    execution.lTimestamp = execution.lTimestamp + 500;
+    execution.behaviorMetadata = behavior1;
+
+    plan.listExecutions.append(execution);
+
+    behavior1.m_sBehaviorName = "TestBehavior1";
+    behavior1.m_ulBehaviorId = 1;
+
+    execution.lId = 3;
+    execution.lTimestamp = execution.lTimestamp + 2000;
+    execution.behaviorMetadata = behavior1;
+
+    plan.listExecutions.append(execution);
+
     return plan;
     */
     VIEW_DBG << "getCurrentRoboyPlan called";

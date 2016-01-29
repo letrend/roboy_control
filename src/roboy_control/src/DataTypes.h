@@ -3,6 +3,7 @@
 
 #include "CommonDefinitions.h"
 
+#include <QDebug>
 #include <QString>
 #include <QMap>
 
@@ -57,7 +58,8 @@ struct RoboyBehavior {
         int currentDuration = 0;
         for (Trajectory trajectory : m_mapMotorTrajectory) {
             currentDuration = trajectory.getDuration();
-            currentDuration > maxDuration ? maxDuration = currentDuration : maxDuration;
+            if(currentDuration > maxDuration)
+                maxDuration = currentDuration;
         }
         return maxDuration;
     }
@@ -86,21 +88,39 @@ struct RoboyBehaviorMetaplan {
 struct RoboyBehaviorPlan {
 
 private:
-    QList<RoboyBehaviorExecution>       listExecutions;
+    QList<RoboyBehaviorExecution>       m_listExecutions;
+    QMap<qint32, Trajectory>            m_mapMotorTrajectories;
 
-    qint64  lStartTimestamp = -1;
-    qint64  lEndTimestamp = -1;
+    bool    m_isValid = false;
+
+    qint64  m_startTimestamp = -1;
+    qint64  m_endTimestamp = -1;
+
+    ControlMode m_controlMode;
+    qint32      m_sampleRate;
+
 
 public:
     RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan);
 
-    qint64 getStartTimestamp();
-    qint64 getEndTimestamp();
-    qint64 getDuration();
+    bool isValid() const;
 
-    const QList<RoboyBehaviorExecution> & getExcutionsList() const;
+    qint64 getStartTimestamp() const;
+    qint64 getEndTimestamp() const;
+    qint64 getDuration() const;
+
+    const QList<RoboyBehaviorExecution> & getExecutionsList() const;
 
     QMap<qint32, Trajectory> getTrajectories() const;
+
+private:
+    void setStartTimestamp();
+    void setEndTimestamp();
+
+    bool doFlattening();
+    bool insertExecution(RoboyBehaviorExecution & execution);
+
+    void printMap() const;
 };
 
 struct ROSController {
