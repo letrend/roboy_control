@@ -257,6 +257,7 @@ RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan()
         metaExec.lId                = nextExec.lId;
         metaExec.lTimestamp         = nextExec.lTimestamp;
         metaExec.behaviorMetadata   = nextExec.behavior.m_metadata;
+        metaPlan.listExecutions.append(metaExec);
     }
 
     return metaPlan;
