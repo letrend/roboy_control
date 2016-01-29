@@ -21,9 +21,9 @@ public:
     qint8  removeBehaviorExecWithID (qint32 laneIndex, qint64 lId);
     qint8  removeBehaviorExecWithTimestamp (qint32 laneIndex, qint64 timestamp);
 
-    qint32              laneCount ();
-    qint32              itemCount (qint32 laneIndex);
-    QVariant            data(qint32 laneIndex, qint32 itemIndex, qint32 role);
+    qint32                  laneCount ();
+    qint32                  itemCount (qint32 laneIndex);
+    QVariant                data(qint32 laneIndex, qint32 itemIndex, qint32 role);
     RoboyBehaviorMetaplan   getBehaviorPlan ();
 
 private:

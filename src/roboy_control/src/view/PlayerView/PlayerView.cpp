@@ -209,3 +209,12 @@ void PlayerView::scaleFactorComboxBoxIndexChanged(int index)
         break;
     }
 }
+
+/**
+ * @brief PlayerView::fromPlayerView_getCurrentRoboyPlan method to retrieve the current behavior plan from the MainWindow
+ * @return the current behavior plan
+ */
+RoboyBehaviorMetaplan PlayerView::fromPlayerView_getCurrentRoboyPlan()
+{
+    return this->multiLaneModel->getBehaviorPlan();
+}

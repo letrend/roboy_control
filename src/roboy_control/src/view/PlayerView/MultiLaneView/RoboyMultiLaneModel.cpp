@@ -3,6 +3,7 @@
 
 #include "RoboyMultiLaneModel.h"
 #include "MultiLaneViewLane.h"
+#include "LogDefines.h"
 
 
 /* public methods */
@@ -226,5 +227,37 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
  */
 RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan()
 {
-    return RoboyBehaviorMetaplan();
+    RoboyBehaviorMetaplan metaPlan;
+
+    int numBehaviors = 0;
+
+    for(QList<RoboyBehaviorExecution> behaviorsList : this->behaviors) {
+        numBehaviors += behaviorsList.length();
+    }
+
+     VIEW_DBG << numBehaviors;
+
+    for (int i = 0; i < numBehaviors; i++) {
+        int indexOfLaneWithNextBehavior = -1;
+        for(int j = 0; j < this->behaviors.length(); j++) {
+            if (!this->behaviors[j].isEmpty()) {
+                if (indexOfLaneWithNextBehavior > -1) {
+                    if (this->behaviors[j].first().lTimestamp < this->behaviors[indexOfLaneWithNextBehavior].first().lTimestamp) {
+                        indexOfLaneWithNextBehavior = j;
+                    }
+                }else{
+                    indexOfLaneWithNextBehavior = j;
+                }
+            }
+        }
+        RoboyBehaviorExecution nextExec = this->behaviors[indexOfLaneWithNextBehavior].first();
+        this->behaviors[indexOfLaneWithNextBehavior].removeFirst();
+
+        RoboyBehaviorMetaExecution metaExec;
+        metaExec.lId                = nextExec.lId;
+        metaExec.lTimestamp         = nextExec.lTimestamp;
+        metaExec.behaviorMetadata   = nextExec.behavior.m_metadata;
+    }
+
+    return metaPlan;
 }

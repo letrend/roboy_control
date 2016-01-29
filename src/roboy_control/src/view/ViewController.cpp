@@ -36,6 +36,7 @@ void ViewController::playBehaviorPlan() {
  */
 RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     // TODO: Get RoboyBehaviorPlan from PlayerView
+    /*
     RoboyBehaviorMetaplan plan;
 
     RoboyBehaviorMetadata behavior1;
@@ -50,4 +51,7 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     plan.listExecutions.append(execution);
 
     return plan;
+    */
+    VIEW_DBG << "getCurrentRoboyPlan called";
+    return this->m_pMainWindow->fromMainWindow_getCurrentRoboyPlan();
 }

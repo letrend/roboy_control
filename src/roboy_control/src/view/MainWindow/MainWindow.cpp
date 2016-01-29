@@ -41,9 +41,17 @@ MainWindow::~MainWindow()
  */
 void MainWindow::notify() 
 {
-    qDebug() << "MainViewController: Notified on data changed";
     this->playerView->notify();
 	this->recorderView->notify();
 	this->editorView->notify();
+}
+
+/**
+ * @brief fromMainWindow_getCurrentRoboyPlan method to retrieve the current behavior plan from the MainWindow
+ * @return the current behavior plan
+ */
+RoboyBehaviorMetaplan MainWindow::fromMainWindow_getCurrentRoboyPlan()
+{
+    return this->playerView->fromPlayerView_getCurrentRoboyPlan();
 }
 

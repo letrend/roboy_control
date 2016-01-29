@@ -36,6 +36,8 @@ public slots:
     void showBehaviorListItemMenu(const QPoint& pos);
     void scaleFactorComboxBoxIndexChanged(int index);
 
+    RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
+
 private:
     ViewController * m_pViewController;
 

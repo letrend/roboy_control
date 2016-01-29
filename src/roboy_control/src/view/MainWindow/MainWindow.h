@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTabWidget>
 
+#include "DataTypes.h"
 #include "../EditorView/EditorView.h"
 #include "../PlayerView/PlayerView.h"
 #include "../RecorderView/RecorderView.h"
@@ -26,6 +27,7 @@ public:
     ~MainWindow();
 
     void notify();
+    RoboyBehaviorMetaplan fromMainWindow_getCurrentRoboyPlan();
 
 private:
     ViewController * m_pViewController;
