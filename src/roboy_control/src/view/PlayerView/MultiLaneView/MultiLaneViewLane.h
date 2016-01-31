@@ -7,8 +7,7 @@
 
 #include "MultiLaneViewItem.h"
 
-class MultiLaneViewLane : public QFrame
-{
+class MultiLaneViewLane : public QFrame {
     Q_OBJECT
 
 public:
@@ -33,8 +32,8 @@ public slots:
     void removeItem();
 
 signals:
-        void removeItemWithPointer(MultiLaneViewItem * item);
-        void removeLane();
+    void removeItemWithPointer(MultiLaneViewItem * item);
+    void removeLane();
 
 private:
     QList<MultiLaneViewItem *> items;

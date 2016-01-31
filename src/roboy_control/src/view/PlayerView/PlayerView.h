@@ -16,8 +16,7 @@ class PlayerView;
 
 class ViewController;
 
-class PlayerView : public QWidget, public IObserver
-{
+class PlayerView : public QWidget, public IObserver {
     Q_OBJECT
 
 public:

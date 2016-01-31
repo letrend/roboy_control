@@ -9,8 +9,7 @@
  */
 MainWindow::MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow) 
-{
+    ui(new Ui::MainWindow) {
     modelService->subscribe(this);
     this->ui->setupUi(this);
     this->mainTabWidget = new QTabWidget();
@@ -27,31 +26,28 @@ MainWindow::MainWindow(IModelService *modelService, ViewController * pViewContro
 /**
  * @brief MainWindow::~MainWindow destructor
  */
-MainWindow::~MainWindow() 
-{
-	delete this->playerView;
-	delete this->recorderView;
-	delete this->editorView;
-	delete this->mainTabWidget;
+MainWindow::~MainWindow() {
+    delete this->playerView;
+    delete this->recorderView;
+    delete this->editorView;
+    delete this->mainTabWidget;
     delete this->ui;
 }
 
 /**
  * @brief MainWindow::notify method to notify about data changes implemented from IObserver interface
  */
-void MainWindow::notify() 
-{
+void MainWindow::notify() {
     this->playerView->notify();
-	this->recorderView->notify();
-	this->editorView->notify();
+    this->recorderView->notify();
+    this->editorView->notify();
 }
 
 /**
  * @brief fromMainWindow_getCurrentRoboyPlan method to retrieve the current behavior plan from the MainWindow
  * @return the current behavior plan
  */
-RoboyBehaviorMetaplan MainWindow::fromMainWindow_getCurrentRoboyPlan()
-{
+RoboyBehaviorMetaplan MainWindow::fromMainWindow_getCurrentRoboyPlan() {
     return this->playerView->fromPlayerView_getCurrentRoboyPlan();
 }
 

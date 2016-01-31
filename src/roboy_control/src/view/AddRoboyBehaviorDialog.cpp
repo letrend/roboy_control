@@ -3,12 +3,10 @@
 
 AddRoboyBehaviorDialog::AddRoboyBehaviorDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AddRoboyBehaviorDialog)
-{
+    ui(new Ui::AddRoboyBehaviorDialog) {
     ui->setupUi(this);
 }
 
-AddRoboyBehaviorDialog::~AddRoboyBehaviorDialog()
-{
+AddRoboyBehaviorDialog::~AddRoboyBehaviorDialog() {
     delete ui;
 }

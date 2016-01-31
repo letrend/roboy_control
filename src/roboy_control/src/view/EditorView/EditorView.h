@@ -11,8 +11,7 @@ namespace Ui {
 class EditorView;
 }
 
-class EditorView : public QWidget, public IObserver
-{
+class EditorView : public QWidget, public IObserver {
     Q_OBJECT
 
 public:

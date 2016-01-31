@@ -6,8 +6,7 @@
 #include "IMultiLaneViewModel.h"
 #include "MultiLaneViewLane.h"
 
-class MultiLaneView : public QWidget
-{
+class MultiLaneView : public QWidget {
     Q_OBJECT
 
 public:

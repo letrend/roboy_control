@@ -18,8 +18,7 @@
  * @brief MultiLaneViewLane::MultiLaneViewLane constructor
  * @param parent the non mandatory parent of the widget
  */
-MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, scaleFactor viewScaleFactor, QWidget *parent)
-{
+MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, scaleFactor viewScaleFactor, QWidget *parent) {
     Q_UNUSED(parent);
 
     this->viewScaleFactor = viewScaleFactor;
@@ -43,8 +42,7 @@ MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, scaleFactor viewScaleFa
     QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showMultiLaneViewLaneMenu(const QPoint&)));
 }
 
-MultiLaneViewLane::~MultiLaneViewLane()
-{
+MultiLaneViewLane::~MultiLaneViewLane() {
     for (MultiLaneViewItem *item : this->items) {
         delete item;
     }
@@ -53,8 +51,7 @@ MultiLaneViewLane::~MultiLaneViewLane()
 /**
  * @brief MultiLaneViewLane::setScaleFactor method for setting a scale factor for the multi lane widget
  */
-void MultiLaneViewLane::setScaleFactor(scaleFactor factor)
-{
+void MultiLaneViewLane::setScaleFactor(scaleFactor factor) {
     /* set new scale factor */
     this->viewScaleFactor = factor;
 }
@@ -66,8 +63,7 @@ void MultiLaneViewLane::setScaleFactor(scaleFactor factor)
  * @param timeStamp timestamp of the behavior item
  * @param duration duration of the behavior item
  */
-void MultiLaneViewLane::itemInsertedHandler(qint32 index, QString name, QIcon icon, qint64 timestamp, quint64 duration, quint64 motorCount)
-{
+void MultiLaneViewLane::itemInsertedHandler(qint32 index, QString name, QIcon icon, qint64 timestamp, quint64 duration, quint64 motorCount) {
     MultiLaneViewItem *item = new MultiLaneViewItem(name, motorCount, icon, timestamp);
     item->setGeometry((timestamp/this->viewScaleFactor), 20 + ITEM_INDENT, (duration/this->viewScaleFactor), this->height()-20-(ITEM_INDENT << 1));
     item->setParent(this);
@@ -80,8 +76,7 @@ void MultiLaneViewLane::itemInsertedHandler(qint32 index, QString name, QIcon ic
  * @brief MultiLaneViewLane::itemRemovedHandler method for handling the removal of a behavior item
  * @param timestamp timestamp of the behavior that should be removed
  */
-void MultiLaneViewLane::itemRemovedHandler(qint32 index)
-{
+void MultiLaneViewLane::itemRemovedHandler(qint32 index) {
     MultiLaneViewItem * item = this->items.at(index);
     this->items.removeAt(index);
     delete item;
@@ -91,8 +86,7 @@ void MultiLaneViewLane::itemRemovedHandler(qint32 index)
  * @brief MultiLaneViewLane::paintEvent paint event for the MultiLaneViewLane
  * @param event event on which the view is painted
  */
-void MultiLaneViewLane::paintEvent(QPaintEvent *event)
-{
+void MultiLaneViewLane::paintEvent(QPaintEvent *event) {
     QWidget::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -122,8 +116,7 @@ void MultiLaneViewLane::paintEvent(QPaintEvent *event)
  * @brief MultiLaneViewLane::showMultiLaneViewLaneMenu method to handle the invokation of a context menu on the MultiLaneViewLane
  * @param pos position at which the context menu is invoked
  */
-void MultiLaneViewLane::showMultiLaneViewLaneMenu(const QPoint &pos)
-{
+void MultiLaneViewLane::showMultiLaneViewLaneMenu(const QPoint &pos) {
     QMenu behaviorListItemMenu;
     QAction removeLaneAction(QIcon(":/delete-img-dark.png"), "remove lane", NULL);
     connect(&removeLaneAction, SIGNAL(triggered()), this, SLOT(removeLaneHandler()));
@@ -136,8 +129,7 @@ void MultiLaneViewLane::showMultiLaneViewLaneMenu(const QPoint &pos)
 /**
  * @brief MultiLaneViewLane::removeItem handler method to remove a item from the current lane
  */
-void MultiLaneViewLane::removeItem()
-{
+void MultiLaneViewLane::removeItem() {
     QObject * sender = this->sender();
     emit removeItemWithPointer(qobject_cast<MultiLaneViewItem *>(sender));
 }
@@ -145,7 +137,6 @@ void MultiLaneViewLane::removeItem()
 /**
  * @brief MultiLaneViewLane::removeLaneHandler handler function for the remove lane action in the lanes contextmenu
  */
-void MultiLaneViewLane::removeLaneHandler()
-{
+void MultiLaneViewLane::removeLaneHandler() {
     emit(removeLane());
 }
