@@ -82,9 +82,10 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
     }
 
     qint64 behaviorDuration = behavior.getDuration();
+
     /* edge case empty list */
     if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        if(this->behaviors[laneIndex].count() < 1) {
+        if (this->behaviors[laneIndex].count() < 1) {
             const RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].append(bExec);
             emit itemInserted(laneIndex, 0);
@@ -92,15 +93,16 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
         }
 
         for (int i = 0; i < this->behaviors[laneIndex].count()-1; i++) {
-            if(this->behaviors[laneIndex][i].lTimestamp <= lTimestamp && this->behaviors[laneIndex][i+1].lTimestamp > lTimestamp+behaviorDuration) {
+            if (this->behaviors[laneIndex][i].lTimestamp + this->behaviors[laneIndex][i].behavior.getDuration() <= lTimestamp &&
+                this->behaviors[laneIndex][i+1].lTimestamp > lTimestamp+behaviorDuration) {
                 RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
                 this->behaviors[laneIndex].insert(i, bExec);
                 emit itemInserted(laneIndex, i);
                 return 0;
             }
         }
-        /* edge case first item */
 
+        /* edge case first item */
         if (lTimestamp + behaviorDuration < this->behaviors[laneIndex].first().lTimestamp) {
             RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].insert(0, bExec);
@@ -109,7 +111,7 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
         }
 
         /*edge case last item */
-        if (lTimestamp > this->behaviors[laneIndex].last().lTimestamp) {
+        if (lTimestamp > this->behaviors[laneIndex].last().lTimestamp + this->behaviors[laneIndex].last().behavior.getDuration()) {
             RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
             this->behaviors[laneIndex].append(bExec);
             emit itemInserted(laneIndex, this->behaviors[laneIndex].count()-1);
@@ -234,10 +236,10 @@ RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan()
 {
     struct BehaviorExecComparator
     {
-      bool operator()(RoboyBehaviorMetaExecution a, RoboyBehaviorMetaExecution b) const
-      {
-        return a.lTimestamp < b.lTimestamp;
-      }
+        bool operator()(RoboyBehaviorMetaExecution a, RoboyBehaviorMetaExecution b) const
+        {
+            return a.lTimestamp < b.lTimestamp;
+        }
     };
 
     RoboyBehaviorMetaplan metaPlan;
