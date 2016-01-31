@@ -75,5 +75,5 @@ qint64 MultiLaneViewItem::getTimestamp()
  */
 void MultiLaneViewItem::removeItemHandler()
 {
-    emit removeItemWithTimestamp(this->timestamp);
+    emit removeItem();
 }

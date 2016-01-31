@@ -26,8 +26,8 @@ public slots:
     void itemInsertedHandler    (qint32 laneIndex, qint32 itemIndex);
     void itemRemovedHandler     (qint32 laneIndex, qint32 itemIndex);
 
-    void removeItemWithTimestampAndLaneID(qint64 timestamp, qint64 laneID);
-    void removeLaneWithLaneID(qint64 laneID);
+    void removeItemWithPointer(MultiLaneViewItem * item);
+    void removeLane();
 
 private:
     IMultiLaneViewModel *model;

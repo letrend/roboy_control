@@ -95,8 +95,8 @@ void MultiLaneView::setScaleFactor(scaleFactor factor)
  */
 void MultiLaneView::laneInsertedHandler(qint32 index)
 {
-    MultiLaneViewLane *lane = new MultiLaneViewLane(LANE_HEIGHT, MINIMUM_LANE_WIDTH, this->viewScaleFactor, this->nextAvailableLaneID++, this);
-    connect(lane, SIGNAL(removeLaneWithLaneID(qint64)), this, SLOT(removeLaneWithLaneID(qint64)));
+    MultiLaneViewLane *lane = new MultiLaneViewLane(LANE_HEIGHT, this->viewScaleFactor, this);
+    connect(lane, SIGNAL(removeLane()), this, SLOT(removeLane()));
 
     this->lanes.insert(index, lane);
     this->laneBackground->setFixedHeight((this->lanes.count()*LANE_HEIGHT)+((this->lanes.count()+1)*LANE_SPACING));
@@ -132,7 +132,7 @@ void MultiLaneView::itemInsertedHandler(qint32 laneIndex, qint32 itemIndex)
     qint64  bDuration   = this->model->data(laneIndex, itemIndex, Qt::UserRole + 1      ).value<qint64>();
     qint64  bMotorCount = this->model->data(laneIndex, itemIndex, Qt::UserRole + 2      ).value<qint64>();
 
-    connect(lane, SIGNAL(removeItemWithTimestampAndLaneID(qint64,qint64)), this, SLOT(removeItemWithTimestampAndLaneID(qint64,qint64)));
+    connect(lane, SIGNAL(removeItemWithPointer(MultiLaneViewItem*)), this, SLOT(removeItemWithPointer(MultiLaneViewItem*)));
 
     qint64 maxSize = ((bTimestamp + bDuration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
     this->laneBackground->setFixedWidth(maxSize);
@@ -170,28 +170,37 @@ void MultiLaneView::itemRemovedHandler(qint32 laneIndex, qint32 itemIndex)
  * @param timestamp
  * @param laneID
  */
-void MultiLaneView::removeItemWithTimestampAndLaneID(qint64 timestamp, qint64 laneID)
+void MultiLaneView::removeItemWithPointer(MultiLaneViewItem * item)
 {
-   for (int i = 0; i < this->lanes.count(); i++) {
-       if (this->lanes[i]->getLaneID() == laneID) {
-           this->model->removeBehaviorExecWithTimestamp(i, timestamp);
-       }
-   }
+    QObject * sender = this->sender();
+
+    for (int i = 0; i < this->lanes.count(); i++) {
+        if (this->lanes[i] == qobject_cast<MultiLaneViewLane *>(sender)) {
+            this->model->removeBehaviorExecWithTimestamp(i, item->getTimestamp());
+        }
+    }
 }
 
-void MultiLaneView::removeLaneWithLaneID(qint64 laneID)
+void MultiLaneView::removeLane()
 {
+    QObject* sender = this->sender();
+
     for (int i = 0; i < this->lanes.count(); i++) {
-        if (this->lanes[i]->getLaneID() == laneID) {
+        if (this->lanes[i] == qobject_cast<MultiLaneViewLane *>(sender)) {
             if (this->lanes[i]->children().count() > 0) {
                 QMessageBox::StandardButton reply;
-                  reply = QMessageBox::question(this, "Deleting Lane", QString("The lane you are about to delete is not empty. ") +
-                                                                       QString("If you continue, all behaviors in it ") +
-                                                                       QString("will also be deleted. Are you sure you want to continue?"),
-                                                                       QMessageBox::Yes|QMessageBox::No);
-                  if (reply == QMessageBox::Yes) {
-                      this->model->removeLane(i);
-                  }
+                const char * messageText =  "The lane you are about to delete is not empty. "
+                                            "If you continue, all behaviors in it will also be deleted. "
+                                            "Are you sure you want to continue?";
+
+                reply = QMessageBox::question(this,
+                                              QString("Deleting Lane"),
+                                              QString(messageText),
+                                              QMessageBox::Yes | QMessageBox::No);
+
+                if (reply == QMessageBox::Yes) {
+                    this->model->removeLane(i);
+                }
             } else {
                 this->model->removeLane(i);
             }
@@ -206,8 +215,8 @@ void MultiLaneView::removeLaneWithLaneID(qint64 laneID)
  */
 void MultiLaneView::setupConnections()
 {
-        QObject::connect(this->model, SIGNAL(laneInserted (qint32)), this, SLOT(laneInsertedHandler(qint32)));
-        QObject::connect(this->model, SIGNAL(laneRemoved  (qint32)), this, SLOT(laneRemovedHandler(qint32)));
-        QObject::connect(this->model, SIGNAL(itemInserted (qint32, qint32)), this, SLOT(itemInsertedHandler(qint32, qint32)));
-        QObject::connect(this->model, SIGNAL(itemRemoved  (qint32, qint32)), this, SLOT(itemRemovedHandler(qint32, qint32)));
+        QObject::connect(this->model, SIGNAL(laneInserted (qint32)),            this, SLOT(laneInsertedHandler(qint32           )));
+        QObject::connect(this->model, SIGNAL(laneRemoved  (qint32)),            this, SLOT(laneRemovedHandler(qint32            )));
+        QObject::connect(this->model, SIGNAL(itemInserted (qint32, qint32)),    this, SLOT(itemInsertedHandler(qint32, qint32   )));
+        QObject::connect(this->model, SIGNAL(itemRemoved  (qint32, qint32)),    this, SLOT(itemRemovedHandler(qint32, qint32    )));
 }

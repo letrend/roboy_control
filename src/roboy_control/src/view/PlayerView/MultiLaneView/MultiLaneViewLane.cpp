@@ -18,12 +18,11 @@
  * @brief MultiLaneViewLane::MultiLaneViewLane constructor
  * @param parent the non mandatory parent of the widget
  */
-MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, quint64 minimumLaneWidth, scaleFactor viewScaleFactor, qint64 laneID, QWidget *parent)
+MultiLaneViewLane::MultiLaneViewLane(quint32 laneHeight, scaleFactor viewScaleFactor, QWidget *parent)
 {
     Q_UNUSED(parent);
 
     this->viewScaleFactor = viewScaleFactor;
-    this->laneID = laneID;
 
     this->setFixedHeight(laneHeight);
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -72,7 +71,7 @@ void MultiLaneViewLane::itemInsertedHandler(qint32 index, QString name, QIcon ic
     MultiLaneViewItem *item = new MultiLaneViewItem(name, motorCount, icon, timestamp);
     item->setGeometry((timestamp/this->viewScaleFactor), 20 + ITEM_INDENT, (duration/this->viewScaleFactor), this->height()-20-(ITEM_INDENT << 1));
     item->setParent(this);
-    connect(item, SIGNAL(removeItemWithTimestamp(qint64)), this, SLOT(removeItemWithTimestamp(qint64)));
+    connect(item, SIGNAL(removeItem()), this, SLOT(removeItem()));
     this->items.insert(index, item);
     item->show();
 }
@@ -120,15 +119,6 @@ void MultiLaneViewLane::paintEvent(QPaintEvent *event)
 }
 
 /**
- * @brief MultiLaneViewLane::getLaneID getter method for lane id
- * @return the id of the current lane
- */
-qint64 MultiLaneViewLane::getLaneID()
-{
-    return this->laneID;
-}
-
-/**
  * @brief MultiLaneViewLane::showMultiLaneViewLaneMenu method to handle the invokation of a context menu on the MultiLaneViewLane
  * @param pos position at which the context menu is invoked
  */
@@ -144,12 +134,12 @@ void MultiLaneViewLane::showMultiLaneViewLaneMenu(const QPoint &pos)
 }
 
 /**
- * @brief MultiLaneViewLane::removeItemWithTimestamp handler method to remove a item from the current lane
- * @param timestamp timestamp of the item
+ * @brief MultiLaneViewLane::removeItem handler method to remove a item from the current lane
  */
-void MultiLaneViewLane::removeItemWithTimestamp(qint64 timestamp)
+void MultiLaneViewLane::removeItem()
 {
-    emit removeItemWithTimestampAndLaneID(timestamp, this->laneID);
+    QObject * sender = this->sender();
+    emit removeItemWithPointer(qobject_cast<MultiLaneViewItem *>(sender));
 }
 
 /**
@@ -157,5 +147,5 @@ void MultiLaneViewLane::removeItemWithTimestamp(qint64 timestamp)
  */
 void MultiLaneViewLane::removeLaneHandler()
 {
-    emit(removeLaneWithLaneID(this->laneID));
+    emit(removeLane());
 }
