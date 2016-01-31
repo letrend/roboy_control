@@ -155,13 +155,13 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
     
     if (selectedIndex.isValid()) {
     	QMenu behaviorListItemMenu;
-        QAction addAction(QIcon(":/add-img-dark.png"), "add to queue", NULL);
-        addAction.setIconVisibleInMenu(true);
-        behaviorListItemMenu.addAction(&addAction);
+        QAction *addAction = new QAction(QIcon(":/add-img-dark.png"), "add to queue", NULL);
+        addAction->setIconVisibleInMenu(true);
+        behaviorListItemMenu.addAction(addAction);
     	QAction *selectedItem = behaviorListItemMenu.exec(globalPos);
 
     	if (selectedItem) {
-    		if (selectedItem->text() == "add to queue") {
+            if (selectedItem == addAction) {
                 AddRoboyBehaviorDialog dialog(this->multiLaneModel->laneCount());
                 if(dialog.exec() == AddRoboyBehaviorDialog::Accepted) {
                     qint32 laneIndex = dialog.selectedLane();
@@ -169,13 +169,6 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
                     RoboyBehavior behavior = this->behaviorListModel->getBehavior(selectedIndex.row());
                     int success = this->multiLaneModel->insertBehaviorExec(laneIndex, timestamp, behavior);
                     switch(success) {
-                    case -2: {
-                        QMessageBox msgBox;
-                        msgBox.setWindowTitle("Adding the behavior failed");
-                        msgBox.setText("The inserted behavior does overlap with one or more behaviors in the selected lane.");
-                        msgBox.exec();
-                    }
-                    break;
                     case -1: {
                         QMessageBox msgBox;
                         msgBox.setWindowTitle("Invalid timestamp");
@@ -183,10 +176,19 @@ void PlayerView::showBehaviorListItemMenu(const QPoint& pos)
                         msgBox.exec();
                     }
                     break;
+                    case -2: {
+                        QMessageBox msgBox;
+                        msgBox.setWindowTitle("Adding the behavior failed");
+                        msgBox.setText("The inserted behavior does overlap with one or more behaviors in the selected lane.");
+                        msgBox.exec();
+                    }
+                    break;
                     }
                 }
             }
 		}
+
+        delete(addAction);
 	}
 }
 

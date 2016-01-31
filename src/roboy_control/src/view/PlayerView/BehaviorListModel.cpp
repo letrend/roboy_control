@@ -1,6 +1,6 @@
 #include "BehaviorListModel.h"
 
-/*constructor*/
+/* constructor */
 
 /**
  * @brief BehaviorListModel::BehaviorListModel constructor
@@ -61,7 +61,7 @@ RoboyBehavior BehaviorListModel::getBehavior(int index) const
 	return this->behaviorList[index];
 }
 
-// private methods
+/* private methods */
 
 /**
  * @brief BehaviorListModel::updateBehaviorList method for triggering a update of the behavior list after a change in the data

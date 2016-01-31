@@ -166,9 +166,8 @@ void MultiLaneView::itemRemovedHandler(qint32 laneIndex, qint32 itemIndex)
 }
 
 /**
- * @brief MultiLaneView::removeItemWithTimestampAndLaneID
- * @param timestamp
- * @param laneID
+ * @brief MultiLaneView::removeItemWithTimestampAndLaneID slot to remove a item with given pointer from the multi lane view
+ * @param item pointer of the multi lane view item that should be removed
  */
 void MultiLaneView::removeItemWithPointer(MultiLaneViewItem * item)
 {
@@ -181,6 +180,9 @@ void MultiLaneView::removeItemWithPointer(MultiLaneViewItem * item)
     }
 }
 
+/**
+ * @brief MultiLaneView::removeLane slot to remove a multi lane view lane
+ */
 void MultiLaneView::removeLane()
 {
     QObject* sender = this->sender();
