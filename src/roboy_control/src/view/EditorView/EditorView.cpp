@@ -8,23 +8,20 @@
  */
 EditorView::EditorView(IModelService *modelService, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::EditorView)
-{
+    ui(new Ui::EditorView) {
     this->ui->setupUi(this);
 }
 
 /**
  * @brief EditorView::~EditorView destructor
  */
-EditorView::~EditorView()
-{
+EditorView::~EditorView() {
     delete this->ui;
 }
 
 /**
  * @brief EditorView::notify method to notify about data changes implemented from IObserver interface
  */
-void EditorView::notify()
-{
+void EditorView::notify() {
 
 }

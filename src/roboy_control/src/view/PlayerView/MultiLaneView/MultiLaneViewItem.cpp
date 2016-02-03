@@ -12,8 +12,7 @@
  * @param icon icon of the MultiLaneViewItem
  * @param parent non mandatory parent of the item
  */
-MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, qint64 timestamp, QWidget *parent) : QWidget(parent)
-{
+MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon icon, qint64 timestamp, QWidget *parent) : QWidget(parent) {
     this->timestamp = timestamp;
 
     QBoxLayout *layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
@@ -50,8 +49,7 @@ MultiLaneViewItem::MultiLaneViewItem(QString name, quint64 motorCount, QIcon ico
  * @brief MultiLaneViewItem::showMultiLaneViewItemMenu method to handle the invokation of a context menu on the MultiLaneViewItem
  * @param pos position at which the context menu is invoked
  */
-void MultiLaneViewItem::showMultiLaneViewItemMenu(const QPoint &pos)
-{
+void MultiLaneViewItem::showMultiLaneViewItemMenu(const QPoint &pos) {
     QMenu behaviorListItemMenu;
     QAction removeItemAction(QIcon(":/delete-img-dark.png"), "remove behavior", NULL);
     connect(&removeItemAction, SIGNAL(triggered()), this, SLOT(removeItemHandler()));
@@ -65,15 +63,13 @@ void MultiLaneViewItem::showMultiLaneViewItemMenu(const QPoint &pos)
  * @brief MultiLaneViewItem::getTimestamp method for retrieving the timestamp of the MultiLaneViewItem
  * @return the timestamp of the MultiLaneViewItem
  */
-qint64 MultiLaneViewItem::getTimestamp()
-{
+qint64 MultiLaneViewItem::getTimestamp() {
     return this->timestamp;
 }
 
 /**
  * @brief MultiLaneViewItem::removeItemHandler handler function for the remove item action in the items contextmenu
  */
-void MultiLaneViewItem::removeItemHandler()
-{
-    emit removeItemWithTimestamp(this->timestamp);
+void MultiLaneViewItem::removeItemHandler() {
+    emit removeItem();
 }

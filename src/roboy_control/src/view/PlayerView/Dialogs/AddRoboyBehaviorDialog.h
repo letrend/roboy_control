@@ -7,8 +7,7 @@ namespace Ui {
 class AddRoboyBehaviorDialog;
 }
 
-class AddRoboyBehaviorDialog : public QDialog
-{
+class AddRoboyBehaviorDialog : public QDialog {
     Q_OBJECT
 
 public:

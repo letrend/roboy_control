@@ -5,13 +5,12 @@
 
 #include "IMultiLaneViewModel.h"
 
-class RoboyMultiLaneModel : public IMultiLaneViewModel
-{
+class RoboyMultiLaneModel : public IMultiLaneViewModel {
     Q_OBJECT
 
 public:
-    RoboyMultiLaneModel(){}
-    ~RoboyMultiLaneModel(){}
+    RoboyMultiLaneModel() {}
+    ~RoboyMultiLaneModel() {}
     virtual void initializeWidget   ();
     qint8  addLane            ();
     qint8  insertLane         (qint32 index);

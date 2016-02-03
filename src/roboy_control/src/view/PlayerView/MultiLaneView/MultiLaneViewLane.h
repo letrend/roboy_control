@@ -7,8 +7,7 @@
 
 #include "MultiLaneViewItem.h"
 
-class MultiLaneViewLane : public QFrame
-{
+class MultiLaneViewLane : public QFrame {
     Q_OBJECT
 
 public:
@@ -21,26 +20,24 @@ public:
 
     typedef enum multiLaneViewScaleFactor scaleFactor;
 
-    explicit MultiLaneViewLane(quint32 laneHeight, quint64 minimumLaneWidth, scaleFactor viewScaleFactor, qint64 laneID, QWidget *parent = 0);
+    explicit MultiLaneViewLane(quint32 laneHeight, scaleFactor viewScaleFactor, QWidget *parent = 0);
     ~MultiLaneViewLane();
     void setScaleFactor(scaleFactor factor);
     void itemInsertedHandler    (qint32 index, QString name, QIcon icon, qint64 timestamp, quint64 duration64, quint64 motorCount);
     void itemRemovedHandler     (qint32 index);
     void paintEvent(QPaintEvent *event);
-    qint64 getLaneID();
 
 public slots:
     void showMultiLaneViewLaneMenu(const QPoint &pos);
-    void removeItemWithTimestamp(qint64 timestamp);
+    void removeItem();
 
 signals:
-        void removeItemWithTimestampAndLaneID(qint64 timestamp, qint64 laneID);
-        void removeLaneWithLaneID(qint64 laneID);
+    void removeItemWithPointer(MultiLaneViewItem * item);
+    void removeLane();
 
 private:
     QList<MultiLaneViewItem *> items;
     scaleFactor viewScaleFactor = scaleFactor::millisecond;
-    qint64 laneID;
 
 private slots:
     void removeLaneHandler();

@@ -11,8 +11,7 @@ namespace Ui {
 class RecorderView;
 }
 
-class RecorderView : public QWidget, public IObserver
-{
+class RecorderView : public QWidget, public IObserver {
     Q_OBJECT
 
 public:

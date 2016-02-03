@@ -4,27 +4,26 @@
 #include "../../interfaces/IObserver.h"
 #include "../../model/IModelService.h"
 
-class BehaviorListModel : public QAbstractListModel, public IObserver
-{
-  Q_OBJECT
+class BehaviorListModel : public QAbstractListModel, public IObserver {
+    Q_OBJECT
 
 public:
-  /* constructor */
-  BehaviorListModel(IModelService *modelService, QObject *parent = 0);
+    /* constructor */
+    BehaviorListModel(IModelService *modelService, QObject *parent = 0);
 
-  /* methods implemented from IObserver interface */
-  void notify();
+    /* methods implemented from IObserver interface */
+    void notify();
 
-  /* QAbstractListModel methods */
-  QVariant data(const QModelIndex &index, int role) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    /* QAbstractListModel methods */
+    QVariant data(const QModelIndex &index, int role) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-  /* BehaviorListModel methods */
-  RoboyBehaviorMetadata getBehaviorMetaData(int index) const;
+    /* BehaviorListModel methods */
+    RoboyBehavior getBehavior(int index) const;
 
 private:
-  QList<RoboyBehaviorMetadata> behaviorList;
-  IModelService *modelService;
+    QList<RoboyBehavior> behaviorList;
+    IModelService *modelService;
 
-  void updateBehaviorList();
+    void updateBehaviorList();
 };

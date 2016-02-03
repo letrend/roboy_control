@@ -18,8 +18,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow, public IObserver
-{
+class MainWindow : public QMainWindow, public IObserver {
     Q_OBJECT
 
 public:

@@ -5,8 +5,7 @@
 
 #include "DataTypes.h"
 
-class IMultiLaneViewModel : public QObject
-{
+class IMultiLaneViewModel : public QObject {
     Q_OBJECT
 
 public:

@@ -5,8 +5,7 @@
 #include <QLabel>
 #include <QWidget>
 
-class MultiLaneViewItem : public QWidget
-{
+class MultiLaneViewItem : public QWidget {
     Q_OBJECT
 
 public:
@@ -14,9 +13,9 @@ public:
     qint64  getTimestamp();
 
 public slots:
-        void showMultiLaneViewItemMenu(const QPoint& pos);
+    void showMultiLaneViewItemMenu(const QPoint& pos);
 signals:
-        void removeItemWithTimestamp(qint64 timestamp);
+    void removeItem();
 private:
     qint64 timestamp;
     QLabel *iconLabel;
