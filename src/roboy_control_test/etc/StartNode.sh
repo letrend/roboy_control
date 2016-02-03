@@ -1,0 +1,1 @@
+roslaunch /home/bruh/workspace/roboy_control/src/roboy_control_test/etc/ControllerStub.launch

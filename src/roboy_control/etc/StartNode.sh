@@ -1,1 +1,0 @@
-roslaunch ${ROBOY_CONTROL_HOME}/etc/ControllerStub.launch

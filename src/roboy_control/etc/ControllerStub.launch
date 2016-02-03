@@ -1,4 +1,0 @@
-
-<launch>
-    <node name="controller_stub" pkg="roboy_control" type="controller_stub" args="motor0"/>
-</launch>

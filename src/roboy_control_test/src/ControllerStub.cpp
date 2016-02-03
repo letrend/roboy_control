@@ -2,10 +2,11 @@
 // Created by bruh on 1/24/16.
 //
 
+#include "DataTypes.h"
+
 #include <QDebug>
 
 #include "common_utilities/Trajectory.h"
-#include "DataTypes.h"
 
 #include "ros/ros.h"
 
@@ -15,22 +16,17 @@ STATUS state;
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
 
 int main(int argc, char ** argv) {
-    ros::init(argc, argv, "controllerStub");
 
-    if(argc != 2) {
-        qDebug() << "Invalid number of arguments";
-        exit(1);
-    }
+    ros::init(argc, argv, "controller_stub_1");
+    ros::NodeHandle n;
 
     qDebug() << "Started ControllerStub-Node: " << argv[1];
-    ros::NodeHandle n;
+    nodeName = argv[1];
 
     state = STATUS::INITIALIZED;
 
-    nodeName = argv[1];
-
     qDebug() << "[" << nodeName << "] Advertise Service: " << nodeName;
-    n.advertiseService(nodeName.toStdString(), callbackMotor);
+    ros::ServiceServer trajectoryServer =  n.advertiseService("roboy/trajectory_motor1", callbackMotor);
 
     ros::spin();
 }

@@ -4,7 +4,5 @@
 			databasePath="/home/bruh/workspace/roboy_control/src/roboy_control/database"/>
 	<Controllers>
 		<Controller id="1">true</Controller>
-		<Controller id="2">true</Controller>
-		<Controller id="3">true</Controller>
 	</Controllers>
 </RoboyControlConfiguration>
