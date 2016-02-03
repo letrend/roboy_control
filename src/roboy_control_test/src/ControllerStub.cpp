@@ -33,7 +33,7 @@ int main(int argc, char ** argv) {
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res){
     qDebug() << "[" << nodeName << "] " << "Received Service Call: TRAJECTORY for motor ";
-    qDebug() << "[" << nodeName << "] " << "TRAJECTORY: [samplerate:" << req.samplerate << "][controlmode:" << req.controlmode << "]";
+    qDebug() << "[" << nodeName << "] " << "TRAJECTORY: [samplerate:" << req.samplerate << "]";
     qint32 index = 0;
     for(qint32 wp : req.waypoints) {
         qDebug() << " - WAYPOINT" << ++index << ": [value:" << wp << "]";

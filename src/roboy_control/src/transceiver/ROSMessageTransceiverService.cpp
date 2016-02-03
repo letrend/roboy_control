@@ -43,7 +43,7 @@ void ROSMessageTransceiverService::sendTrajectory() {
 
     common_utilities::Trajectory srv;
     srv.request.samplerate = m_trajectory.m_sampleRate;
-    srv.request.controlmode = m_trajectory.m_controlMode;
+//    srv.request.controlmode = m_trajectory.m_controlMode;
     for(RoboyWaypoint wp : m_trajectory.m_listWaypoints) {
         srv.request.waypoints.push_back(wp.m_ulValue);
     }
