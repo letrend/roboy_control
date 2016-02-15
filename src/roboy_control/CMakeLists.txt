@@ -1,14 +1,21 @@
-## FIND CATKIN/ROS
+## Find CATKIN/ROS
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
 )
 
-## FIND QT
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
-add_definitions(${QT_DEFINITIONS})
+## Find QT
+## Minimum version requirements
+set(QT_MIN_VERSION "5.4.0")
+
+## Find Qt5
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
+             Core
+	     	 Widgets
+             Gui
+             Qml
+             Quick)
 
 add_subdirectory(src)
 
@@ -23,10 +30,10 @@ file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/database/*)
 file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/msg/*)
 add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 
-## Generate Qt-Files (Mocs for Headers & UI-Fieles)
-qt4_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
-qt4_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
-qt4_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
+## Generate Qt-Files (Mocs for Headers & UI-Files)
+qt5_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
+qt5_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
+qt5_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
 catkin_package(
    CATKIN_DEPENDS message_runtime
@@ -42,5 +49,5 @@ include_directories(
 )
 
 add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
-target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
+target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
 add_dependencies(roboy_control_node common_utilities_generate_messages_cpp)

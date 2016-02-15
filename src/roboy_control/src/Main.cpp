@@ -11,25 +11,26 @@
 
 void initializeDatabase();
 
-void myMessageOutput(QtMsgType type, const char * msg) {
+void myMessageOutput(QtMsgType type,  const QMessageLogContext &context, const QString &msg) {
+    QByteArray localMsg = msg.toLocal8Bit();
     switch(type) {
         case QtDebugMsg:
-            fprintf(stderr, "\033[0m%s\n", msg);
+            fprintf(stderr, "\033[0m%s\n", localMsg.constData());
             break;
         case QtWarningMsg:
-            fprintf(stderr, "\033[33m%s\n", msg);
+            fprintf(stderr, "\033[33m%s\n", localMsg.constData());
             break;
         case QtCriticalMsg:
-            fprintf(stderr, "\033[32m%s\n", msg);
+            fprintf(stderr, "\033[32m%s\n", localMsg.constData());
             break;
         case QtFatalMsg:
-            fprintf(stderr, "\033[31m%s\n", msg);
+            fprintf(stderr, "\033[31m%s\n", localMsg.constData());
             break;
     }
 }
 
 int main(int argc, char ** argv) {
-    qInstallMsgHandler(myMessageOutput);
+    qInstallMessageHandler(myMessageOutput);
 
     ros::init(argc, argv, "roboy_control");
     ros::NodeHandle n;

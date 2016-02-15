@@ -1,3 +1,6 @@
+#include <QMenu>
+#include <QMessageBox>
+
 #include "DataTypes.h"
 #include "LogDefines.h"
 #include "PlayerView.h"
