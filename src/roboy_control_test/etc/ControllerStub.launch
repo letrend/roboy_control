@@ -1,4 +1,4 @@
 
 <launch>
-    <node name="controller_stub_1" pkg="roboy_control_test" type="controller_stub" args="roboy/trajectory_motor1"/>
+    <node name="controller_stub_9" pkg="roboy_control_test" type="controller_stub" args="roboy/trajectory_motor9"/>
 </launch>

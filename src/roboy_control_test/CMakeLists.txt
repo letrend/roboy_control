@@ -26,7 +26,7 @@ include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_executable(roboy_control_test_node src/TestNode.cpp)
+add_executable(roboy_control_test_node src/Main.cpp src/TestNode.cpp)
 target_link_libraries(roboy_control_test_node ${catkin_LIBRARIES} ${QT_LIBRARIES})
 add_dependencies(roboy_control_test_node common_utilities_generate_messages_cpp)
 

@@ -11,11 +11,13 @@
 
 struct ROSController {
     qint8                 id;
+    ControlMode           controlMode;
     STATUS                state;
+    QProcess *            process;
 
     QString toString() const {
         QString string;
-        string.sprintf("ROSController: [id:%i][state:%i]", id, state);
+        string.sprintf("ROSController: [id:%i][controlmode:%i][state:%i]", id, controlMode, state);
         return string;
     }
 };

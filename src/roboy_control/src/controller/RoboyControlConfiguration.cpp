@@ -50,14 +50,35 @@ void RoboyControlConfiguration::readModelConfig() {
 }
 
 void RoboyControlConfiguration::readControllersConfig() {
+    ROSController controller;
     while(m_xmlReader.readNextStartElement()) {
         if(m_xmlReader.name() == "Controller") {
             qint8 id = m_xmlReader.attributes().value("id").toString().toShort();
-            bool value = false;
-            m_xmlReader.readElementText() == "true" ? value = true : value = false;
-            if (value)
-                m_listControllerConfig.append(id);
-            CONFIG_DBG << "Parsed Controller: " << id << " Value: " << value;
+            controller.id = id;
+            controller.state = STATUS::UNDEFINED;
+            QString controlMode = m_xmlReader.attributes().value("controlmode").toString();
+            bool enable = false;
+            m_xmlReader.readElementText() == "true" ? enable = true : enable = false;
+
+            if(controlMode == "position") {
+                controller.controlMode = ControlMode::POSITION_CONTROL;
+            }
+            else if (controlMode == "force") {
+                controller.controlMode = ControlMode::FORCE_CONTROL;
+            }
+            else if (controlMode == "velocity") {
+                controller.controlMode = ControlMode::VELOCITY_CONTROL;
+            }
+            else {
+                CONFIG_DBG << "Invalid controlMode for controller " << id;
+                enable = false;
+            }
+
+            if(enable) {
+                CONFIG_DBG << "Parsed Controller: " << controller.toString();
+                m_listControllerConfig.append(controller);
+            }
+
         } else {
             m_xmlReader.skipCurrentElement();
         }
@@ -71,6 +92,6 @@ QString RoboyControlConfiguration::getModelConfig(const QString attributeName) c
     return QString::null;
 }
 
-const QList<qint8> & RoboyControlConfiguration::getControllersConfig() const {
+const QList<ROSController> & RoboyControlConfiguration::getControllersConfig() const {
     return m_listControllerConfig;
 }

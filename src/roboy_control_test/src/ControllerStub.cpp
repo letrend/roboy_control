@@ -6,27 +6,34 @@
 
 #include <QDebug>
 
+#include "common_utilities/Steer.h"
 #include "common_utilities/Trajectory.h"
 
 #include "ros/ros.h"
 
 QString nodeName;
+QString serviceName;
+qint32 id;
 STATUS state;
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
+bool callbackSteering(common_utilities::Steer & msg);
 
 int main(int argc, char ** argv) {
 
-    ros::init(argc, argv, "controller_stub_1");
-    ros::NodeHandle n;
+    id = atoi(argv[1]);
+    nodeName = argv[2];
+    serviceName = argv[3];
+    qDebug() << "Start ControllerStub-Node: " << nodeName;
+    qDebug() << "Service Name: " << serviceName;
 
-    qDebug() << "Started ControllerStub-Node: " << argv[1];
-    nodeName = argv[1];
+    ros::init(argc, argv, nodeName.toStdString());
+    ros::NodeHandle n;
 
     state = STATUS::INITIALIZED;
 
-    qDebug() << "[" << nodeName << "] Advertise Service: " << nodeName;
-    ros::ServiceServer trajectoryServer =  n.advertiseService("roboy/trajectory_motor1", callbackMotor);
+    ros::ServiceServer trajectoryServer =  n.advertiseService(serviceName.toStdString(), callbackMotor);
+    ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
 
     ros::spin();
 }
@@ -40,9 +47,13 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
     }
 
     qDebug() << "[" << nodeName << "] " << "Send Service Response on topic 'motor1'";
-    res.state.id = 1;
+    res.state.id = id;
     res.state.state = STATUS::TRAJECTORY_READY ;
     qDebug() << "\t- Update Controller State: [id:" << res.state.id << "][state:" << res.state.state << "]";
 
+    return true;
+}
+
+bool callbackSteering(common_utilities::Steer & msg) {
     return true;
 }

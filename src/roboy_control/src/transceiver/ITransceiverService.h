@@ -22,10 +22,10 @@ protected:
     QString         m_name;
     ITransceiverServiceDelegate * delegate;
 
-    QMutex           m_mutexData;
-    std::list<qint8> m_initializationList;
-    Trajectory       m_trajectory;
-    qint8            m_steeringCommand;
+    QMutex                   m_mutexData;
+    std::list<ROSController> m_initializationList;
+    Trajectory               m_trajectory;
+    qint8                    m_steeringCommand;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
@@ -88,7 +88,7 @@ public:
         this->delegate = delegate;
     }
 
-    void sendInitializeRequest(const std::list<qint8> initializationList) {
+    void sendInitializeRequest(const std::list<ROSController> initializationList) {
         m_mutexData.lock();
         m_initializationList = initializationList;
         m_mutexData.unlock();
@@ -126,6 +126,5 @@ protected:
     virtual void sendInitializeRequest() = 0;
     virtual void sendSteeringMessage() = 0;
 };
-
 
 #endif //ROBOYCONTROL_ITRANSCEIVERSERVICE_H

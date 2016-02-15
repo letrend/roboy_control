@@ -16,17 +16,15 @@ MyoController::MyoController() {
 
     // Create Controller Status Structs
     MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
-    QList<qint8> controllerIds = RoboyControlConfiguration::instance().getControllersConfig();
-    ROSController controller;
-    for(qint8 id : controllerIds) {
-        controller.id = id;
+    QList<ROSController> controllers = RoboyControlConfiguration::instance().getControllersConfig();
+    for(ROSController controller : controllers) {
         controller.state = STATUS::UNDEFINED;
         name.clear();
-        name.sprintf("motor%i", id);
-        controller.transceiver = new ROSMessageTransceiverService(id, name);
+        name.sprintf("motor%i", controller.id);
+        controller.transceiver = new ROSMessageTransceiverService(controller.id, name);
         controller.transceiver->setDelegate(this);
         controller.transceiver->start();
-        m_mapControllers.insert(id, controller);
+        m_mapControllers.insert(controller.id, controller);
         MYOCONTROLLER_DBG << "\t- " << controller.toString();
     }
 }
@@ -41,7 +39,7 @@ MyoController::~MyoController() {
 bool MyoController::initializeControllers() {
     MYOCONTROLLER_DBG << "Send Initialize Request to Myo-Master";
     bool result = false;
-    m_myoMasterTransceiver->sendInitializeRequest(m_mapControllers.keys().toStdList());
+    m_myoMasterTransceiver->sendInitializeRequest(m_mapControllers.values().toStdList());
 
     while(!m_bInitializationComplete){
         m_mutexCVTransceiver.lock();

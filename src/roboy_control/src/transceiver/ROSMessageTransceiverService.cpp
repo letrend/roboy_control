@@ -11,8 +11,10 @@ void ROSMessageTransceiverService::sendInitializeRequest() {
 
     common_utilities::Initialize initialize;
 
-    for(qint8 id : m_initializationList)
-        initialize.request.idList.push_back(id);
+    for(ROSController controller : m_initializationList) {
+        initialize.request.idList.push_back(controller.id);
+        initialize.request.controlmode.push_back(controller.controlMode);
+    }
 
     if(client.call(initialize)) {
         TRANSCEIVER_LOG << "Service call successfull";

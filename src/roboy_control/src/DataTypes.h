@@ -125,12 +125,13 @@ private:
 
 struct ROSController {
     qint8                 id;
+    ControlMode           controlMode;
     STATUS                state;
     ITransceiverService * transceiver;
 
     QString toString() const {
         QString string;
-        string.sprintf("ROSController: [id:%i][state:%i]", id, state);
+        string.sprintf("ROSController: [id:%i][controlMode:%i][state:%i]", id, controlMode, state);
         return string;
     }
 };

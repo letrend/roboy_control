@@ -16,7 +16,7 @@ private:
     QXmlStreamReader m_xmlReader;
 
     QMap<QString, QString> m_mapModelConfig;
-    QList<qint8> m_listControllerConfig;
+    QList<ROSController> m_listControllerConfig;
 
 public:
     static RoboyControlConfiguration& instance() {
@@ -26,7 +26,7 @@ public:
 
     RoboyControlConfiguration();
     QString getModelConfig(const QString attributeName) const;
-    const QList<qint8> & getControllersConfig() const;
+    const QList<ROSController> & getControllersConfig() const;
 
 private:
     void readModelConfig();
