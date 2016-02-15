@@ -146,11 +146,12 @@ void MultiLaneView::itemRemovedHandler(qint32 laneIndex, qint32 itemIndex) {
     MultiLaneViewLane *lane = this->lanes.at(laneIndex);
     lane->itemRemovedHandler(itemIndex);
 
+    /* calculating the new size of the lane background */
     qint64 maxSize = 0;
     for (int i = 0; i < this->model->laneCount(); i++) {
         qint32 itemCount  = this->model->itemCount(i);
-        qint64 timestamp = this->model->data(i, itemCount-1, Qt::UserRole    ).value<qint64>();
-        qint64 duration  = this->model->data(i, itemCount-1, Qt::UserRole + 1).value<qint64>();
+        qint64 timestamp  = this->model->data(i, itemCount-1, Qt::UserRole    ).value<qint64>();
+        qint64 duration   = this->model->data(i, itemCount-1, Qt::UserRole + 1).value<qint64>();
         qint64 newMaxSize = ((timestamp + duration + (0x64*this->viewScaleFactor))/this->viewScaleFactor) + (LANE_INDENT << 1);
         if (newMaxSize > maxSize) {
             maxSize = newMaxSize;
@@ -165,12 +166,9 @@ void MultiLaneView::itemRemovedHandler(qint32 laneIndex, qint32 itemIndex) {
  * @param item pointer of the multi lane view item that should be removed
  */
 void MultiLaneView::removeItemWithPointer(MultiLaneViewItem * item) {
-    QObject * sender = this->sender();
-
-    for (int i = 0; i < this->lanes.count(); i++) {
-        if (this->lanes[i] == qobject_cast<MultiLaneViewLane *>(sender)) {
-            this->model->removeBehaviorExecWithTimestamp(i, item->getTimestamp());
-        }
+    int index = this->lanes.indexOf(qobject_cast<MultiLaneViewLane *>(this->sender()));
+    if(index >= 0) {
+            this->model->removeBehaviorExecWithTimestamp(index, item->getTimestamp());
     }
 }
 
@@ -178,29 +176,16 @@ void MultiLaneView::removeItemWithPointer(MultiLaneViewItem * item) {
  * @brief MultiLaneView::removeLane slot to remove a multi lane view lane
  */
 void MultiLaneView::removeLane() {
-    QObject* sender = this->sender();
+    int index = this->lanes.indexOf(qobject_cast<MultiLaneViewLane *>(this->sender()));
+    if (this->lanes[index]->children().count() > 0)
+        if (QMessageBox::question(this,
+                                  QString("Deleting Lane"),
+                                  QString("The lane you are about to delete is not empty. "
+                                          "If you continue, all behaviors in it will also be deleted. "
+                                          "Are you sure you want to continue?"),
+                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) return;
 
-    for (int i = 0; i < this->lanes.count(); i++) {
-        if (this->lanes[i] == qobject_cast<MultiLaneViewLane *>(sender)) {
-            if (this->lanes[i]->children().count() > 0) {
-                QMessageBox::StandardButton reply;
-                const char * messageText =  "The lane you are about to delete is not empty. "
-                                            "If you continue, all behaviors in it will also be deleted. "
-                                            "Are you sure you want to continue?";
-
-                reply = QMessageBox::question(this,
-                                              QString("Deleting Lane"),
-                                              QString(messageText),
-                                              QMessageBox::Yes | QMessageBox::No);
-
-                if (reply == QMessageBox::Yes) {
-                    this->model->removeLane(i);
-                }
-            } else {
-                this->model->removeLane(i);
-            }
-        }
-    }
+    this->model->removeLane(index);
 }
 
 /* private methods */
