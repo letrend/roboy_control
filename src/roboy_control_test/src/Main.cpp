@@ -14,6 +14,5 @@ int main(int argc, char ** argv) {
 
     TestNode testNode;
 
-
     ros::spin();
 }

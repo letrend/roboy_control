@@ -5,14 +5,7 @@
 #ifndef ROBOY_CONTROL_TESTNODE_H
 #define ROBOY_CONTROL_TESTNODE_H
 
-#include <QDebug>
-#include <QProcess>
-#include <QtCore/qprocess.h>
-#include <QtCore/qxmlstream.h>
-#include <QtCore/qfile.h>
-
 #include "ros/ros.h"
-#include "std_msgs/String.h"
 
 #include "common_utilities/Initialize.h"
 #include "common_utilities/ControllerState.h"

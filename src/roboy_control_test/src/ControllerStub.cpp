@@ -4,8 +4,6 @@
 
 #include "DataTypes.h"
 
-#include <QDebug>
-
 #include "common_utilities/Steer.h"
 #include "common_utilities/Trajectory.h"
 
@@ -17,7 +15,7 @@ qint32 id;
 STATUS state;
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
-bool callbackSteering(common_utilities::Steer & msg);
+//void callbackSteering(common_utilities::Steer::ConstPtr & msg);
 
 int main(int argc, char ** argv) {
 
@@ -33,7 +31,7 @@ int main(int argc, char ** argv) {
     state = STATUS::INITIALIZED;
 
     ros::ServiceServer trajectoryServer =  n.advertiseService(serviceName.toStdString(), callbackMotor);
-    ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
+//    ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
 
     ros::spin();
 }
@@ -54,6 +52,6 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
     return true;
 }
 
-bool callbackSteering(common_utilities::Steer & msg) {
-    return true;
-}
+//void callbackSteering(common_utilities::Steer::ConstPtr & msg) {
+
+//}

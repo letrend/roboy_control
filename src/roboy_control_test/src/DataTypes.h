@@ -5,6 +5,8 @@
 #ifndef ROBOY_CONTROL_DATATYPES_H_H
 #define ROBOY_CONTROL_DATATYPES_H_H
 
+#include <QDebug>
+#include <QProcess>
 #include <QString>
 
 #include "CommonDefinitions.h"
