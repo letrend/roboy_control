@@ -37,6 +37,8 @@ MyoController::~MyoController() {
 
 // RoboyController Interface
 bool MyoController::initializeControllers() {
+    // Check Pre-Conditions
+
     MYOCONTROLLER_DBG << "Send Initialize Request to Myo-Master";
     bool result = false;
     m_myoMasterTransceiver->sendInitializeRequest(m_mapControllers.values().toStdList());

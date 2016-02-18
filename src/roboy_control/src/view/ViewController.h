@@ -13,7 +13,9 @@
 
 class RoboyController;
 
-class ViewController {
+class ViewController : public QObject {
+
+    Q_OBJECT
 
 private:
     IModelService   * m_pModelSerivce;
@@ -26,6 +28,15 @@ public:
 
     void playBehaviorPlan();
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
+
+    //TODO: Trigger Initialization by button
+    void triggerInit();
+
+signals:
+    void signalInitialize();
+    void signalPlay();
+    void signalStop();
+
 };
 
 
