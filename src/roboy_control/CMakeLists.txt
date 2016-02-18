@@ -12,17 +12,14 @@ set(QT_MIN_VERSION "5.4.0")
 ## Find Qt5
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
              Core
-	     	 Widgets
-             Gui
-             Qml
-             Quick)
+	     Widgets	
+	     Quick)
 
 add_subdirectory(src)
 
 message(Include Dirs:\n${ROBOY_INCLUDE_DIRS})
 message(Headers Found:\n${ROBOY_HEADERS})
 message(Sources Found:\n${ROBOY_SOURCES})
-message(UI-Files Found:\n${ROBOY_UI_FILES})
 
 ## Dummy target to add non-source files to Qt-Project Viewer
 file(GLOB ETC ${CMAKE_CURRENT_SOURCE_DIR}/etc/*)
@@ -32,7 +29,6 @@ add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 
 ## Generate Qt-Files (Mocs for Headers & UI-Files)
 qt5_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
-qt5_wrap_ui(MOC_UI ${ROBOY_UI_FILES})
 qt5_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
 
 catkin_package(
@@ -48,6 +44,7 @@ include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_UI} ${MOC_RESOURCES})
-target_link_libraries(roboy_control_node ${catkin_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+add_executable(roboy_control_node ${ROBOY_SOURCES} ${MOC_HDRS} ${MOC_RESOURCES})
+qt5_use_modules(roboy_control_node Core Widgets Quick)
+target_link_libraries(roboy_control_node ${catkin_LIBRARIES})
 add_dependencies(roboy_control_node common_utilities_generate_messages_cpp)

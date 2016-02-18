@@ -6,10 +6,12 @@
 #define ROBOYCONTROL_VIEWCONTROLLER_H
 
 #include "IModelService.h"
-#include "MainWindow/MainWindow.h"
+#include "mainWindow/MainWindow.h"
 
 #include <QDateTime>
 #include <QThread>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 class RoboyController;
 
@@ -20,6 +22,7 @@ private:
     RoboyController * m_pRoboyController;
 
     MainWindow      * m_pMainWindow;
+    QQmlApplicationEngine *m_pApplicationEngine;
 
 public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);

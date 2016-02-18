@@ -9,6 +9,9 @@
 #include "RoboyController.h"
 #include "XmlModelService.h"
 
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+
 void initializeDatabase();
 
 void myMessageOutput(QtMsgType type,  const QMessageLogContext &context, const QString &msg) {
@@ -39,6 +42,9 @@ int main(int argc, char ** argv) {
 
     RoboyController controller;
     controller.start();
+
+    //QQmlApplicationEngine engine;
+    //engine.load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 
     return app.exec();
 }
