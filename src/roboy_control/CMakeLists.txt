@@ -12,8 +12,8 @@ set(QT_MIN_VERSION "5.4.0")
 ## Find Qt5
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
              Core
-	     Widgets	
-	     Quick)
+	         Widgets	
+	         Quick)
 
 add_subdirectory(src)
 
@@ -27,9 +27,16 @@ file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/database/*)
 file(GLOB DB  ${CMAKE_CURRENT_SOURCE_DIR}/msg/*)
 add_custom_target(dummy_target SOURCES ${ROBOY_HEADERS} ${ETC} ${DB})
 
-## Generate Qt-Files (Mocs for Headers & UI-Files)
+## Generate Qt-Files (Mocs for Headers)
 qt5_wrap_cpp(MOC_HDRS ${ROBOY_HEADERS})
-qt5_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES})
+
+## Adding Material resources
+qt5_add_resources(MOC_RESOURCES ${ROBOY_RESOURCES}
+  								$ENV{MATERIAL_DIR}/modules/FontAwesome.qrc
+  								$ENV{MATERIAL_DIR}/modules/FontRoboto.qrc
+  								$ENV{MATERIAL_DIR}/modules/Icons.qrc
+  								$ENV{MATERIAL_DIR}/modules/Material.qrc
+ 						 		$ENV{MATERIAL_DIR}/modules/MaterialQtQuick.qrc)
 
 catkin_package(
    CATKIN_DEPENDS message_runtime

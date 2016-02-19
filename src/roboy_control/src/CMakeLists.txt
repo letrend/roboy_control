@@ -5,7 +5,6 @@ set(HDRS
 set(SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/DataTypes.cpp)
-set(UI_FILES)
 set(INCL ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(model)

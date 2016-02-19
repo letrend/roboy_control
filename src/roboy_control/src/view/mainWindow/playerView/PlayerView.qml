@@ -230,7 +230,7 @@ View {
 
                             id: behaviorListItemActionSheet
                             title: testModel.at(index, 1)
-
+/*
                             actions: [
 
                                 Action {
@@ -243,7 +243,7 @@ View {
                                     name: "Cancel"
                                 }
 
-                            ]
+                            ]*/
                         }
 
                         onClicked: {

@@ -20,6 +20,7 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     m_pMainWindow = new MainWindow(m_pModelSerivce, this);
 
     m_pApplicationEngine = new QQmlApplicationEngine();
+    m_pApplicationEngine->addImportPath("qrc:/");
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 }
 
