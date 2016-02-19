@@ -23,13 +23,17 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 }
 
+void ViewController::triggerInit() {
+    emit signalInitialize();
+}
+
 /**
  * @brief ViewController::playBehaviorPlan method for triggering playing the current behavior plan
  */
 void ViewController::playBehaviorPlan() {
     VIEW_DBG << "Play Behavior Plan triggered.";
-
-    m_pRoboyController->fromViewController_triggerPlayPlan();
+    emit signalPlay();
+//    m_pRoboyController->fromViewController_triggerPlayPlan();
 }
 
 /**

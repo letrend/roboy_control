@@ -26,13 +26,6 @@ private:
 
     MyoController       * m_pMyoController;
 
-    QMutex                m_mutexCVView;
-    QWaitCondition        m_conditionView;
-
-    bool    m_bStartExectution = false;
-    bool    m_bStopExecution = false;
-    bool    m_bTerminate = false;
-
 protected:
     void run();
 
@@ -40,8 +33,14 @@ public:
     RoboyController();
     ~RoboyController();
 
-    // ViewController Interface
-    void fromViewController_triggerPlayPlan();
+public slots:
+    void slotInitializeRoboy();
+    void slotExecutePlan();
+    void stopPlan();
+
+signals:
+    void updateRoboyStatus();
+    void updatecontrollerStatus();
 
 private:
     void executeCurrentRoboyPlan();

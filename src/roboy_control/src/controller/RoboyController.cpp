@@ -7,16 +7,12 @@
 RoboyController::RoboyController() {
     m_pModelService = new XmlModelService();
     m_pViewController = new ViewController(this, m_pModelService);
+
+    connect(m_pViewController, SIGNAL(signalInitialize()), this, SLOT(slotInitializeRoboy()));
+    connect(m_pViewController, SIGNAL(signalPlay()), this, SLOT(slotExecutePlan()));
 }
 
 RoboyController::~RoboyController() {
-    m_bTerminate = true;
-    m_mutexCVView.lock();
-    m_conditionView.wakeAll();
-    m_mutexCVView.unlock();
-
-    QThread::wait();
-
     delete m_pMyoController;
     delete m_pModelService;
     delete m_pViewController;
@@ -27,50 +23,34 @@ RoboyController::~RoboyController() {
 
 void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Started";
-    CONTROLLER_DBG << "ID is: " << this->currentThreadId();
+    CONTROLLER_DBG << "ControllerThread-Id is: " << this->currentThreadId();
 
     m_pMyoController = new MyoController();
     msleep(1000);
 
-    CONTROLLER_DBG << "Initialize Controllers";
+    m_pViewController->triggerInit();
 
-    bool run = false;
-    if(m_pMyoController->initializeControllers()) {
-        CONTROLLER_SUC << "Initialization Complete";
-        CONTROLLER_DBG << "Controller Thread wait for events";
-        run = true;
-    } else {
-        CONTROLLER_WAR << "Initialization failed. Exit.";
-    }
-
-    while( run ) {
-        m_mutexCVView.lock();
-        m_conditionView.wait(&m_mutexCVView);
-
-        if( m_bStartExectution ) {
-            CONTROLLER_DBG << "Triggered 'Start Execution' from View";
-            m_bStartExectution = false;
-            executeCurrentRoboyPlan();
-        } else if ( m_bStopExecution ) {
-            CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
-            m_bStopExecution = false;
-        } else if ( m_bTerminate ) {
-            CONTROLLER_DBG << "Received Terminate Thread. Quit.";
-            run = false;
-        }
-
-        m_mutexCVView.unlock();
-    }
+    exec();
 
     CONTROLLER_DBG << "Controller Thread Interrupted. Quit.";
 }
 
-// ViewController Interface
-void RoboyController::fromViewController_triggerPlayPlan() {
-    m_mutexCVView.lock();
-    m_bStartExectution = true;
-    m_conditionView.wakeAll();
-    m_mutexCVView.unlock();
+// Slots
+void RoboyController::slotInitializeRoboy() {
+    CONTROLLER_DBG << "Triggered 'Initialize' from View";
+    if(m_pMyoController->initializeControllers())
+        CONTROLLER_SUC << "Initialization Complete";
+    else
+        CONTROLLER_WAR << "Initialization failed.";
+}
+
+void RoboyController::slotExecutePlan() {
+    CONTROLLER_DBG << "Triggered 'Start Execution' from View";
+    executeCurrentRoboyPlan();
+}
+
+void RoboyController::stopPlan() {
+    CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
 }
 
 // Private Interface
