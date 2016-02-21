@@ -6,44 +6,34 @@
  * @param pViewController controller of the ui component
  * @param parent non mandatory parent for the MainWindow
  */
-MainWindow::MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent) {
-/*
-    modelService->subscribe(this);
-    this->ui->setupUi(this);
-    this->mainTabWidget = new QTabWidget();
-    this->playerView = new PlayerView(modelService, pViewController);
-    this->recorderView = new RecorderView(modelService);
-    this->editorView = new EditorView(modelService);
-    this->setContentsMargins(9,9,9,9);
-    this->setCentralWidget(mainTabWidget);
-    this->mainTabWidget->addTab(playerView, "player");
-    this->mainTabWidget->addTab(recorderView, "recorder");
-    this->mainTabWidget->addTab(editorView, "editor");
-*/
+MainWindow::MainWindow(IModelService *pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent) : QObject(pParent) {
+    pModelService->subscribe(this);
+    m_pEditorView   = new EditorView  (pModelService, pViewController, pAppEngine);
+    m_pPlayerView   = new PlayerView  (pModelService, pViewController, pAppEngine);
+    m_pRecorderView = new RecorderView(pModelService, pViewController, pAppEngine);
+
+    QQmlContext * pQmlContext = pAppEngine->rootContext();
+    pQmlContext->setContextProperty("cpp_EditorView",   m_pEditorView  );
+    pQmlContext->setContextProperty("cpp_PlayerView",   m_pPlayerView  );
+    pQmlContext->setContextProperty("cpp_RecorderView", m_pRecorderView);
 }
 
 /**
  * @brief MainWindow::~MainWindow destructor
  */
 MainWindow::~MainWindow() {
-/*
-    delete this->playerView;
-    delete this->recorderView;
-    delete this->editorView;
-    delete this->mainTabWidget;
-    delete this->ui;
-*/
+    delete m_pEditorView;
+    delete m_pPlayerView;
+    delete m_pRecorderView;
 }
 
 /**
  * @brief MainWindow::notify method to notify about data changes implemented from IObserver interface
  */
 void MainWindow::notify() {
-/*
-    this->playerView->notify();
-    this->recorderView->notify();
-    this->editorView->notify();
-*/
+    m_pEditorView->notify();
+    m_pPlayerView->notify();
+    m_pRecorderView->notify();
 }
 
 /**
@@ -51,8 +41,5 @@ void MainWindow::notify() {
  * @return the current behavior plan
  */
 RoboyBehaviorMetaplan MainWindow::fromMainWindow_getCurrentRoboyPlan() {
-/*
-    return this->playerView->fromPlayerView_getCurrentRoboyPlan();
-*/	RoboyBehaviorMetaplan p;
-	return p;
+    return m_pPlayerView->fromPlayerView_getCurrentRoboyPlan();
 }

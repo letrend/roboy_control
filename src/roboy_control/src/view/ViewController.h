@@ -14,17 +14,17 @@
 #include <QQmlContext>
 
 class RoboyController;
+class MainWindow;
 
 class ViewController : public QObject {
 
     Q_OBJECT
 
 private:
-    IModelService   * m_pModelSerivce;
-    RoboyController * m_pRoboyController;
-
-    MainWindow      * m_pMainWindow;
-    QQmlApplicationEngine *m_pApplicationEngine;
+    IModelService           * m_pModelSerivce;
+    RoboyController         * m_pRoboyController;
+    MainWindow              * m_pMainWindow;
+    QQmlApplicationEngine   * m_pApplicationEngine;
 
 public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);

@@ -1,17 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "DataTypes.h"
+#include <QObject>
+#include <QQmlApplicationEngine>
 
-#include "../../interfaces/IObserver.h"
-#include "../../model/IModelService.h"
+#include "DataTypes.h"
+#include "IObserver.h"
+#include "IModelService.h"
+#include "editorView/EditorView.h"
+#include "playerView/PlayerView.h"
+#include "recorderView/RecorderView.h"
 
 class ViewController;
+class EditorView;
+class PlayerView;
+class RecorderView;
 
-class MainWindow : public IObserver {
+class MainWindow : public QObject, public IObserver {
+	Q_OBJECT
 
 public:
-    explicit MainWindow(IModelService *modelService, ViewController * pViewController, QWidget *parent = 0);
+    explicit MainWindow(IModelService *pModelService, ViewController * pViewController, QQmlApplicationEngine *pAppEngine, QObject *pParent = 0);
     ~MainWindow();
 
     void notify();
@@ -19,6 +28,10 @@ public:
 
 private:
     ViewController * m_pViewController;
+    EditorView	   * m_pEditorView;
+    PlayerView     * m_pPlayerView;
+    RecorderView   * m_pRecorderView;
+
 };
 
 #endif // MAINWINDOW_H

@@ -7,47 +7,39 @@ import "./recorderView"
 import "./editorView"
 
 ApplicationWindow {
-
-    id: roboyControlWindow
-    title: "Roboy Control"
-    minimumWidth: 600
-    minimumHeight: 500
-
-    /* necessary when loading the window from C++ */
-    visible: true
+    id            : roboyControlWindow
+    minimumWidth  : 600
+    minimumHeight : 500
+    title         : "Roboy Control"
+    visible       : true
 
     theme {
-
-        primaryColor: Palette.colors["blueGrey"]["500"]
-        accentColor: Palette.colors["indigo"]["500"]
-        tabHighlightColor: "white"
-
+        accentColor       : Palette.colors["indigo"]["500"]
+        primaryColor      : Palette.colors["blueGrey"]["500"]
+        tabHighlightColor : "white"
     }
 
-    initialPage: TabbedPage {
-
-        title: "Roboy Control"
-
-        actions: [
-
+    initialPage : TabbedPage {
+        actions : [
             Action {
-                iconName: "action/account_circle"
-                name: "Colors"
-                hoverAnimation: true
-                onTriggered: colorPicker.show()
+                iconName       : "action/account_circle"
+                hoverAnimation : true
+                name           : "Colors"
             },
 
             Action {
-                iconName: "action/settings"
-                name: "Settings"
-                hoverAnimation: true
-                onTriggered: pageStack.push(Qt.resolvedUrl("./settingsView/SettingsView.qml"))
+                iconName       : "action/settings"
+                hoverAnimation : true
+                name           : "Settings"
+                onTriggered    : pageStack.push(Qt.resolvedUrl("qrc:/mainWindow/settingsView/SettingsView.qml"))
             }
         ]
 
-        Tab {
+        title   : "Roboy Control"
 
-            title: "Player"
+
+        Tab {
+            title : "Player"
 
             PlayerView {
 
@@ -55,8 +47,7 @@ ApplicationWindow {
         }
 
         Tab {
-
-            title: "Editor"
+            title : "Editor"
 
             EditorView {
 
@@ -64,8 +55,7 @@ ApplicationWindow {
         }
 
         Tab {
-
-            title: "Recorder"
+            title : "Recorder"
 
             RecorderView {
 

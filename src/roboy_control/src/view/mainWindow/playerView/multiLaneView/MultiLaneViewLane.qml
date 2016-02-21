@@ -1,24 +1,22 @@
 import QtQuick 2.0
+
 import Material 0.2
 
 View {
-
     property var laneIndex
 
-    elevation: 1
-    height: Units.dp(68)
-    backgroundColor: Palette.colors["blueGrey"]["500"]
+    elevation       : 1
+    backgroundColor : Palette.colors["blueGrey"]["500"]
+    height          : Units.dp(68)
 
     Canvas {
-
-        anchors.top:   parent.top
-        anchors.right: parent.right
-        anchors.left:  parent.left
-        antialiasing:  false
-        height: Units.dp(16)
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        anchors.top   : parent.top
+        antialiasing  :  false
+        height        : Units.dp(16)
 
         onPaint: {
-
             /* get drawing context */
             var context = getContext("2d")
 
@@ -26,7 +24,6 @@ View {
             context.beginPath()
 
             for (var tickIndex = 0; tickIndex < width+100; tickIndex = tickIndex + 10) {
-
                 /* draw ticks */
                 context.beginPath()
                 context.lineWidth   = 1
@@ -49,14 +46,13 @@ View {
 
     Canvas {
 
-        anchors.bottom: parent.bottom
-        anchors.right:  parent.right
-        anchors.left:   parent.left
-        antialiasing:   false
-        height: Units.dp(16)
+        anchors.bottom : parent.bottom
+        anchors.left   :   parent.left
+        anchors.right  :  parent.right
+        antialiasing   :   false
+        height         : Units.dp(16)
 
         onPaint: {
-
             /* get drawing context */
             var context = getContext("2d")
 
@@ -64,7 +60,6 @@ View {
             context.beginPath()
 
             for (var tickIndex = 0; tickIndex < width; tickIndex = tickIndex + 10) {
-
                 /* draw ticks */
                 context.beginPath()
                 context.lineWidth   = 1
@@ -79,16 +74,14 @@ View {
                         context.lineTo(Units.dp(tickIndex), height-Units.dp(4))
                     }
                 }
-
                 context.stroke();
             }
         }
     }
 
     MouseArea {
-
-        anchors.fill: parent
         acceptedButtons: Qt.RightButton
+        anchors.fill: parent
 
         onClicked: {
             if(Qt.RightButton) {
@@ -98,27 +91,24 @@ View {
     }
 
     BottomActionSheet {
-
-        id: laneActionSheet
-
-        title: "lane " + laneIndex
-
-        actions: [
-
+        actions : [
             Action {
-                iconName: "action/delete"
-                name: "Delete"
+                iconName    : "action/delete"
+                name        : "Delete"
 
-                onTriggered: {
+                onTriggered : {
                     parent.removeLane(laneIndex)
                 }
             },
 
             Action {
-                iconName: "content/clear"
-                name: "Cancel"
+                iconName : "content/clear"
+                name     : "Cancel"
             }
         ]
+        
+        id     : laneActionSheet
+        title  : "lane " + laneIndex
     }
 
     function removeItem(itemIndex) {

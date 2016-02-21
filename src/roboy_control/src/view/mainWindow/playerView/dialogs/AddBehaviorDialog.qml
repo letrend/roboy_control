@@ -1,28 +1,26 @@
 import QtQuick 2.0
+
 import Material 0.2
 
 Dialog {
-
-    id: addBehaviorDialog
-    title: "Insert Behavior"
-    positiveButtonText: "Insert"
+    id                 : addBehaviorDialog
+    positiveButtonText : "Insert"
+    title              : "Insert Behavior"
 
     TextField {
-
-        id: timeStampTextField
-        anchors.left: parent.left
-        anchors.right: parent.right
-        placeholderText: "timestamp"
-        floatingLabel: true
-        validator: IntValidator{}
+        anchors.left    : parent.left
+        anchors.right   : parent.right
+        floatingLabel   : true
+        id              : timeStampTextField
+        placeholderText : "timestamp"
+        validator       : IntValidator{}
     }
 
     MenuField {
-
-        id: laneSelector
-        model: []
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.left  : parent.left
+        anchors.right : parent.right
+        id            : laneSelector
+        model         : []
     }
 
     onAccepted: {
