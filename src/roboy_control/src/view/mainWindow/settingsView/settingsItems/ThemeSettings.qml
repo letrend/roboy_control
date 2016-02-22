@@ -34,7 +34,7 @@ View {
 
         Rectangle {
             anchors.bottom : parent.bottom
-            anchors.left   : parent.left
+            anchors.right  : parent.right
             anchors.top    : parent.top
             border.color   : Theme.alpha("#000", 0.26)
             border.width   : Theme.accentColor === "white" ? Units.dp(2) : 0

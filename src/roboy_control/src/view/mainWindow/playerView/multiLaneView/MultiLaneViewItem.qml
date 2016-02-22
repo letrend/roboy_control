@@ -6,6 +6,7 @@ import Material 0.2
 View {
     property int    laneIndex    : 0
     property int    itemIndex    : 0
+    
     property string behaviorName : ""
     property int    motorCount   : 0
     property string iconName     : ""

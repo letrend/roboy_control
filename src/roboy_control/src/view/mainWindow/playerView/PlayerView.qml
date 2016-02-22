@@ -72,7 +72,8 @@ View {
                 anchors.right   : scaleFactorButton.left
                 elevation       : 1
                 id              : addLaneButton
-
+                onClicked       : cpp_PlayerView.addLaneButtonClicked()
+                
                 Icon {
                     anchors.centerIn : parent
                     name             : "content/add"
@@ -146,6 +147,7 @@ View {
                 MultiLaneView {
                     anchors.fill : parent
                     id           : multiLaneView
+                    model        : cpp_MultiLaneViewModel
                 }
             }
         }
@@ -218,76 +220,64 @@ View {
                 Layout.fillWidth  :  true
 
                 ScrollView {
-                    anchors.fill: parent
+                    anchors.fill : parent
 
                     ColumnLayout {
                         Label {
-
-                            id: behaviorNameLabel
-                            text: "Behavior Name"
-                            Layout.topMargin: Units.dp(16)
-                            Layout.leftMargin: Units.dp(16)
-                            font.family: "Roboto"
-                            style: "subheading"
-
+                            font.family       : "Roboto"
+                            id                : behaviorNameLabel
+                            Layout.topMargin  : Units.dp(16)
+                            Layout.leftMargin : Units.dp(16)
+                            style             : "subheading"
+                            text              : "Behavior Name"
                         }
 
                         Label {
-
-                            id: behaviorNameValueLabel
-                            text: "-"
-                            Layout.leftMargin: Units.dp(16)
-
+                            id                : behaviorNameValueLabel
+                            Layout.leftMargin : Units.dp(16)
+                            text              : "-"
                         }
 
                         Label {
-
-                            id: idLabel
-                            text: "ID"
-                            Layout.leftMargin: Units.dp(16)
-                            font.family: "Roboto"
-                            style: "subheading"
-
+                            font.family       : "Roboto"
+                            id                : idLabel
+                            Layout.leftMargin : Units.dp(16)
+                            style             : "subheading"
+                            text              : "ID"
                         }
 
                         Label {
-                            id: idValueLabel
-                            text: "-"
-                            Layout.leftMargin: Units.dp(16)
+                            id                : idValueLabel
+                            Layout.leftMargin : Units.dp(16)
+                            text              : "-"
                         }
 
                         Label {
-
-                            id: motorCountLabel
-                            text: "Motor Count"
-                            Layout.leftMargin: Units.dp(16)
-                            font.family: "Roboto"
-                            style: "subheading"
-
+                            font.family       : "Roboto"
+                            id                : motorCountLabel
+                            Layout.leftMargin : Units.dp(16)
+                            style             : "subheading"
+                            text              : "Motor Count"
                         }
 
                         Label {
-
-                            id: motorCountValueLabel
-                            text: "-"
-                            Layout.leftMargin: Units.dp(16)
+                            id                : motorCountValueLabel
+                            Layout.leftMargin : Units.dp(16)
+                            text              : "-"
                         }
 
                         Label {
-
-                            id: descriptionLabel
-                            text: "Description"
-                            Layout.leftMargin: Units.dp(16)
-                            font.family: "Roboto"
-                            style: "subheading"
-
+                            font.family       : "Roboto"
+                            id                : descriptionLabel
+                            Layout.leftMargin : Units.dp(16)
+                            style             : "subheading"
+                            text              : "Description"
                         }
 
                         Label {
-
-                            id: descriptionValueLabel
-                            text: "-"
-                            Layout.leftMargin: Units.dp(16)
+                            id                : descriptionValueLabel
+                            Layout.leftMargin : Units.dp(16)
+                            text              : "-"
                         }
                     }
                 }
@@ -296,14 +286,14 @@ View {
     }
 
     AddBehaviorDialog {
-        id: addBehaviorDialog
+        id : addBehaviorDialog
     }
 
     ActionButton {
-        anchors.bottom: parent.bottom
-        anchors.margins: Units.dp(48)
-        anchors.right: parent.right
-        iconName: "content/add"
-        onClicked: addBehaviorDialog.show()
+        anchors.bottom  : parent.bottom
+        anchors.margins : Units.dp(48)
+        anchors.right   : parent.right
+        iconName        : "content/add"
+        onClicked       : addBehaviorDialog.show()
     }
 }

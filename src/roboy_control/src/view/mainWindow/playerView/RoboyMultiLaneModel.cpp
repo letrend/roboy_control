@@ -10,7 +10,7 @@
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::addLane() {
-    this->behaviors.append(QList<RoboyBehaviorExecution>());
+    mBehaviors.append(QList<RoboyBehaviorExecution>());
     emit dataChanged();
     return 0;
 }
@@ -21,9 +21,9 @@ qint8 RoboyMultiLaneModel::addLane() {
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::insertLane(qint32 index) {
-    if (index >= 0 && index < this->behaviors.count()) {
+    if (index >= 0 && index < mBehaviors.count()) {
         QList<RoboyBehaviorExecution> newLane;
-        this->behaviors.insert(index, newLane);
+        mBehaviors.insert(index, newLane);
         emit dataChanged();
         return 0;
     }
@@ -36,8 +36,8 @@ qint8 RoboyMultiLaneModel::insertLane(qint32 index) {
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::removeLane(qint32 index) {
-    if (index >= 0 && index < this->behaviors.count()) {
-        this->behaviors.removeAt(index);
+    if (index >= 0 && index < mBehaviors.count()) {
+        mBehaviors.removeAt(index);
         emit dataChanged();
         return 0;
     }
@@ -60,36 +60,36 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
     qint64 behaviorDuration = behavior.getDuration();
 
     /* edge case empty list */
-    if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        if (this->behaviors[laneIndex].count() < 1) {
-            const RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
-            this->behaviors[laneIndex].append(bExec);
+    if (laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        if (mBehaviors[laneIndex].count() < 1) {
+            const RoboyBehaviorExecution bExec = {mNextAvailableId++, lTimestamp, behavior};
+            mBehaviors[laneIndex].append(bExec);
             emit dataChanged();
             return 0;
         }
 
-        for (int i = 0; i < this->behaviors[laneIndex].count()-1; i++) {
-            if (this->behaviors[laneIndex][i].lTimestamp + this->behaviors[laneIndex][i].behavior.getDuration() <= lTimestamp &&
-                    this->behaviors[laneIndex][i+1].lTimestamp > lTimestamp+behaviorDuration) {
-                RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
-                this->behaviors[laneIndex].insert(i, bExec);
+        for (int i = 0; i < mBehaviors[laneIndex].count()-1; i++) {
+            if (mBehaviors[laneIndex][i].lTimestamp + mBehaviors[laneIndex][i].behavior.getDuration() <= lTimestamp &&
+                    mBehaviors[laneIndex][i+1].lTimestamp > lTimestamp+behaviorDuration) {
+                RoboyBehaviorExecution bExec = {mNextAvailableId++, lTimestamp, behavior};
+                mBehaviors[laneIndex].insert(i, bExec);
                 emit dataChanged();
                 return 0;
             }
         }
 
         /* edge case first item */
-        if (lTimestamp + behaviorDuration < this->behaviors[laneIndex].first().lTimestamp) {
-            RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
-            this->behaviors[laneIndex].insert(0, bExec);
+        if (lTimestamp + behaviorDuration < mBehaviors[laneIndex].first().lTimestamp) {
+            RoboyBehaviorExecution bExec = {mNextAvailableId++, lTimestamp, behavior};
+            mBehaviors[laneIndex].insert(0, bExec);
             emit dataChanged();
             return 0;
         }
 
         /*edge case last item */
-        if (lTimestamp > this->behaviors[laneIndex].last().lTimestamp + this->behaviors[laneIndex].last().behavior.getDuration()) {
-            RoboyBehaviorExecution bExec = {this->nextAvailableId++, lTimestamp, behavior};
-            this->behaviors[laneIndex].append(bExec);
+        if (lTimestamp > mBehaviors[laneIndex].last().lTimestamp + mBehaviors[laneIndex].last().behavior.getDuration()) {
+            RoboyBehaviorExecution bExec = {mNextAvailableId++, lTimestamp, behavior};
+            mBehaviors[laneIndex].append(bExec);
             emit dataChanged();
             return 0;
         }
@@ -104,9 +104,9 @@ qint8  RoboyMultiLaneModel::insertBehaviorExec(qint32 laneIndex, qint64 lTimesta
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::removeBehaviorExecWithIndex(qint32 laneIndex, qint32 itemIndex) {
-    if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        if(itemIndex >= 0 && itemIndex < this->behaviors[laneIndex].count()) {
-            this->behaviors[laneIndex].removeAt(itemIndex);
+    if (laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        if(itemIndex >= 0 && itemIndex < mBehaviors[laneIndex].count()) {
+            mBehaviors[laneIndex].removeAt(itemIndex);
             emit dataChanged();
             return 0;
         }
@@ -121,10 +121,10 @@ qint8 RoboyMultiLaneModel::removeBehaviorExecWithIndex(qint32 laneIndex, qint32 
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::removeBehaviorExecWithID(qint32 laneIndex, qint64 lId) {
-    if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        for (int i = 0; i < this->behaviors[laneIndex].count(); i++) {
-            if (this->behaviors[laneIndex][i].lId == lId) {
-                this->behaviors[laneIndex].removeAt(i);
+    if(laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        for (int i = 0; i < mBehaviors[laneIndex].count(); i++) {
+            if (mBehaviors[laneIndex][i].lId == lId) {
+                mBehaviors[laneIndex].removeAt(i);
                 emit dataChanged();
                 return 0;
             }
@@ -140,10 +140,10 @@ qint8 RoboyMultiLaneModel::removeBehaviorExecWithID(qint32 laneIndex, qint64 lId
  * @return 0 for success, -1 on failure
  */
 qint8 RoboyMultiLaneModel::removeBehaviorExecWithTimestamp(qint32 laneIndex, qint64 timestamp) {
-    if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        for (int i = 0; i < this->behaviors[laneIndex].count(); i++) {
-            if (this->behaviors[laneIndex][i].lTimestamp == timestamp) {
-                this->behaviors[laneIndex].removeAt(i);
+    if(laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        for (int i = 0; i < mBehaviors[laneIndex].count(); i++) {
+            if (mBehaviors[laneIndex][i].lTimestamp == timestamp) {
+                mBehaviors[laneIndex].removeAt(i);
                 emit dataChanged();
                 return 0;
             }
@@ -157,7 +157,7 @@ qint8 RoboyMultiLaneModel::removeBehaviorExecWithTimestamp(qint32 laneIndex, qin
  * @return number of lanes
  */
 qint32 RoboyMultiLaneModel::laneCount() {
-    return this->behaviors.count();
+    return mBehaviors.count();
 }
 
 /**
@@ -166,8 +166,8 @@ qint32 RoboyMultiLaneModel::laneCount() {
  * @return number of items in the lane at laneIndex
  */
 qint32 RoboyMultiLaneModel::itemCount(qint32 laneIndex) {
-    if (laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        return this->behaviors[laneIndex].count();
+    if (laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        return mBehaviors[laneIndex].count();
     }
     return 0;
 }
@@ -180,9 +180,9 @@ qint32 RoboyMultiLaneModel::itemCount(qint32 laneIndex) {
  * @return the QVariant that should be displayed
  */
 QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 role) {
-    if(laneIndex >= 0 && laneIndex < this->behaviors.count()) {
-        if(itemIndex >=  0 && itemIndex < this->behaviors[laneIndex].count()) {
-            RoboyBehaviorExecution behaviorExec = this->behaviors[laneIndex][itemIndex];
+    if(laneIndex >= 0 && laneIndex < mBehaviors.count()) {
+        if(itemIndex >=  0 && itemIndex < mBehaviors[laneIndex].count()) {
+            RoboyBehaviorExecution behaviorExec = mBehaviors[laneIndex][itemIndex];
             if (role == Qt::DisplayRole) // behavior name
                 return behaviorExec.behavior.m_metadata.m_sBehaviorName;
             else if (role == Qt::DecorationRole) // behavior icon
@@ -212,7 +212,7 @@ RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan() {
 
     RoboyBehaviorMetaplan metaPlan;
 
-    for(QList<RoboyBehaviorExecution> behaviorList : this->behaviors) {
+    for(QList<RoboyBehaviorExecution> behaviorList : mBehaviors) {
         for(RoboyBehaviorExecution behaviorExec : behaviorList) {
             RoboyBehaviorMetaExecution metaExec;
             metaExec.lId                = behaviorExec.lId;

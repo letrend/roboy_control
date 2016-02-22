@@ -3,7 +3,7 @@
 
 #include <QVariant>
 
-#include "MultiLaneView/IMultiLaneViewModel.h"
+#include "multiLaneView/IMultiLaneViewModel.h"
 
 class RoboyMultiLaneModel : public IMultiLaneViewModel {
     Q_OBJECT
@@ -26,8 +26,8 @@ public slots:
     RoboyBehaviorMetaplan   getBehaviorPlan ();
 
 private:
-    QList< QList<RoboyBehaviorExecution> > behaviors;
-    qint64 nextAvailableId = 0;
+    QList<QList<RoboyBehaviorExecution>> mBehaviors;
+    qint64 mNextAvailableId = 0;
 };
 
 #endif // ROBOYMULTILANEMODEL_H

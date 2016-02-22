@@ -80,7 +80,7 @@ View {
     }
 
     function removeLane(laneIndex) {
-        console.log("remove lane")
+        cpp_PlayerView.removeLaneHandler(laneIndex)
     }
 
     function removeItem(laneIndex, itemIndex) {

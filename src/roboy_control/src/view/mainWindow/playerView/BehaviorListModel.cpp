@@ -39,8 +39,8 @@ QVariant BehaviorListModel::data(const QModelIndex & index, int role) const {
 		break;
 		case BehaviorListRoles::DescriptionRole: {
 			QString description;
-            for(u_int32_t iterator : m_BehaviorList[index.row()].m_mapMotorTrajectory.keys()) {
-    			description += QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count());
+			for(u_int32_t iterator : m_BehaviorList[index.row()].m_mapMotorTrajectory.keys()) {
+				description += QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count());
 			}
 			return description;
 		}

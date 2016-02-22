@@ -1,5 +1,6 @@
 #include "LogDefines.h"
 #include "PlayerView.h"
+#include "RoboyMultiLaneModel.h"
 
 /**
  * @brief PlayerView::PlayerView constructor
@@ -14,9 +15,12 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
     m_pModelService         = pModelService;
     m_pAppEngine            = pAppEngine;
     m_pBehaviorListModel    = new BehaviorListModel(pModelService);
+    m_pMultiLaneViewModel   = new RoboyMultiLaneModel();
+
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
     pQmlContext->setContextProperty("cpp_BehaviorListModel", m_pBehaviorListModel);
+    pQmlContext->setContextProperty("cpp_MultiLaneViewModel", m_pMultiLaneViewModel);
 }
 
 /**
@@ -65,7 +69,26 @@ void PlayerView::skipButtonClicked() {
  * @brief PlayerView::addLaneButtonClicked click handler for the add lane button
  */
 void PlayerView::addLaneButtonClicked() {
+    m_pMultiLaneViewModel->addLane();
+}
 
+/* MultiLaneView related slots */
+
+/**
+ * @brief PlayerView::removeLaneHandler handler to remove a lane from the MultiLaneView
+ * @param laneIndex index of the lane that should be removed
+ */
+void PlayerView::removeLaneHandler(qint32 laneIndex) {
+    m_pMultiLaneViewModel->removeLane(laneIndex);
+}
+
+/**
+ * @brief PlayerView::removeItemHandler handler to remove a item from the MultiLaneView
+ * @param laneIndex index of the lane of the item that should be removed
+ * @param itemIndex index of the item that should be removed
+ */
+void PlayerView::removeItemHandler(qint32 laneIndex, qint32 itemIndex) {
+    m_pMultiLaneViewModel->removeBehaviorExecWithIndex(laneIndex, itemIndex);
 }
 
 /**

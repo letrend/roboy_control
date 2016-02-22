@@ -8,6 +8,7 @@
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
+#include "multiLaneView/IMultiLaneViewModel.h"
 #include "ViewController.h"
 
 class ViewController;
@@ -28,11 +29,16 @@ public slots:
     void skipButtonClicked   ();
     void addLaneButtonClicked();
 
+    /* MultiLaneView related slots */
+    void removeLaneHandler(qint32 laneIndex);
+    void removeItemHandler(qint32 laneIndex, qint32 itemIndex);
+
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
 
 private:
     ViewController          * m_pViewController;
     IModelService           * m_pModelService;
+    IMultiLaneViewModel     * m_pMultiLaneViewModel;
     QQmlApplicationEngine   * m_pAppEngine;
     BehaviorListModel       * m_pBehaviorListModel;
 };
