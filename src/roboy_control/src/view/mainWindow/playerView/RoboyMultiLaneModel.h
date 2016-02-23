@@ -23,7 +23,7 @@ public slots:
     qint32                  laneCount ();
     qint32                  itemCount (qint32 laneIndex);
     QVariant                data(qint32 laneIndex, qint32 itemIndex, qint32 role);
-    RoboyBehaviorMetaplan   getBehaviorPlan ();
+    RoboyBehaviorMetaplan   getBehaviorMetaPlan ();
 
 private:
     QList<QList<RoboyBehaviorExecution>> mBehaviors;

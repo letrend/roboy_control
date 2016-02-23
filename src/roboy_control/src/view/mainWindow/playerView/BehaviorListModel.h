@@ -22,10 +22,12 @@ public:
 
     BehaviorListModel(IModelService * pModelService, QObject * parent = 0);
 
+    RoboyBehavior behaviorAt(qint32 index);
+
     /* methods implemented from QAbstractListModel */
     QVariant 				data     (const QModelIndex & index, int role = Qt::DisplayRole) const;
-    QHash<int, QByteArray> 	roleNames() 													 const;
-    int 					rowCount (const QModelIndex & parent = QModelIndex()) 		     const;
+    QHash<int, QByteArray> 	roleNames()                                                      const;
+    int 					rowCount (const QModelIndex & parent = QModelIndex())            const;
 
     /* methods implemented from IObserver interface */
     void notify();

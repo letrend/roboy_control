@@ -19,6 +19,8 @@ View {
         updateView()
     }
 
+    property int numLanes : 0
+
     Connections {
         target        : model
         onDataChanged : {
@@ -32,7 +34,7 @@ View {
         View {
             id: laneBackground
             height: Units.dp(68  + 2*16)
-            width:  Units.dp(100 + 2*16)
+            width:  100 + Units.dp(2*16)
         }
     }
 
@@ -43,9 +45,11 @@ View {
             laneBackground.children[i].destroy()
         }
 
+        numLanes = model.laneCount()
+
         /* rebuilding the view hierachy with the new data */
-        var numLanes = model.laneCount();
-        for (var laneIndex = 0; laneIndex < numLanes; laneIndex++) {
+        var laneCount = model.laneCount();
+        for (var laneIndex = 0; laneIndex < laneCount; laneIndex++) {
             var laneComponent = Qt.createComponent("MultiLaneViewLane.qml")
             if (laneComponent.status === Component.Ready) {
                 var lane = laneComponent.createObject(laneBackground)
@@ -66,13 +70,13 @@ View {
                         item.iconName         = model.data(laneIndex, itemIndex, 0x0001)
                         item.itemIndex        = itemIndex 
                         item.laneIndex        = laneIndex
-                        item.width            = Units.dp(model.data(laneIndex, itemIndex, 0x0101) / scaleFactor)                      
-                        item.x                = Units.dp(model.data(laneIndex, itemIndex, 0x0100) / scaleFactor)
+                        item.width            = model.data(laneIndex, itemIndex, 0x0101) / scaleFactor                   
+                        item.x                = model.data(laneIndex, itemIndex, 0x0100) / scaleFactor
                         item.y                = Units.dp(16)
 
-                        laneBackground.height = Units.dp(numLanes*68+(numLanes+1)*16)
+                        laneBackground.height = Units.dp(laneCount*68+(laneCount+1)*16)
                         laneBackground.width  = (item.x + item.width + Units.dp(100 + 2*16) > laneBackground.width) / scaleFactor ?
-                        (item.x + item.width  + Units.dp(100 + 2*16)) / scaleFactor : (laneBackground.width)
+                        (item.x + item.width  + 100 + Units.dp(2*16)) / scaleFactor : (laneBackground.width)
                     }
                 }
             }
@@ -84,6 +88,6 @@ View {
     }
 
     function removeItem(laneIndex, itemIndex) {
-        console.log("remove item")
+        cpp_PlayerView.removeItemHandler(laneIndex, itemIndex)
     }
 }

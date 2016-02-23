@@ -17,7 +17,6 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
     m_pBehaviorListModel    = new BehaviorListModel(pModelService);
     m_pMultiLaneViewModel   = new RoboyMultiLaneModel();
 
-
     QQmlContext * pQmlContext = pAppEngine->rootContext();
     pQmlContext->setContextProperty("cpp_BehaviorListModel", m_pBehaviorListModel);
     pQmlContext->setContextProperty("cpp_MultiLaneViewModel", m_pMultiLaneViewModel);
@@ -92,10 +91,21 @@ void PlayerView::removeItemHandler(qint32 laneIndex, qint32 itemIndex) {
 }
 
 /**
+ * @brief PlayerView::insertBehaviorHandler handler to insert a behavior into the MultiLaneView
+ * @param behaviorIndex index of the behavior in the behaviorListView that should be inserted
+ * @param laneIndex index of the lane into which the behavior should be inserted
+ * @param lTimestamp timestamp at which the behavior should be inserted
+ * @return 0 for sucess, < 0 for failure
+ */
+qint8 PlayerView::insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp) {
+    RoboyBehavior selectedBehavior = m_pBehaviorListModel->behaviorAt(behaviorIndex);
+    return m_pMultiLaneViewModel->insertBehaviorExec(laneIndex, lTimestamp, selectedBehavior);
+}
+
+/**
  * @brief PlayerView::fromPlayerView_getCurrentRoboyPlan method to retrieve the current behavior plan from the MainWindow
  * @return the current behavior plan
  */
 RoboyBehaviorMetaplan PlayerView::fromPlayerView_getCurrentRoboyPlan() {
-    RoboyBehaviorMetaplan p;
-    return p;
+    return m_pMultiLaneViewModel->getBehaviorMetaPlan();
 }

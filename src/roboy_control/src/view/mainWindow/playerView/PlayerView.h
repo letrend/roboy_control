@@ -30,8 +30,9 @@ public slots:
     void addLaneButtonClicked();
 
     /* MultiLaneView related slots */
-    void removeLaneHandler(qint32 laneIndex);
-    void removeItemHandler(qint32 laneIndex, qint32 itemIndex);
+    void  removeLaneHandler    (qint32 laneIndex);
+    void  removeItemHandler    (qint32 laneIndex, qint32 itemIndex);
+    qint8 insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp);
 
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
 

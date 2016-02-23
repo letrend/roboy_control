@@ -12,6 +12,15 @@ BehaviorListModel::BehaviorListModel(IModelService *pModelService, QObject *pare
     updateBehaviorList();
 }
 
+/**
+ * @brief getter method for a behavior at a given index
+ * @param index index of the behavior that should be retrieved
+ * @return the behavior for given index
+ **/
+RoboyBehavior BehaviorListModel::behaviorAt(qint32 index) {
+	return m_BehaviorList[index];
+}
+
 /* methods implemented from QAbstractListModel */
 
 /**

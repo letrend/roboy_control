@@ -10,7 +10,7 @@ import "./dialogs"
 import "./multiLaneView"
 
 View {
-    property var selectedBehaviorID
+    property var selectedBehaviorIndex
 
     height  : 480
     id      : playerView
@@ -169,7 +169,7 @@ View {
                         }
 
                         Layout.margins : 0
-                        selected       : id === selectedBehaviorID
+                        selected       : index === selectedBehaviorIndex
                         subText        : "motor count " + motorCount
                         text           : title
 
@@ -186,15 +186,18 @@ View {
 
                         BottomActionSheet {
                             actions : [
-
                                 Action {
-                                    iconName: "content/add"
-                                    name: "Add to timeline"
+                                    iconName    : "content/add"
+                                    name        : "Add to multi lane view"
+                                    
+                                    onTriggered : {
+                                        addBehaviorDialog.show()
+                                    }
                                 },
 
                                 Action {
-                                    iconName: "content/clear"
-                                    name: "Cancel"
+                                    iconName : "content/clear"
+                                    name     : "Cancel"
                                 }
                             ]
 
@@ -202,15 +205,23 @@ View {
                             title   : model.title
                         }
 
-                        onClicked: {
+                        onClicked : {
                             behaviorNameValueLabel.text = title    
                             descriptionValueLabel.text  = description
                             idValueLabel.text           = id
                             motorCountValueLabel.text   = motorCount
-                            selectedBehaviorID          = id
+                            selectedBehaviorIndex       = index
+                        }
+
+                        AddBehaviorDialog {
+                            id         : addBehaviorDialog
+                            numLanes   : multiLaneView.numLanes
+                            onAccepted : {
+                                cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+                            }
                         }
                     }
-                    model        : cpp_BehaviorListModel
+                    model          : cpp_BehaviorListModel
                 }
             }
 
@@ -285,15 +296,10 @@ View {
         }
     }
 
-    AddBehaviorDialog {
-        id : addBehaviorDialog
-    }
-
     ActionButton {
         anchors.bottom  : parent.bottom
         anchors.margins : Units.dp(48)
         anchors.right   : parent.right
         iconName        : "content/add"
-        onClicked       : addBehaviorDialog.show()
     }
 }

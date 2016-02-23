@@ -8,7 +8,6 @@ View {
     elevation       : 1
     backgroundColor : Palette.colors["blueGrey"]["500"]
     height          : Units.dp(68)
-    id              : multiLaneViewItem
 
     Canvas {
         anchors.left  : parent.left
@@ -24,19 +23,19 @@ View {
             /* draw background */
             context.beginPath()
 
-            for (var tickIndex = 0; tickIndex < multiLaneViewItem.width; tickIndex = tickIndex + 10) {
+            for (var tickIndex = 0; tickIndex < width; tickIndex = tickIndex + 10) {
                 /* draw ticks */
                 context.beginPath()
                 context.lineWidth   = 1
                 context.strokeStyle = "white"
                 context.textAlign   = "center"
-                context.moveTo(Units.dp(tickIndex), Units.dp(0));
+                context.moveTo(tickIndex, Units.dp(0));
 
-                if (tickIndex > 0 && tickIndex < multiLaneViewItem.width) {
+                if (tickIndex > 0 && tickIndex < width) {
                     if (tickIndex % 50 === 0) {
-                        context.lineTo(Units.dp(tickIndex), Units.dp(8))
+                        context.lineTo(tickIndex, Units.dp(8))
                     } else {
-                        context.lineTo(Units.dp(tickIndex), Units.dp(4))
+                        context.lineTo(tickIndex, Units.dp(4))
                     }
                 }
 
@@ -59,19 +58,19 @@ View {
             /* draw background */
             context.beginPath()
 
-            for (var tickIndex = 0; tickIndex < multiLaneViewItem.width; tickIndex = tickIndex + 10) {
+            for (var tickIndex = 0; tickIndex <= width; tickIndex = tickIndex + 10) {
                 /* draw ticks */
                 context.beginPath()
                 context.lineWidth   = 1
                 context.strokeStyle = "white"
                 context.textAlign   = "center"
-                context.moveTo(Units.dp(tickIndex), height);
+                context.moveTo(tickIndex, height);
 
-                if (tickIndex > 0 && tickIndex < multiLaneViewItem.width) {
+                if (tickIndex > 0 && tickIndex < width) {
                     if (tickIndex % 50 === 0) {
-                        context.lineTo(Units.dp(tickIndex), height-Units.dp(8))
+                        context.lineTo(tickIndex, height-Units.dp(8))
                     } else {
-                        context.lineTo(Units.dp(tickIndex), height-Units.dp(4))
+                        context.lineTo(tickIndex, height-Units.dp(4))
                     }
                 }
                 context.stroke();

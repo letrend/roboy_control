@@ -200,10 +200,10 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
 }
 
 /**
- * @brief RoboyMultiLaneModel::getBehaviorPlan method to retrieve a RoboyBehaviorPlan from the MultiLaneWidget
+ * @brief RoboyMultiLaneModel::getBehaviorMetaPlan method to retrieve a RoboyBehaviorPlan from the MultiLaneWidget
  * @return a RoboyBehaviorPlan representing the executions displayed in the MultiLaneWidget
  */
-RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorPlan() {
+RoboyBehaviorMetaplan RoboyMultiLaneModel::getBehaviorMetaPlan() {
     struct BehaviorExecComparator {
         bool operator()(RoboyBehaviorMetaExecution a, RoboyBehaviorMetaExecution b) const {
             return a.lTimestamp < b.lTimestamp;
