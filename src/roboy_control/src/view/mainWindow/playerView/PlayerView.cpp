@@ -47,21 +47,21 @@ void PlayerView::playButtonClicked() {
  * @brief PlayerView::pauseButtonClicked click handler for the pause button
  */
 void PlayerView::pauseButtonClicked() {
-
+    VIEW_DBG << "pause button clicked";
 }
 
 /**
  * @brief PlayerView::stopButtonClicked click handler for the stop button
  */
 void PlayerView::stopButtonClicked() {
-
+    VIEW_DBG << "stop button clicked";
 }
 
 /**
  * @brief PlayerView::skipButtonClicked click handler for the skip button
  */
 void PlayerView::skipButtonClicked() {
-
+    VIEW_DBG << "skip button clicked";
 }
 
 /**

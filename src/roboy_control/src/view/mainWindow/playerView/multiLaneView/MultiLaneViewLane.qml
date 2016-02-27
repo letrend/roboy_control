@@ -14,17 +14,13 @@ View {
         anchors.right : parent.right
         anchors.top   : parent.top
         antialiasing  : false
-        height        : Units.dp(16)
+        height        : Units.dp(40)
 
         onPaint: {
-            /* get drawing context */
             var context = getContext("2d")
 
-            /* draw background */
-            context.beginPath()
-
             for (var tickIndex = 0; tickIndex < width; tickIndex = tickIndex + 10) {
-                /* draw ticks */
+
                 context.beginPath()
                 context.lineWidth   = 1
                 context.strokeStyle = "white"
@@ -52,14 +48,10 @@ View {
         height         : Units.dp(16)
 
         onPaint: {
-            /* get drawing context */
             var context = getContext("2d")
 
-            /* draw background */
-            context.beginPath()
-
             for (var tickIndex = 0; tickIndex <= width; tickIndex = tickIndex + 10) {
-                /* draw ticks */
+
                 context.beginPath()
                 context.lineWidth   = 1
                 context.strokeStyle = "white"

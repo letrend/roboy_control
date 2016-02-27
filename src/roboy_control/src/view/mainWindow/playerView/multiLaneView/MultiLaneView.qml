@@ -45,6 +45,8 @@ View {
             laneBackground.children[i].destroy()
         }
 
+        laneBackground.width = 100 + Units.dp(2*16)
+        
         numLanes = model.laneCount()
 
         /* rebuilding the view hierachy with the new data */
@@ -73,11 +75,9 @@ View {
                         item.width            = model.data(laneIndex, itemIndex, 0x0101) / scaleFactor                   
                         item.x                = model.data(laneIndex, itemIndex, 0x0100) / scaleFactor
                         item.y                = Units.dp(16)
-
                         laneBackground.height = Units.dp(laneCount*68+(laneCount+1)*16)
-                        laneBackground.width  = (item.x + item.width + Units.dp(100 + 2*16) > laneBackground.width) / scaleFactor ?
-                        (item.x + item.width  + 100 + Units.dp(2*16)) / scaleFactor : (laneBackground.width)
-                    }
+                        laneBackground.width  = (((item.x + item.width + 100) + Units.dp(2*16)) > laneBackground.width) ? ((item.x + item.width + 100) + Units.dp(2*16)) : laneBackground.width
+                    } 
                 }
             }
         }

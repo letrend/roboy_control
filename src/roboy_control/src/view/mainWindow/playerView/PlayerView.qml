@@ -30,6 +30,7 @@ View {
             Button {
                 elevation : 1
                 id        : playButton
+                onClicked : cpp_PlayerView.playButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
@@ -40,6 +41,7 @@ View {
             Button {
                 elevation : 1
                 id        : pauseButton
+                onClicked : cpp_PlayerView.pauseButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
@@ -50,6 +52,7 @@ View {
             Button {
                 elevation : 1
                 id        : stopButton
+                onClicked : cpp_PlayerView.stopButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
@@ -60,6 +63,7 @@ View {
             Button {
                 elevation : 1
                 id        : skipButton
+                onClicked : cpp_PlayerView.skipButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
@@ -89,49 +93,6 @@ View {
                 Icon {
                     anchors.centerIn : parent
                     name             : "action/zoom_in"
-                }
-
-                Dialog {
-                    id                : scaleFactorDialog
-                    title             : "Select the behavior scale factor"
-                    positiveButtonText: "Select"
-
-                    Slider {
-                        alwaysShowValueLabel    : true
-                        anchors.left            : parent.left
-                        anchors.right           : parent.right
-                        height                  : 100
-                        id                      : scaleFactorSlider
-                        maximumValue            : 4
-                        minimumValue            : 1
-                        numericValueLabel       : true
-                        stepSize                : 1
-                        tickmarksEnabled        : true
-                        value                   : 4
-
-                        onValueChanged: {
-                            switch(value) {
-                            case 1:
-                                multiLaneView.scaleFactor = 1000
-                                break;
-                            case 2:
-                                multiLaneView.scaleFactor = 100
-                                break;
-                            case 3:
-                                multiLaneView.scaleFactor = 10
-                                break;
-                            case 4:
-                                multiLaneView.scaleFactor = 1
-                                break;
-                            }
-                        }
-                    }
-
-                    onRejected: {
-                        multiLaneView.scaleFactor = 1
-                        scaleFactorSlider.value   = 4
-                    }
-
                 }
             }
         }
@@ -206,11 +167,12 @@ View {
                         }
 
                         onClicked : {
-                            behaviorNameValueLabel.text = title    
-                            descriptionValueLabel.text  = description
-                            idValueLabel.text           = id
-                            motorCountValueLabel.text   = motorCount
-                            selectedBehaviorIndex       = index
+                            behaviorNameValueLabel.text     = title    
+                            descriptionValueLabel.text      = description
+                            idValueLabel.text               = id
+                            motorCountValueLabel.text       = motorCount
+                            selectedBehaviorIndex           = index
+                            addBehaviorActionButton.enabled = true
                         }
 
                         AddBehaviorDialog {
@@ -244,9 +206,13 @@ View {
                         }
 
                         Label {
+                            color             : Theme.light.subTextColor
+                            elide             : Text.ElideRight
                             id                : behaviorNameValueLabel
                             Layout.leftMargin : Units.dp(16)
+                            style             : "body1"
                             text              : "-"
+                            wrapMode          : Text.WordWrap
                         }
 
                         Label {
@@ -258,9 +224,13 @@ View {
                         }
 
                         Label {
+                            color             : Theme.light.subTextColor
+                            elide             : Text.ElideRight
                             id                : idValueLabel
                             Layout.leftMargin : Units.dp(16)
+                            style             : "body1"
                             text              : "-"
+                            wrapMode          : Text.WordWrap
                         }
 
                         Label {
@@ -272,9 +242,13 @@ View {
                         }
 
                         Label {
+                            color             : Theme.light.subTextColor
+                            elide             : Text.ElideRight
                             id                : motorCountValueLabel
                             Layout.leftMargin : Units.dp(16)
+                            style             : "body1"
                             text              : "-"
+                            wrapMode          : Text.WordWrap
                         }
 
                         Label {
@@ -286,9 +260,13 @@ View {
                         }
 
                         Label {
+                            color             : Theme.light.subTextColor
+                            elide             : Text.ElideRight
                             id                : descriptionValueLabel
                             Layout.leftMargin : Units.dp(16)
+                            style             : "body1"
                             text              : "-"
+                            wrapMode          : Text.WordWrap
                         }
                     }
                 }
@@ -300,6 +278,76 @@ View {
         anchors.bottom  : parent.bottom
         anchors.margins : Units.dp(48)
         anchors.right   : parent.right
+        enabled         : false
         iconName        : "content/add"
+        id              : addBehaviorActionButton
+        onClicked       : addBehaviorDialog.show()           
+
+        AddBehaviorDialog {
+            id         : addBehaviorDialog
+            numLanes   : multiLaneView.numLanes
+            onAccepted : {
+                cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+            }
+        }
+    }
+
+    Dialog {
+        id                 : scaleFactorDialog
+        title              : "Select the behavior scale factor"
+        positiveButtonText : "Select"
+
+        Label { 
+            text: "current scale factor"
+        }
+
+        Label { 
+            color             : Theme.light.subTextColor
+            elide             : Text.ElideRight
+            id                : scaleDescriptionLabel
+            Layout.leftMargin : Units.dp(16)
+            style             : "body1"
+            wrapMode          : Text.WordWrap
+        }
+
+        Slider {
+            alwaysShowValueLabel    : true
+            anchors.left            : parent.left
+            anchors.right           : parent.right
+            height                  : 100
+            id                      : scaleFactorSlider
+            maximumValue            : 4
+            minimumValue            : 1
+            numericValueLabel       : true
+            stepSize                : 1
+            tickmarksEnabled        : true
+            value                   : 4
+
+            onValueChanged: {
+                switch(value) {
+                case 1:
+                    multiLaneView.scaleFactor = 1000
+                    scaleDescriptionLabel.text = "1: seconds"
+                    break;
+                case 2:
+                    multiLaneView.scaleFactor = 100
+                    scaleDescriptionLabel.text = "2: deciseconds"
+                    break;
+                case 3:
+                    multiLaneView.scaleFactor = 10
+                    scaleDescriptionLabel.text = "3: centiseconds"
+                    break;
+                case 4:
+                    multiLaneView.scaleFactor = 1
+                    scaleDescriptionLabel.text = "4: milliseconds"
+                    break;
+                }
+            }
+        }
+
+        onRejected: {
+            multiLaneView.scaleFactor = 1
+            scaleFactorSlider.value   = 4
+        }
     }
 }
