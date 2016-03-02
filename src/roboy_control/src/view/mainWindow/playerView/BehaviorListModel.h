@@ -16,8 +16,9 @@ public:
         IDRole = Qt::UserRole + 1,
         TitleRole,
         IconNameRole,
+        DurationRole,
         MotorCountRole,
-        DescriptionRole
+        MotorInfoRole
     };
 
     BehaviorListModel(IModelService * pModelService, QObject * parent = 0);

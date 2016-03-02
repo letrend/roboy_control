@@ -53,7 +53,7 @@ struct RoboyBehavior {
         return string;
     }
 
-    quint64 getDuration() {
+    quint64 getDuration() const {
         int maxDuration = 0;
         int currentDuration = 0;
         for (Trajectory trajectory : m_mapMotorTrajectory) {

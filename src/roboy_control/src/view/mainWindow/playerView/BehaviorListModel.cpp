@@ -42,16 +42,20 @@ QVariant BehaviorListModel::data(const QModelIndex & index, int role) const {
 			return "action/accessibility";
 		}
 		break;
+		case BehaviorListRoles::DurationRole: {
+			return m_BehaviorList[index.row()].getDuration();
+		}
+		break;
 		case BehaviorListRoles::MotorCountRole: {
 			return m_BehaviorList[index.row()].m_mapMotorTrajectory.count();
 		}
 		break;
-		case BehaviorListRoles::DescriptionRole: {
-			QString description;
-			for(u_int32_t iterator : m_BehaviorList[index.row()].m_mapMotorTrajectory.keys()) {
-				description += QString("MOTOR ID %1 WAYPOINT COUNT %2\n").arg(iterator).arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count());
-			}
-			return description;
+		case BehaviorListRoles::MotorInfoRole: {
+			QList<QString> motorInfo;
+			for(u_int32_t iterator : m_BehaviorList[index.row()].m_mapMotorTrajectory.keys())
+				motorInfo.append(QString("motor %1: waypoint count %2").arg(iterator).arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count()));
+			QVariant motorInfoVariant(motorInfo);
+			return motorInfoVariant;
 		}
 		break;
 	}
@@ -65,8 +69,9 @@ QHash<int, QByteArray> BehaviorListModel::roleNames() const {
     roles[IDRole] 			= "id";
     roles[TitleRole]		= "title";
     roles[IconNameRole]		= "iconPath";
+    roles[DurationRole]     = "duration";
     roles[MotorCountRole] 	= "motorCount";
-    roles[DescriptionRole] 	= "description";
+    roles[MotorInfoRole] 	= "motorInfo";
     return roles;
 }
 

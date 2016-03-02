@@ -168,9 +168,10 @@ View {
 
                         onClicked : {
                             behaviorNameValueLabel.text     = title    
-                            descriptionValueLabel.text      = description
-                            idValueLabel.text               = id
-                            motorCountValueLabel.text       = motorCount
+                            idValueLabel.text               = "identifier: " + id
+                            durationValueLabel.text         = "duration: " + duration + " ms"
+                            motorCountValueLabel.text       = "motor count: " + motorCount
+                            detailListView.model            = motorInfo 
                             selectedBehaviorIndex           = index
                             addBehaviorActionButton.enabled = true
                         }
@@ -190,104 +191,141 @@ View {
             View {
                 elevation         : 1
                 Layout.fillHeight : true
-                Layout.fillWidth  :  true
+                Layout.fillWidth  : true
 
-                ScrollView {
-                    anchors.fill : parent
+                View {
+                    anchors.left    : parent.left
+                    anchors.right   : parent.right
+                    anchors.top     : parent.top
+                    backgroundColor : Theme.primaryColor
+                    height          : Units.dp(200)
+                    id              : detailTopView
 
                     ColumnLayout {
-                        Label {
-                            font.family       : "Roboto"
-                            id                : behaviorNameLabel
-                            Layout.topMargin  : Units.dp(16)
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "subheading"
-                            text              : "Behavior Name"
-                        }
+                        anchors.bottomMargin : Units.dp(16)
+                        anchors.fill         : parent
+                        anchors.topMargin    : Units.dp(16)
+                        id : column
 
                         Label {
-                            color             : Theme.light.subTextColor
-                            elide             : Text.ElideRight
-                            id                : behaviorNameValueLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "body1"
-                            text              : "-"
-                            wrapMode          : Text.WordWrap
+                            anchors.left    : parent.left
+                            anchors.right   : parent.left
+                            anchors.margins : Units.dp(16)
+                            color           : "white"
+                            id              : behaviorNameValueLabel
+                            style           : "title"
+                            text            : "-"
                         }
 
-                        Label {
-                            font.family       : "Roboto"
-                            id                : idLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "subheading"
-                            text              : "ID"
+                        Item {
+                            anchors.top            : behaviorNameValueLabel.bottom
+                            id                     : titleSpacer
+                            Layout.fillWidth       : true
+                            Layout.preferredHeight : Units.dp(8)
                         }
 
-                        Label {
-                            color             : Theme.light.subTextColor
-                            elide             : Text.ElideRight
-                            id                : idValueLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "body1"
-                            text              : "-"
-                            wrapMode          : Text.WordWrap
+                        ListItem.Standard {
+                            anchors.top : titleSpacer.bottom
+                            id          : idItem
+
+                            action: Icon {
+                                anchors.centerIn : parent
+                                color            : "white"
+                                name             : "action/accessibility"
+                            }
+
+                            content : Label {
+                                anchors.centerIn  : parent
+                                color             : "white"
+                                font.family       : "Roboto"
+                                id                : idValueLabel
+                                Layout.leftMargin : Units.dp(16)
+                                style             : "subheading"
+                                text              : "-"
+                                width             : parent.width
+                            }
                         }
 
-                        Label {
-                            font.family       : "Roboto"
-                            id                : motorCountLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "subheading"
-                            text              : "Motor Count"
+                        ListItem.Standard {
+                            anchors.top : idItem.bottom
+                            id          : durationItem
+
+                            action : Icon {
+                                anchors.centerIn : parent
+                                color            : "white"
+                                name             : "action/alarm_on"
+                            }
+
+                            content : Label {
+                                anchors.centerIn  : parent
+                                color             : "white"
+                                font.family       : "Roboto"
+                                id                : durationValueLabel
+                                Layout.leftMargin : Units.dp(16)
+                                style             : "subheading"
+                                text              : "-"
+                                width             : parent.width
+                            }
                         }
 
-                        Label {
-                            color             : Theme.light.subTextColor
-                            elide             : Text.ElideRight
-                            id                : motorCountValueLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "body1"
-                            text              : "-"
-                            wrapMode          : Text.WordWrap
-                        }
+                        ListItem.Standard {
+                            anchors.top : durationItem.bottom
+                            id          : motorCountItem
 
-                        Label {
-                            font.family       : "Roboto"
-                            id                : descriptionLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "subheading"
-                            text              : "Description"
-                        }
+                            action : Icon {
+                                anchors.centerIn : parent
+                                color            : "white"
+                                name             : "action/autorenew"
+                            }
 
-                        Label {
-                            color             : Theme.light.subTextColor
-                            elide             : Text.ElideRight
-                            id                : descriptionValueLabel
-                            Layout.leftMargin : Units.dp(16)
-                            style             : "body1"
-                            text              : "-"
-                            wrapMode          : Text.WordWrap
+                            content : Label {
+                                anchors.centerIn  : parent
+                                color             : "white"
+                                font.family       : "Roboto"
+                                id                : motorCountValueLabel
+                                Layout.leftMargin : Units.dp(16)
+                                style             : "subheading"
+                                text              : "-"
+                                width             : parent.width
+                            }
                         }
                     }
                 }
-            }
-        }
-    }
 
-    ActionButton {
-        anchors.bottom  : parent.bottom
-        anchors.margins : Units.dp(48)
-        anchors.right   : parent.right
-        enabled         : false
-        iconName        : "content/add"
-        id              : addBehaviorActionButton
-        onClicked       : addBehaviorDialog.show()           
+                ListView {
+                    anchors.bottom   : parent.bottom
+                    anchors.left     : parent.left
+                    anchors.right    : parent.right
+                    anchors.top      : detailTopView.bottom
+                    id               : detailListView
+                    Layout.fillWidth : true
 
-        AddBehaviorDialog {
-            id         : addBehaviorDialog
-            numLanes   : multiLaneView.numLanes
-            onAccepted : {
-                cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+                    delegate        : ListItem.Standard {
+                        action : Icon {
+                            anchors.centerIn: parent
+                            name: "av/album"
+                        }
+                        text        : modelData
+                    }
+                }
+
+                ActionButton {
+                    anchors.verticalCenter  : detailTopView.bottom
+                    anchors.margins : Units.dp(16)
+                    anchors.right   : parent.right
+                    enabled         : false
+                    iconName        : "content/add"
+                    id              : addBehaviorActionButton
+                    onClicked       : addBehaviorDialog.show()           
+
+                    AddBehaviorDialog {
+                        id         : addBehaviorDialog
+                        numLanes   : multiLaneView.numLanes
+                        onAccepted : {
+                            cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+                        }
+                    }
+                }
             }
         }
     }
