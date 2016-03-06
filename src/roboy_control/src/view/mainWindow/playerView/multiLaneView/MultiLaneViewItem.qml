@@ -55,12 +55,6 @@ View {
         title   : behaviorName
 
         actions : [
-
-            Action {
-                iconName : "content/create"
-                name     : "Edit"
-            },
-
             Action {
                 iconName    : "action/delete"
                 name        : "Delete"

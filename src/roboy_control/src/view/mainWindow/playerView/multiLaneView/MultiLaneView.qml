@@ -28,6 +28,17 @@ View {
         }
     }
 
+    MouseArea {
+        acceptedButtons: Qt.RightButton
+        anchors.fill: parent
+
+        onClicked: {
+            if(Qt.RightButton) {
+                timelineActionSheet.open()
+            }
+        }
+    }
+
     ScrollView {
         anchors.fill: parent
 
@@ -45,8 +56,8 @@ View {
             laneBackground.children[i].destroy()
         }
 
-        laneBackground.width = 100 + Units.dp(2*16)
-        
+        laneBackground.width  = 100 + Units.dp(2*16)
+        laneBackground.height = Units.dp(model.laneCount()*68+(model.laneCount()+1)*16)
         numLanes = model.laneCount()
 
         /* rebuilding the view hierachy with the new data */
@@ -62,6 +73,8 @@ View {
                 lane.laneIndex       = laneIndex
                 lane.y               = Units.dp(laneIndex*68+(laneIndex+1)*16)
 
+                lane.multiLaneView  = multiLaneView
+
                 for (var itemIndex = 0; itemIndex < model.itemCount(laneIndex); itemIndex++) {
                     var itemComponent = Qt.createComponent("MultiLaneViewItem.qml")
 
@@ -75,11 +88,66 @@ View {
                         item.width            = model.data(laneIndex, itemIndex, 0x0101) / scaleFactor                   
                         item.x                = model.data(laneIndex, itemIndex, 0x0100) / scaleFactor
                         item.y                = Units.dp(16)
-                        laneBackground.height = Units.dp(laneCount*68+(laneCount+1)*16)
                         laneBackground.width  = (((item.x + item.width + 100) + Units.dp(2*16)) > laneBackground.width) ? ((item.x + item.width + 100) + Units.dp(2*16)) : laneBackground.width
                     } 
                 }
             }
+        }
+    }
+
+    BottomActionSheet {
+        actions : [
+            Action {
+                iconName    : "action/search"
+                name        : "Set scale factor"
+                onTriggered : {
+                    scaleFactorDialog.show()
+                }
+            },
+
+            Action {
+                iconName : "content/clear"
+                name     : "Cancel"
+            }
+        ]
+        
+        id     : timelineActionSheet
+        title  : "Timeline"
+    }
+
+    Dialog {
+        id                 : scaleFactorDialog
+        title              : "Select a scale factor"
+        positiveButtonText : "Select"
+
+        Label { 
+            text: "A pixel in the timeline represents \none unit of the following:"
+        }
+
+        MenuField {
+            anchors.left     : parent.left
+            anchors.right    : parent.right
+            model            : ["milliseconds", "centiseconds", "deciseconds", "seconds"]
+            onItemSelected   : {
+                switch(index) {
+                case 0:
+                    multiLaneView.scaleFactor = 1
+                    break;
+                case 1:
+                    multiLaneView.scaleFactor = 10
+                    break;
+                case 2:
+                    multiLaneView.scaleFactor = 100
+                    break;
+                case 3:
+                    multiLaneView.scaleFactor = 1000
+                    break;
+                }
+            }
+        }
+
+        onRejected: {
+            multiLaneView.scaleFactor = 1
         }
     }
 

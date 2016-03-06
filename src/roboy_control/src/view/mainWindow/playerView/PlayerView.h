@@ -22,17 +22,16 @@ public:
 
     void notify();
 
-public slots:
-    void playButtonClicked   ();
-    void pauseButtonClicked  ();
-    void stopButtonClicked   ();
-    void skipButtonClicked   ();
-    void addLaneButtonClicked();
+    Q_INVOKABLE void playButtonClicked   ();
+    Q_INVOKABLE void pauseButtonClicked  ();
+    Q_INVOKABLE void stopButtonClicked   ();
+    Q_INVOKABLE void skipButtonClicked   ();
+    Q_INVOKABLE void addLaneButtonClicked();
 
     /* MultiLaneView related slots */
-    void  removeLaneHandler    (qint32 laneIndex);
-    void  removeItemHandler    (qint32 laneIndex, qint32 itemIndex);
-    qint8 insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp);
+    Q_INVOKABLE void removeLaneHandler    (qint32 laneIndex);
+    Q_INVOKABLE void removeItemHandler    (qint32 laneIndex, qint32 itemIndex);
+    Q_INVOKABLE int  insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp);
 
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
 

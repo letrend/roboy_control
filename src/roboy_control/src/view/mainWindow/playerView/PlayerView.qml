@@ -70,31 +70,6 @@ View {
                     name             : "av/skip_next"
                 }
             }
-
-            Button {
-                anchors.margins : Units.dp(16)
-                anchors.right   : scaleFactorButton.left
-                elevation       : 1
-                id              : addLaneButton
-                onClicked       : cpp_PlayerView.addLaneButtonClicked()
-                
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "content/add"
-                }
-            }
-
-            Button {
-                anchors.right : parent.right
-                elevation     : 1
-                id            : scaleFactorButton
-                onClicked     : scaleFactorDialog.show()
-
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "action/zoom_in"
-                }
-            }
         }
 
         View {
@@ -102,13 +77,20 @@ View {
             Layout.fillHeight : true
             Layout.fillWidth  : true
 
-            ColumnLayout {
-                anchors.fill : parent
+            MultiLaneView {
+                anchors.bottom : parent.bottom
+                anchors.left   : parent.left
+                anchors.right  : parent.right
+                anchors.top    : parent.top
+                id             : multiLaneView
+                model          : cpp_MultiLaneViewModel
 
-                MultiLaneView {
-                    anchors.fill : parent
-                    id           : multiLaneView
-                    model        : cpp_MultiLaneViewModel
+                ActionButton {
+                    anchors.bottom  : parent.bottom
+                    anchors.margins : Units.dp(16)
+                    anchors.right   : parent.right
+                    iconName        : "content/add"
+                    onClicked       : cpp_PlayerView.addLaneButtonClicked()
                 }
             }
         }
@@ -131,7 +113,7 @@ View {
 
                         Layout.margins : 0
                         selected       : index === selectedBehaviorIndex
-                        subText        : "motor count " + motorCount
+                        subText        : "motor count: " + motorCount
                         text           : title
 
                         MouseArea {
@@ -152,7 +134,11 @@ View {
                                     name        : "Add to multi lane view"
                                     
                                     onTriggered : {
-                                        addBehaviorDialog.show()
+                                        if (multiLaneView.numLanes < 1) {
+                                            showError("No lane in timeline", "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", "ok")
+                                        } else {
+                                            addBehaviorDialog.show()
+                                        }
                                     }
                                 },
 
@@ -173,14 +159,23 @@ View {
                             motorCountValueLabel.text       = "motor count: " + motorCount
                             detailListView.model            = motorInfo 
                             selectedBehaviorIndex           = index
-                            addBehaviorActionButton.enabled = true
+                            addToTimelineButton.enabled     = true
                         }
 
                         AddBehaviorDialog {
                             id         : addBehaviorDialog
                             numLanes   : multiLaneView.numLanes
                             onAccepted : {
-                                cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+                                switch(cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampLabel.text)) {
+                                case -1: {
+                                    showError("Error while inserting behavior", "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", "ok")
+                                }
+                                    break;
+                                case -2: {
+                                    showError("Error while inserting behavior", "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", "ok")
+                                }
+                                    break;
+                                }
                             }
                         }
                     }
@@ -198,14 +193,14 @@ View {
                     anchors.right   : parent.right
                     anchors.top     : parent.top
                     backgroundColor : Theme.primaryColor
-                    height          : Units.dp(200)
+                    height          : detailTopColumn.implicitHeight + Units.dp(16)
                     id              : detailTopView
 
-                    ColumnLayout {
+                    Column {
                         anchors.bottomMargin : Units.dp(16)
                         anchors.fill         : parent
                         anchors.topMargin    : Units.dp(16)
-                        id : column
+                        id                   : detailTopColumn
 
                         Label {
                             anchors.left    : parent.left
@@ -218,15 +213,13 @@ View {
                         }
 
                         Item {
-                            anchors.top            : behaviorNameValueLabel.bottom
                             id                     : titleSpacer
                             Layout.fillWidth       : true
                             Layout.preferredHeight : Units.dp(8)
                         }
 
                         ListItem.Standard {
-                            anchors.top : titleSpacer.bottom
-                            id          : idItem
+                            id : idItem
 
                             action: Icon {
                                 anchors.centerIn : parent
@@ -247,8 +240,7 @@ View {
                         }
 
                         ListItem.Standard {
-                            anchors.top : idItem.bottom
-                            id          : durationItem
+                            id : durationItem
 
                             action : Icon {
                                 anchors.centerIn : parent
@@ -269,13 +261,12 @@ View {
                         }
 
                         ListItem.Standard {
-                            anchors.top : durationItem.bottom
-                            id          : motorCountItem
+                            id : motorCountItem
 
                             action : Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "action/autorenew"
+                                name             : "av/album"
                             }
 
                             content : Label {
@@ -293,7 +284,7 @@ View {
                 }
 
                 ListView {
-                    anchors.bottom   : parent.bottom
+                    anchors.bottom   : detailViewButtonView.top
                     anchors.left     : parent.left
                     anchors.right    : parent.right
                     anchors.top      : detailTopView.bottom
@@ -302,90 +293,57 @@ View {
 
                     delegate        : ListItem.Standard {
                         action : Icon {
-                            anchors.centerIn: parent
-                            name: "av/album"
+                            anchors.centerIn : parent
+                            name             : "av/album"
                         }
                         text        : modelData
                     }
                 }
 
-                ActionButton {
-                    anchors.verticalCenter  : detailTopView.bottom
-                    anchors.margins : Units.dp(16)
-                    anchors.right   : parent.right
-                    enabled         : false
-                    iconName        : "content/add"
-                    id              : addBehaviorActionButton
-                    onClicked       : addBehaviorDialog.show()           
+                View {
+                    anchors.bottom : parent.bottom
+                    anchors.left   : parent.left
+                    anchors.right  : parent.right
+                    height         : Units.dp(68)
+                    id             : detailViewButtonView
+
+                    RowLayout {
+                        anchors.fill    : parent
+                        anchors.margins : Units.dp(16)
+
+                        Button {
+                            anchors.right : parent.right
+                            id            : addToTimelineButton
+                            onClicked     : {
+                                if (multiLaneView.numLanes < 1) {
+                                    showError("No lane in timeline", "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", "ok")
+                                } else {
+                                    addBehaviorDialog.show()
+                                }
+                            }
+                            textColor     : Theme.accentColor
+                            text          : "ADD TO TIMELINE"
+                        }
+                    }
 
                     AddBehaviorDialog {
                         id         : addBehaviorDialog
                         numLanes   : multiLaneView.numLanes
                         onAccepted : {
-                            cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampTextField.text)
+                            switch(cpp_PlayerView.insertBehaviorHandler(selectedBehaviorIndex, laneSelector.selectedIndex, timestampLabel.text)) {
+                            case -1: {
+                                showError("Error while inserting behavior", "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", "ok")
+                            }
+                                break;
+                            case -2: {
+                                showError("Error while inserting behavior", "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", "ok")
+                            }
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-
-    Dialog {
-        id                 : scaleFactorDialog
-        title              : "Select the behavior scale factor"
-        positiveButtonText : "Select"
-
-        Label { 
-            text: "current scale factor"
-        }
-
-        Label { 
-            color             : Theme.light.subTextColor
-            elide             : Text.ElideRight
-            id                : scaleDescriptionLabel
-            Layout.leftMargin : Units.dp(16)
-            style             : "body1"
-            wrapMode          : Text.WordWrap
-        }
-
-        Slider {
-            alwaysShowValueLabel    : true
-            anchors.left            : parent.left
-            anchors.right           : parent.right
-            height                  : 100
-            id                      : scaleFactorSlider
-            maximumValue            : 4
-            minimumValue            : 1
-            numericValueLabel       : true
-            stepSize                : 1
-            tickmarksEnabled        : true
-            value                   : 4
-
-            onValueChanged: {
-                switch(value) {
-                case 1:
-                    multiLaneView.scaleFactor = 1000
-                    scaleDescriptionLabel.text = "1: seconds"
-                    break;
-                case 2:
-                    multiLaneView.scaleFactor = 100
-                    scaleDescriptionLabel.text = "2: deciseconds"
-                    break;
-                case 3:
-                    multiLaneView.scaleFactor = 10
-                    scaleDescriptionLabel.text = "3: centiseconds"
-                    break;
-                case 4:
-                    multiLaneView.scaleFactor = 1
-                    scaleDescriptionLabel.text = "4: milliseconds"
-                    break;
-                }
-            }
-        }
-
-        onRejected: {
-            multiLaneView.scaleFactor = 1
-            scaleFactorSlider.value   = 4
         }
     }
 }

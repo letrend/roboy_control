@@ -1,6 +1,5 @@
 import QtQuick 2.4
 import Material 0.2
-import Material.ListItems 0.1 as ListItem
 
 import "./playerView"
 import "./recorderView"
@@ -21,12 +20,6 @@ ApplicationWindow {
 
     initialPage : TabbedPage {
         actions : [
-            Action {
-                iconName       : "action/account_circle"
-                hoverAnimation : true
-                name           : "Colors"
-            },
-
             Action {
                 iconName       : "action/settings"
                 hoverAnimation : true

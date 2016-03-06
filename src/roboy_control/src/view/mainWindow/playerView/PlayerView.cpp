@@ -9,8 +9,7 @@
  * @param pAppEngine qml application engine of the gui
  * @param parent non mandatory parent for the MainWindow
  */
-PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent) :
-    QObject(pParent) {
+PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent) : QObject(pParent) {
     m_pViewController       = pViewController;
     m_pModelService         = pModelService;
     m_pAppEngine            = pAppEngine;
@@ -97,7 +96,7 @@ void PlayerView::removeItemHandler(qint32 laneIndex, qint32 itemIndex) {
  * @param lTimestamp timestamp at which the behavior should be inserted
  * @return 0 for sucess, < 0 for failure
  */
-qint8 PlayerView::insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp) {
+int PlayerView::insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp) {
     RoboyBehavior selectedBehavior = m_pBehaviorListModel->behaviorAt(behaviorIndex);
     return m_pMultiLaneViewModel->insertBehaviorExec(laneIndex, lTimestamp, selectedBehavior);
 }

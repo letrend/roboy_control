@@ -4,8 +4,10 @@ import Material 0.2
 
 View {
     property var laneIndex
+    property var multiLaneView
 
     elevation       : 1
+    id              : multiLaneViewLane
     backgroundColor : Palette.colors["blueGrey"]["500"]
     height          : Units.dp(68)
 
@@ -71,8 +73,8 @@ View {
     }
 
     MouseArea {
-        acceptedButtons: Qt.RightButton
-        anchors.fill: parent
+        acceptedButtons : Qt.RightButton
+        anchors.fill    : parent
 
         onClicked: {
             if(Qt.RightButton) {
@@ -88,16 +90,11 @@ View {
                 name        : "Delete"
 
                 onTriggered : {
-                    var laneBackground = parent
-                    var laneScrollView = laneBackground.parent
-                    var helperView1    = laneScrollView.parent
-                    var helperView2    = helperView1.parent
-                    var helperView3    = helperView2.parent
-                    var helperView4    = helperView3.parent
-                    var helperView5    = helperView4.parent
-                    var helperView6    = helperView5.parent
-                    var multiLaneView  = helperView6.parent
-                    multiLaneView.removeLane(laneIndex)
+                    if (multiLaneView.model.itemCount(laneIndex) > 0) {
+                        laneNotEmptyDialog.show()
+                    } else {
+                        multiLaneView.removeLane(laneIndex)
+                    }
                 }
             },
 
@@ -108,19 +105,21 @@ View {
         ]
         
         id     : laneActionSheet
-        title  : "lane " + laneIndex
+        title  : "lane " + (laneIndex + 1)
+    }
+
+     Dialog {
+        hasActions         : true
+        id                 : laneNotEmptyDialog
+        negativeButtonText : "cancel"
+        onAccepted         : multiLaneView.removeLane(multiLaneViewLane.laneIndex)
+        positiveButtonText : "proceed"   
+        text               : "The lane you want to delete is not empty. If you proceed, the lane and all contained behaviors will be removed."
+        title              : "Lane not empty"
+        width              : Units.dp(300) 
     }
 
     function removeItem(itemIndex) {
-        var laneBackground = parent
-        var laneScrollView = laneBackground.parent
-        var helperView1    = laneScrollView.parent
-        var helperView2    = helperView1.parent
-        var helperView3    = helperView2.parent
-        var helperView4    = helperView3.parent
-        var helperView5    = helperView4.parent
-        var helperView6    = helperView5.parent
-        var multiLaneView  = helperView6.parent
         multiLaneView.removeItem(laneIndex, itemIndex)
     }
 }

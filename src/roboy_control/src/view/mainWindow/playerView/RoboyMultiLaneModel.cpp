@@ -192,7 +192,7 @@ QVariant RoboyMultiLaneModel::data(qint32 laneIndex, qint32 itemIndex, qint32 ro
             else if (role == Qt::UserRole + 1) //behavior duration
                 return QVariant(behaviorExec.behavior.getDuration());
             else if (role == Qt::UserRole + 2) // behavior motor count
-                //return (QVariant(behaviorExec.behavior.m_mapMotorTrajectory.count()));
+                return (QVariant(behaviorExec.behavior.m_mapMotorTrajectory.count()));
                 return 0;
         }
     }
