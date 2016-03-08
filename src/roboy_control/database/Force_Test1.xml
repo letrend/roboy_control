@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<roboybehavior name="Force_Test1" behaviorid="10">
+    <motor motorid="5" controlmode="3" samplerate="100">
+        <waypoint id="0">5</waypoint>
+    </motor>
+</roboybehavior>

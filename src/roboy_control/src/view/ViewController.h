@@ -36,6 +36,7 @@ signals:
     void signalInitialize();
     void signalPlay();
     void signalStop();
+    void signalRewind();
 
 };
 

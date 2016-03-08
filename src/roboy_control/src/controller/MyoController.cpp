@@ -52,6 +52,10 @@ bool MyoController::initializeControllers() {
     if(isInitializedCorrectly()) {
         MYOCONTROLLER_SUC << "Initialization completed successful" ;
         result = true;
+
+//        for(ROSController controller : m_mapControllers.values()) {
+//            controller.transceiver->listenOnControllerStatus();
+//        }
     } else {
         MYOCONTROLLER_WAR << "Initialization failed";
         result = false;
