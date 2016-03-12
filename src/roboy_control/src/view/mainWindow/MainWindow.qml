@@ -6,6 +6,7 @@ import "./recorderView"
 import "./editorView"
 
 ApplicationWindow {
+
     id            : roboyControlWindow
     minimumWidth  : 600
     minimumHeight : 500
@@ -29,7 +30,6 @@ ApplicationWindow {
         ]
 
         title   : "Roboy Control"
-
 
         Tab {
             title : "Player"

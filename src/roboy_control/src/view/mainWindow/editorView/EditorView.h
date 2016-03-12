@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
+#include "../BehaviorListModel.h"
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
@@ -20,10 +21,21 @@ public:
 
     void notify();
 
+    //Q_INVOKABLE bool setSelectedBehaviorIndex(int index);
+
+    /* functions to update data */
+    //Q_INVOKABLE bool updateBehaviorName     (QString name);
+    //Q_INVOKABLE bool updateBehaviorId       (int id      );
+
+    /* button handler functions */
+    //Q_INVOKABLE bool saveButtonClicked      (int index   );
+
 private:
 	ViewController          * m_pViewController;
     IModelService           * m_pModelService;
     QQmlApplicationEngine   * m_pAppEngine;
+    BehaviorListModel       * m_pBehaviorListModel;
+    RoboyBehavior           * m_pSelectedBehavior;
 
 };
 

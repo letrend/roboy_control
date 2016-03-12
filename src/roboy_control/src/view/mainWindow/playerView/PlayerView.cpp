@@ -17,7 +17,7 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
     m_pMultiLaneViewModel   = new RoboyMultiLaneModel();
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
-    pQmlContext->setContextProperty("cpp_BehaviorListModel", m_pBehaviorListModel);
+    pQmlContext->setContextProperty("cpp_PVBehaviorListModel", m_pBehaviorListModel);
     pQmlContext->setContextProperty("cpp_MultiLaneViewModel", m_pMultiLaneViewModel);
 }
 
@@ -26,6 +26,7 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
  */
 PlayerView::~PlayerView() {
     delete m_pBehaviorListModel;
+    delete m_pMultiLaneViewModel;
 }
 
 /**

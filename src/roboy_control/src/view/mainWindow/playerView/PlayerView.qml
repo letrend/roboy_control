@@ -179,7 +179,7 @@ View {
                             }
                         }
                     }
-                    model          : cpp_BehaviorListModel
+                    model          : cpp_PVBehaviorListModel
                 }
             }
 

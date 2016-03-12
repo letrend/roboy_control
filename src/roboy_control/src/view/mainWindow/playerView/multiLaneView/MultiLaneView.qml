@@ -81,7 +81,7 @@ View {
                     if (itemComponent.status === Component.Ready) {
                         var item              = itemComponent.createObject(lane)
 
-                        item.behaviorName     = model.data(laneIndex, itemIndex, 0x0000)
+                        item.behaviorName     = model.data(laneIndex, itemIndex, 0x0000) + ": " + model.data(laneIndex, itemIndex, 0x0101) + " ms"
                         item.iconName         = model.data(laneIndex, itemIndex, 0x0001)
                         item.itemIndex        = itemIndex 
                         item.laneIndex        = laneIndex

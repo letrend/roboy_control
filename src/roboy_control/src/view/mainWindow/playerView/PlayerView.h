@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "BehaviorListModel.h"
+#include "../BehaviorListModel.h"
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
