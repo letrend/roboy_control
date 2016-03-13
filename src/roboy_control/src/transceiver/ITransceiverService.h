@@ -5,6 +5,8 @@
 #ifndef ROBOYCONTROL_ITRANSCEIVERSERVICE_H
 #define ROBOYCONTROL_ITRANSCEIVERSERVICE_H
 
+#include "ros/ros.h"
+
 #include <QThread>
 #include <QWaitCondition>
 #include <QtCore/qmutex.h>
@@ -58,6 +60,9 @@ public:
         bool run = true;
         TRANSCEIVER_LOG << "Transceiver Thread started";
         TRANSCEIVER_LOG << "Wait for Events";
+
+        ros::AsyncSpinner spinner(4);
+        spinner.start();
 
         while(run) {
             m_mutexCV.lock();
@@ -120,6 +125,8 @@ public:
         m_condition.wakeAll();
         m_mutexCV.unlock();
     }
+
+    virtual void listenOnControllerStatus() = 0;
 
 protected:
     virtual void sendTrajectory() = 0;

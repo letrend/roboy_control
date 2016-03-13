@@ -3,7 +3,6 @@
 //
 
 #include <QDebug>
-#include "ros/ros.h"
 #include "TestNode.h"
 
 int main(int argc, char ** argv) {
