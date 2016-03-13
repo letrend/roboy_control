@@ -224,7 +224,7 @@ View {
                             action: Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "action/accessibility"
+                                name             : "action/info_outline"
                             }
 
                             content : Label {
@@ -245,7 +245,7 @@ View {
                             action : Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "action/alarm_on"
+                                name             : "av/av_timer"
                             }
 
                             content : Label {

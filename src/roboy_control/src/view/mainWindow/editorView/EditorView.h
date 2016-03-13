@@ -21,14 +21,14 @@ public:
 
     void notify();
 
-    //Q_INVOKABLE bool setSelectedBehaviorIndex(int index);
+    Q_INVOKABLE bool setSelectedBehaviorIndex(int index);
 
     /* functions to update data */
-    //Q_INVOKABLE bool updateBehaviorName     (QString name);
-    //Q_INVOKABLE bool updateBehaviorId       (int id      );
+    Q_INVOKABLE bool updateBehaviorName     (QString name);
+    Q_INVOKABLE bool updateBehaviorId       (int id      );
 
     /* button handler functions */
-    //Q_INVOKABLE bool saveButtonClicked      (int index   );
+    Q_INVOKABLE bool saveButtonClicked      ();
 
 private:
 	ViewController          * m_pViewController;

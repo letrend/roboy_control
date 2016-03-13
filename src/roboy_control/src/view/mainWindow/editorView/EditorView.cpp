@@ -1,5 +1,4 @@
 #include "EditorView.h"
-#include "LogDefines.h"
 
 /**
  * @brief EditorView::EditorView constructor
@@ -36,51 +35,50 @@ void EditorView::notify() {
  * @param index index of the behavior that should be selected
  * @return true for success, false for failure
  */
- /*
 bool EditorView::setSelectedBehaviorIndex(int index) {
 	if(index >= 0 || index < m_pBehaviorListModel->rowCount()) {
-		m_pSelectedBehavior = &m_pBehaviorListModel->behaviorAt(index);
-		VIEW_DBG << "setSelectedBehaviorIndex";
+		static RoboyBehavior behavior = m_pBehaviorListModel->behaviorAt(index);
+		m_pSelectedBehavior = &behavior;
 		return true;
 	}
 	return false;
-}*/
+}
 
 /**
  * @brief EditorView::setBehaviorName handler for when the behavior name has been edited
  * @param name the new behavior name
  * @return true for success, false for failure
  */
- /*
 bool EditorView::updateBehaviorName(QString name) {
 	if (m_pSelectedBehavior != 0 && name.length() > 0) {
-		m_pSelectedBehavior.m_metadata.m_sBehaviorName = name;
+		m_pSelectedBehavior->m_metadata.m_sBehaviorName = name;
 		return true;
 	}
 	return false;
-}*/
+}
 
 /**
  * @brief EditorView::setBehaviorId handler for when the behavior id has been edited
  * @param id the new behavior id
  * @return true for success, false for failure
  */
- /*
 bool EditorView::updateBehaviorId(int id) {
 	if (m_pSelectedBehavior != 0) {
-		m_pSelectedBehavior.m_metadata.m_ulBehaviorId = id;
+		m_pSelectedBehavior->m_metadata.m_ulBehaviorId = (quint64) id;
 		return true;
 	}
 	return false;
-}*/
+}
 
 /**
  * @brief EditorView::saveButtonClicked click handler for the save button
  * @param index index of the behavior that is supposed to be safed
  * @return true for success, false for failure
  */
- /*
-bool EditorView::saveButtonClicked(int index) {
-	RoboyBehavior behavior = m_pBehaviorListModel->behaviorAt(index);
-	return true;
-}*/
+bool EditorView::saveButtonClicked() {
+	if (m_pSelectedBehavior != 0) {
+		m_pModelService->updateRoboyBehavior(*m_pSelectedBehavior);
+		return true;
+	}
+	return false;
+}

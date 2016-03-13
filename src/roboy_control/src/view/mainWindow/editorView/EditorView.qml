@@ -5,7 +5,6 @@ import Material 0.2
 import Material.ListItems 0.1 as ListItem
 
 Page {
-/*
     property var selectedBehaviorIndex
 
     onSelectedBehaviorIndexChanged : {
@@ -35,8 +34,7 @@ Page {
 	                	selectedBehaviorIndex         = index
 	                	behaviorNameTextfield.text    = title
 	                	behaviorNameTextfield.enabled = true
-	                	identifierTextfield.text      = id
-	                	identifierTextfield.enabled   = true
+	                	identifierLabel.text          = id
 	                	durationLabel.text            = "duration: " + duration + " ms"
 	                	motorCountLabel.text          = "motor count: " + motorCount 
 	                	motorListView.model           = motorInfo
@@ -99,7 +97,7 @@ Page {
 			                    color             : "white"
 			                    enabled           : false
 			                    id                : behaviorNameTextfield
-			                    onEditingFinished : { cpp_EditorView.setBehaviorName(text) }
+			                    onEditingFinished : { cpp_EditorView.updateBehaviorName(text) }
 			                    placeholderText   : "behavior name"
 			                    textColor         : "white"
 			                    width             : parent.width
@@ -110,19 +108,16 @@ Page {
 			                action : Icon {
 			                    anchors.centerIn : parent
 			                    color            : "white"
-			                    name             : "action/credit_card"
+			                    name             : "action/info_outline"
 			                }
 
-			                content : TextField {
-			                    anchors.centerIn  : parent
-			                    color             : "white"
-			                    enabled           : false
-			                    id                : identifierTextfield
-			                    onEditingFinished : { cpp_EditorView.setBehaviorId(text)}
-			                    placeholderText   : "identifier"
-			                    textColor         : "white"
-			                    validator         : IntValidator{}
-			                    width             : parent.width
+			                content : Label {
+			                	anchors.centerIn : parent
+			                    color            : "white"
+			                    font.pixelSize   : Units.dp(16)
+			                    id               : identifierLabel
+			                   	text             : "-"
+			                    width            : parent.width
 			                }
 			            }
 
@@ -130,7 +125,7 @@ Page {
 			                action : Icon {
 			                    anchors.centerIn : parent
 			                    color            : "white"
-			                    name             : "action/alarm_on"
+			                    name             : "av/av_timer"
 			                }
 
 			                content : Label {
@@ -203,7 +198,8 @@ Page {
 
 	                Button {
 	                	onClicked : {
-	                		cpp_EditorView.saveButtonClicked(selectedBehaviorIndex);
+	                		cpp_EditorView.saveButtonClicked();
+	                		snackbar.open("Behavior updated")
 	                	}
 	                    text      : "Save"
 	                    textColor : Theme.accentColor
@@ -216,5 +212,4 @@ Page {
     Snackbar {
         id: snackbar
     }
-    */
 }
