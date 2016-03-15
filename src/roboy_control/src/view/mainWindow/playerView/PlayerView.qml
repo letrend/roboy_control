@@ -29,6 +29,17 @@ View {
 
             Button {
                 elevation : 1
+                id        : rewindButton
+                onClicked : cpp_PlayerView.rewindButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "av/skip_previous"
+                }
+            }
+
+            Button {
+                elevation : 1
                 id        : playButton
                 onClicked : cpp_PlayerView.playButtonClicked()
 
@@ -68,6 +79,18 @@ View {
                 Icon {
                     anchors.centerIn : parent
                     name             : "av/skip_next"
+                }
+            }
+
+            Button {
+                anchors.right : parent.right
+                elevation     : 1
+                id            : initButton
+                onClicked     : cpp_PlayerView.initButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "action/autorenew"
                 }
             }
         }

@@ -47,21 +47,35 @@ void PlayerView::playButtonClicked() {
  * @brief PlayerView::pauseButtonClicked click handler for the pause button
  */
 void PlayerView::pauseButtonClicked() {
-    VIEW_DBG << "pause button clicked";
+    m_pViewController->pauseBehaviorPlan();
 }
 
 /**
  * @brief PlayerView::stopButtonClicked click handler for the stop button
  */
 void PlayerView::stopButtonClicked() {
-    VIEW_DBG << "stop button clicked";
+    m_pViewController->stopBehaviorPlan();
 }
 
 /**
  * @brief PlayerView::skipButtonClicked click handler for the skip button
  */
 void PlayerView::skipButtonClicked() {
-    VIEW_DBG << "skip button clicked";
+    m_pViewController->skipBehavior();
+}
+
+/**
+ * @brief PlayeView::rewindButtonclicked click handler for the rewind button 
+ */
+void PlayerView::rewindButtonClicked() {
+    m_pViewController->rewindBehaviorPlan();
+}
+
+/**
+ * @brief PlayerView::initButtonClicked click handler for the init button
+ */
+void PlayerView::initButtonClicked() {
+    m_pViewController->triggerInit();
 }
 
 /**
