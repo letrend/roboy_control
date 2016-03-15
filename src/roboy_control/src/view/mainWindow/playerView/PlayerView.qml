@@ -90,7 +90,7 @@ View {
 
                 Icon {
                     anchors.centerIn : parent
-                    name             : "action/launch"
+                    name             : "action/autorenew"
                 }
             }
 
@@ -102,7 +102,7 @@ View {
 
                 Icon {
                     anchors.centerIn : parent
-                    name             : "hardware/developer_board"
+                    name             : "action/build"
                 }
             }
         }

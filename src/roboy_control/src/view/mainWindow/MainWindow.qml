@@ -21,6 +21,17 @@ ApplicationWindow {
 
     initialPage : TabbedPage {
         actions : [
+        /*
+            Action {
+                iconName       : "action/autorenew"
+                name           : "Initialize"
+            },
+
+            Action {
+                iconName       : "action/build"
+                name           : "Process"
+            },*/
+
             Action {
                 iconName       : "action/settings"
                 hoverAnimation : true
