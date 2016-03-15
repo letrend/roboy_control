@@ -83,6 +83,18 @@ View {
             }
 
             Button {
+                anchors.right   : initButton.left
+                anchors.margins : Units.dp(16)
+                elevation       : 1
+                id              : processButton
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "action/launch"
+                }
+            }
+
+            Button {
                 anchors.right : parent.right
                 elevation     : 1
                 id            : initButton
@@ -90,7 +102,7 @@ View {
 
                 Icon {
                     anchors.centerIn : parent
-                    name             : "action/autorenew"
+                    name             : "hardware/developer_board"
                 }
             }
         }

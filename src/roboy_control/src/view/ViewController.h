@@ -29,14 +29,19 @@ private:
 public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);
 
-    void playBehaviorPlan  ();
-    void pauseBehaviorPlan ();
-    void stopBehaviorPlan  ();
-    void skipBehavior      ();
-    void rewindBehaviorPlan();
-    void triggerInit       (); //TODO: Trigger Initialization by button
+    void playBehaviorPlan   ();
+    void pauseBehaviorPlan  ();
+    void stopBehaviorPlan   ();
+    void skipBehavior       ();
+    void rewindBehaviorPlan ();
+    void triggerInit        (); //TODO: Trigger Initialization by button
+    void processBehaviorPlan();
 
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
+
+public slots:
+    void controllerStateChanged(ROSController controller       );
+    void controllerStateChanged(QList<ROSController> controller);
 
 signals:
     void signalPlay      ();
@@ -45,6 +50,7 @@ signals:
     void signalSkip      ();
     void signalRewind    ();
     void signalInitialize();
+    void signalProcess   ();
 
 };
 

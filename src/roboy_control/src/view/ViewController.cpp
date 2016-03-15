@@ -70,9 +70,30 @@ void ViewController::triggerInit() {
 }
 
 /**
+ * @brief ViewController::processBehaviorPlan method for triggering the processing of the current behavior plan
+ */
+void ViewController::processBehaviorPlan() {
+    emit signalProcess();
+}
+
+/**
  * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan
  * @return the current behavior plan
  */
 RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     return this->m_pMainWindow->fromMainWindow_getCurrentRoboyPlan();
+}
+
+/**
+ * @brief ViewController::controllerStateChanged slot to notfiy the gui when a controllers state changes
+ */
+void ViewController::controllerStateChanged(ROSController controller) {
+
+}
+
+/**
+ * @brief ViewController::controllerStateChanged slot to notify the gui about multiple controller state changes
+ */
+void ViewController::controllerStateChanged(QList<ROSController> controller) {
+
 }

@@ -72,6 +72,13 @@ void PlayerView::rewindButtonClicked() {
 }
 
 /**
+ * @brief PlayerView::processButtonClicked click handler for the process button
+ */
+void PlayerView::processButtonClicked() {
+    m_pViewController->processBehaviorPlan();
+}
+
+/**
  * @brief PlayerView::initButtonClicked click handler for the init button
  */
 void PlayerView::initButtonClicked() {

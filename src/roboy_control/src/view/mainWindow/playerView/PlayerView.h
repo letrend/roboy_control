@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void skipButtonClicked   ();
     Q_INVOKABLE void rewindButtonClicked ();
     Q_INVOKABLE void initButtonClicked   ();
+    Q_INVOKABLE void processButtonClicked();
     Q_INVOKABLE void addLaneButtonClicked();
 
     /* MultiLaneView related slots */
