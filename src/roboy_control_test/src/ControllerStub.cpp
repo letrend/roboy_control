@@ -45,9 +45,8 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
     }
 
     qDebug() << "[" << nodeName << "] " << "Send Service Response on topic 'motor1'";
-    res.state.id = id;
-    res.state.state = STATUS::TRAJECTORY_READY ;
-    qDebug() << "\t- Update Controller State: [id:" << res.state.id << "][state:" << res.state.state << "]";
+    res.state = STATUS::TRAJECTORY_READY ;
+    qDebug() << "\t- Update Controller State: [id:" << id << "][state:" << res.state << "]";
 
     return true;
 }

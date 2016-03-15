@@ -21,6 +21,9 @@ class ROSMessageTransceiverService : public ITransceiverService
 {
 private:
     ros::NodeHandle m_nodeHandle;
+    ros::Publisher  m_steerPublisher;
+
+    void callbackStatus(common_utilities::ControllerState::ConstPtr & status);
 
 public:
     ROSMessageTransceiverService(qint32 motorId, QString name = QString());
@@ -28,6 +31,8 @@ public:
     void sendInitializeRequest();
     void sendTrajectory();
     void sendSteeringMessage();
+
+    void listenOnControllerStatus();
 };
 
 #endif // ROSMESSAGETRANSCEIVERSERVICE_H

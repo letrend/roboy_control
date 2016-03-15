@@ -36,7 +36,8 @@ public:
 public slots:
     void slotInitializeRoboy();
     void slotExecutePlan();
-    void stopPlan();
+    void slotStopPlan();
+    void slotRewindPlan();
 
 signals:
     void updateRoboyStatus();

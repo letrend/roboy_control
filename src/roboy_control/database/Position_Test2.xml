@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<roboybehavior name="Position_Test2" behaviorid="2">
+    <motor motorid="0" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+    <motor motorid="1" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+    <motor motorid="2" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+    <motor motorid="4" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+    <motor motorid="5" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+    <motor motorid="6" controlmode="1" samplerate="100">
+        <waypoint id="0">0</waypoint>
+        <waypoint id="1">1</waypoint>
+        <waypoint id="2">2</waypoint>
+        <waypoint id="3">3</waypoint>
+        <waypoint id="4">2</waypoint>
+        <waypoint id="5">1</waypoint>
+        <waypoint id="6">0</waypoint>
+    </motor>
+</roboybehavior>

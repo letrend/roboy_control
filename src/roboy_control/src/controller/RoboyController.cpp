@@ -10,6 +10,8 @@ RoboyController::RoboyController() {
 
     connect(m_pViewController, SIGNAL(signalInitialize()), this, SLOT(slotInitializeRoboy()));
     connect(m_pViewController, SIGNAL(signalPlay()), this, SLOT(slotExecutePlan()));
+    connect(m_pViewController, SIGNAL(signalStop()), this, SLOT(slotStopPlan()));
+    connect(m_pViewController, SIGNAL(signalRewind()), this, SLOT(slotRewindPlan()));
 }
 
 RoboyController::~RoboyController() {
@@ -49,8 +51,12 @@ void RoboyController::slotExecutePlan() {
     executeCurrentRoboyPlan();
 }
 
-void RoboyController::stopPlan() {
+void RoboyController::slotStopPlan() {
     CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
+}
+
+void RoboyController::slotRewindPlan() {
+    CONTROLLER_DBG << "Triggered 'Rewind Plan' from View";
 }
 
 // Private Interface
