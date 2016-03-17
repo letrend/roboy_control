@@ -34,6 +34,9 @@ void ViewController::preprocessBehaviorPlan() {
     emit signalPreprocess();
 }
 
+/**
+ * @brief ViewController::playBehaviorPlan method for triggering playing the current behavior plan
+ */
 void ViewController::playBehaviorPlan() {
     VIEW_DBG << "Play Behavior Plan triggered.";
     emit signalPlay();
@@ -58,10 +61,66 @@ void ViewController::stopRecording() {
 }
 
 
+///**
+// * @brief ViewController::pauseBehaviorPlan method for triggering pausing the current behavior plan
+// */
+//void ViewController::pauseBehaviorPlan() {
+//    emit signalPause();
+//}
+//
+///**
+// * @brief ViewController:stopBehaviorPlan method for triggering stopping the current behavior plan
+// */
+//void ViewController::stopBehaviorPlan() {
+//    emit signalStop();
+//}
+
+///**
+// * @brief ViewController::skipBehavior method for triggering skipping the current behavior
+// */
+//void ViewController::skipBehavior() {
+//    emit signalSkip();
+//}
+
+///**
+// * @brief ViewController::rewindBehavior method for rewinding the current behavior plan
+// */
+// void ViewController::rewindBehaviorPlan() {
+//    emit signalRewind();
+// }
+
+///**
+// * @rbrief ViewController::triggerInit method for triggering the initialization
+// */
+//void ViewController::triggerInit() {
+//    emit signalInitialize();
+//}
+//
+///**
+// * @brief ViewController::processBehaviorPlan method for triggering the processing of the current behavior plan
+// */
+//void ViewController::processBehaviorPlan() {
+//    emit signalProcess();
+//}
+
 /**
  * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan
  * @return the current behavior plan
  */
 RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
     return this->m_pMainWindow->fromMainWindow_getCurrentRoboyPlan();
+}
+
+/**
+ * @brief ViewController::controllerStateChanged slot to notfiy the gui when a controllers state changes
+ */
+void ViewController::controllerStateChanged(ROSController controller) {
+
+}
+
+/**
+ * @brief ViewController::controllerStateChanged slot to notify the gui about multiple controller state changes
+ */
+void ViewController::controllerStateChanged(QList<ROSController> controller) {
+
 }

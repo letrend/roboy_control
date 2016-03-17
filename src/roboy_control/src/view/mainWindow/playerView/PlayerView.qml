@@ -29,6 +29,17 @@ View {
 
             Button {
                 elevation : 1
+                id        : rewindButton
+                onClicked : cpp_PlayerView.rewindButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "av/skip_previous"
+                }
+            }
+
+            Button {
+                elevation : 1
                 id        : playButton
                 onClicked : cpp_PlayerView.playButtonClicked()
 
@@ -81,6 +92,33 @@ View {
                     name             : "av/play_arrow"
                 }
             }
+/*
+           Button {
+                anchors.right   : initButton.left
+                anchors.margins : Units.dp(16)
+                elevation       : 1
+                id              : processButton
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "action/autorenew"
+                }
+            }
+
+            Button {
+                anchors.right : parent.right
+                elevation     : 1
+                id            : initButton
+                onClicked     : cpp_PlayerView.initButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "action/build"
+
+                }
+            }
+*/
+
         }
 
         View {
@@ -190,7 +228,7 @@ View {
                             }
                         }
                     }
-                    model          : cpp_BehaviorListModel
+                    model          : cpp_PVBehaviorListModel
                 }
             }
 
@@ -235,7 +273,7 @@ View {
                             action: Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "action/accessibility"
+                                name             : "action/info_outline"
                             }
 
                             content : Label {
@@ -256,7 +294,7 @@ View {
                             action : Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "action/alarm_on"
+                                name             : "av/av_timer"
                             }
 
                             content : Label {

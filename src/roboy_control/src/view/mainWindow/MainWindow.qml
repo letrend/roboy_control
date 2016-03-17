@@ -6,6 +6,7 @@ import "./recorderView"
 import "./editorView"
 
 ApplicationWindow {
+
     id            : roboyControlWindow
     minimumWidth  : 600
     minimumHeight : 500
@@ -20,6 +21,17 @@ ApplicationWindow {
 
     initialPage : TabbedPage {
         actions : [
+        /*
+            Action {
+                iconName       : "action/autorenew"
+                name           : "Initialize"
+            },
+
+            Action {
+                iconName       : "action/build"
+                name           : "Process"
+            },*/
+
             Action {
                 iconName       : "action/settings"
                 hoverAnimation : true
@@ -29,7 +41,6 @@ ApplicationWindow {
         ]
 
         title   : "Roboy Control"
-
 
         Tab {
             title : "Player"

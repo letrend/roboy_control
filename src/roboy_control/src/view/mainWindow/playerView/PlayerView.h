@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "BehaviorListModel.h"
+#include "../BehaviorListModel.h"
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
@@ -27,6 +27,11 @@ public:
     Q_INVOKABLE void stopButtonClicked   ();
     Q_INVOKABLE void skipButtonClicked   ();
     Q_INVOKABLE void preprocessButtonClicked();
+
+//    Q_INVOKABLE void rewindButtonClicked ();
+//    Q_INVOKABLE void initButtonClicked   ();
+//    Q_INVOKABLE void processButtonClicked();
+
     Q_INVOKABLE void addLaneButtonClicked();
 
     /* MultiLaneView related slots */

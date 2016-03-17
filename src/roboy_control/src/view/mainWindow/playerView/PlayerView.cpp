@@ -17,7 +17,7 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
     m_pMultiLaneViewModel   = new RoboyMultiLaneModel();
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
-    pQmlContext->setContextProperty("cpp_BehaviorListModel", m_pBehaviorListModel);
+    pQmlContext->setContextProperty("cpp_PVBehaviorListModel", m_pBehaviorListModel);
     pQmlContext->setContextProperty("cpp_MultiLaneViewModel", m_pMultiLaneViewModel);
 }
 
@@ -26,6 +26,7 @@ PlayerView::PlayerView(IModelService *pModelService, ViewController * pViewContr
  */
 PlayerView::~PlayerView() {
     delete m_pBehaviorListModel;
+    delete m_pMultiLaneViewModel;
 }
 
 /**
@@ -72,6 +73,28 @@ void PlayerView::preprocessButtonClicked() {
     VIEW_DBG << "preprocess button clicked";
     m_pViewController->preprocessBehaviorPlan();
 }
+
+/**
+ * @brief PlayeView::rewindButtonclicked click handler for the rewind button 
+ */
+//void PlayerView::rewindButtonClicked() {
+//    m_pViewController->rewindBehaviorPlan();
+//}
+
+/**
+ * @brief PlayerView::processButtonClicked click handler for the process button
+ */
+//void PlayerView::processButtonClicked() {
+//    m_pViewController->processBehaviorPlan();
+//}
+
+/**
+ * @brief PlayerView::initButtonClicked click handler for the init button
+ */
+//void PlayerView::initButtonClicked() {
+//    m_pViewController->triggerInit();
+//>>>>>>> ac051b7dbd46760ef201e9a0c19bd726ca94d7c5
+//}
 
 
 /**
