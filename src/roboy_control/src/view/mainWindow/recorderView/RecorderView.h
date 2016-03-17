@@ -20,6 +20,9 @@ public:
 
     void notify();
 
+	Q_INVOKABLE void recordButtonClicked();
+	Q_INVOKABLE void stopRecordButtonClicked();
+
 private:
 	ViewController          * m_pViewController;
     IModelService           * m_pModelService;

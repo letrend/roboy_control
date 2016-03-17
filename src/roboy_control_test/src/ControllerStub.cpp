@@ -2,6 +2,7 @@
 // Created by bruh on 1/24/16.
 //
 
+#include <common_utilities/ControllerState.h>
 #include "DataTypes.h"
 
 #include "common_utilities/Steer.h"
@@ -31,9 +32,25 @@ int main(int argc, char ** argv) {
     state = STATUS::INITIALIZED;
 
     ros::ServiceServer trajectoryServer =  n.advertiseService(serviceName.toStdString(), callbackMotor);
-//    ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
 
-    ros::spin();
+    //ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
+
+    ros::AsyncSpinner spinner(1);
+    spinner.start();
+
+    QString statusTopic;
+    statusTopic.sprintf("/roboy/status_motor%u", id);
+    ros::Publisher statusPublisher = n.advertise<common_utilities::ControllerState>(statusTopic.toStdString(), 1000);
+
+    ros::Duration duration(1,0);
+    while(1) {
+        qDebug() << "Advertixe 'ControllerState' Message";
+        common_utilities::ControllerState stateMessage;
+        stateMessage.id = id;
+        stateMessage.state = STATUS::INITIALIZED;
+        statusPublisher.publish(stateMessage);
+        duration.sleep();
+    }
 }
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res){
@@ -52,5 +69,5 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
 }
 
 //void callbackSteering(common_utilities::Steer::ConstPtr & msg) {
-
+//    qDebug() << "Received Steering Message";
 //}

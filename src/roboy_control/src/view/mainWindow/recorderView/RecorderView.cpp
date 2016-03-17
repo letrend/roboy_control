@@ -25,3 +25,13 @@ RecorderView::~RecorderView() {
 void RecorderView::notify() {
 
 }
+
+void RecorderView::recordButtonClicked() {
+    VIEW_DBG << "Record Button Clicked";
+    m_pViewController->recordBehavior();
+}
+
+void RecorderView::stopRecordButtonClicked() {
+    VIEW_DBG << "Stop Record Button Clicked";
+    m_pViewController->stopRecording();
+}

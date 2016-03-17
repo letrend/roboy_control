@@ -35,16 +35,21 @@ public:
 
 public slots:
     void slotInitializeRoboy();
-    void slotExecutePlan();
+    void slotPreprocessPlan();
+    void slotPlayPlan();
     void slotStopPlan();
+    void slotPausePlan();
     void slotRewindPlan();
+
+    void slotRecordBehavior();
+    void slotStopRecording();
 
 signals:
     void updateRoboyStatus();
     void updatecontrollerStatus();
 
 private:
-    void executeCurrentRoboyPlan();
+    void preprocessCurrentRoboyPlan();
 
 };
 

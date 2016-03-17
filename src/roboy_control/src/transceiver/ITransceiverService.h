@@ -28,12 +28,14 @@ protected:
     std::list<ROSController> m_initializationList;
     Trajectory               m_trajectory;
     qint8                    m_steeringCommand;
+    QList<ROSController>     m_recordRequest;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
     bool            m_bSendInitialize = false;
     bool            m_bSendTrajectory = false;
     bool            m_bSendSteering = false;
+    bool            m_bStartRecording = false;
     bool            m_bTerminate = false;
 
 public:
@@ -61,7 +63,7 @@ public:
         TRANSCEIVER_LOG << "Transceiver Thread started";
         TRANSCEIVER_LOG << "Wait for Events";
 
-        ros::AsyncSpinner spinner(4);
+        ros::AsyncSpinner spinner(1);
         spinner.start();
 
         while(run) {
@@ -80,6 +82,9 @@ public:
                 TRANSCEIVER_LOG << "Triggered 'Send Steering Command'";
                 m_bSendSteering = false;
                 sendSteeringMessage();
+            } else if (m_bStartRecording) {
+                TRANSCEIVER_LOG << "Received: Start Recording";
+                startRecording();
             } else if (m_bTerminate) {
                 TRANSCEIVER_LOG << "Received: Terminate Thread";
                 run = false;
@@ -126,12 +131,29 @@ public:
         m_mutexCV.unlock();
     }
 
+    void startRecording(const QList<ROSController> & controllers) {
+        m_mutexData.lock();
+        m_recordRequest = controllers;
+        m_mutexData.unlock();
+
+        m_mutexCV.lock();
+        m_bStartRecording = true;
+        m_condition.wakeAll();
+        m_mutexCV.unlock();
+    }
+
     virtual void listenOnControllerStatus() = 0;
+
+    virtual void startControllers(const QList<qint32> & controllers) = 0;
+
+    virtual void sendRecordingSteeringMessage(SteeringCommand command) = 0;
 
 protected:
     virtual void sendTrajectory() = 0;
     virtual void sendInitializeRequest() = 0;
     virtual void sendSteeringMessage() = 0;
+
+    virtual void startRecording() = 0;
 };
 
 #endif //ROBOYCONTROL_ITRANSCEIVERSERVICE_H

@@ -39,6 +39,8 @@ void PlayerView::notify() {
  * @brief PlayerView::playButtonClicked click handler for the play button
  */
 void PlayerView::playButtonClicked() {
+    VIEW_DBG << "play button clicked";
+
     m_pViewController->playBehaviorPlan();
 }
 
@@ -47,6 +49,7 @@ void PlayerView::playButtonClicked() {
  */
 void PlayerView::pauseButtonClicked() {
     VIEW_DBG << "pause button clicked";
+    m_pViewController->pauseBehaviorPlan();
 }
 
 /**
@@ -54,6 +57,7 @@ void PlayerView::pauseButtonClicked() {
  */
 void PlayerView::stopButtonClicked() {
     VIEW_DBG << "stop button clicked";
+    m_pViewController->stopBehaviorPlan();
 }
 
 /**
@@ -61,7 +65,14 @@ void PlayerView::stopButtonClicked() {
  */
 void PlayerView::skipButtonClicked() {
     VIEW_DBG << "skip button clicked";
+    m_pViewController->rewindBehaviorPlan();
 }
+
+void PlayerView::preprocessButtonClicked() {
+    VIEW_DBG << "preprocess button clicked";
+    m_pViewController->preprocessBehaviorPlan();
+}
+
 
 /**
  * @brief PlayerView::addLaneButtonClicked click handler for the add lane button

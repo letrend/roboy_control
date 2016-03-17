@@ -1,0 +1,13 @@
+set(HDRS ${HDRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/IControllerHandle.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ROSControllerHandle.h
+PARENT_SCOPE)
+
+set(SRCS ${SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ROSControllerHandle.cpp
+PARENT_SCOPE)
+
+set(INCL ${INCL}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+PARENT_SCOPE)
+

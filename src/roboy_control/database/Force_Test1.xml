@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roboybehavior name="Force_Test1" behaviorid="10">
+    <motor motorid="0" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="1" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="2" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="4" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
     <motor motorid="5" controlmode="3" samplerate="100">
-        <waypoint id="0">5</waypoint>
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="6" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="8" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="9" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
+    </motor>
+    <motor motorid="10" controlmode="3" samplerate="100">
+        <waypoint id="0">4</waypoint>
     </motor>
 </roboybehavior>

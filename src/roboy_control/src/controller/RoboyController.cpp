@@ -9,9 +9,14 @@ RoboyController::RoboyController() {
     m_pViewController = new ViewController(this, m_pModelService);
 
     connect(m_pViewController, SIGNAL(signalInitialize()), this, SLOT(slotInitializeRoboy()));
-    connect(m_pViewController, SIGNAL(signalPlay()), this, SLOT(slotExecutePlan()));
+    connect(m_pViewController, SIGNAL(signalPreprocess()), this, SLOT(slotPreprocessPlan()));
+    connect(m_pViewController, SIGNAL(signalPlay()), this, SLOT(slotPlayPlan()));
     connect(m_pViewController, SIGNAL(signalStop()), this, SLOT(slotStopPlan()));
+    connect(m_pViewController, SIGNAL(signalPause()), this, SLOT(slotPausePlan()));
     connect(m_pViewController, SIGNAL(signalRewind()), this, SLOT(slotRewindPlan()));
+
+    connect(m_pViewController, SIGNAL(signalRecord()), this, SLOT(slotRecordBehavior()));
+    connect(m_pViewController, SIGNAL(signalStopRecording()), this, SLOT(slotStopRecording()));
 }
 
 RoboyController::~RoboyController() {
@@ -46,21 +51,44 @@ void RoboyController::slotInitializeRoboy() {
         CONTROLLER_WAR << "Initialization failed.";
 }
 
-void RoboyController::slotExecutePlan() {
+void RoboyController::slotPreprocessPlan() {
+    CONTROLLER_DBG << "Triggered 'Preprocess Execution' from View";
+    preprocessCurrentRoboyPlan();
+}
+
+void RoboyController::slotPlayPlan() {
     CONTROLLER_DBG << "Triggered 'Start Execution' from View";
-    executeCurrentRoboyPlan();
+    m_pMyoController->playPlanExecution();
+
 }
 
 void RoboyController::slotStopPlan() {
     CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
+    m_pMyoController->stopPlanExecution();
+}
+
+void RoboyController::slotPausePlan() {
+    CONTROLLER_DBG << "Triggered 'Pause Execution' from View";
+    m_pMyoController->pausePlanExecution();
 }
 
 void RoboyController::slotRewindPlan() {
     CONTROLLER_DBG << "Triggered 'Rewind Plan' from View";
+    m_pMyoController->rewindPlanExecution();
+}
+
+void RoboyController::slotRecordBehavior() {
+    CONTROLLER_DBG << "Triggered 'Record Behavior' from View";
+    m_pMyoController->recordBehavior();
+}
+
+void RoboyController::slotStopRecording() {
+    CONTROLLER_DBG << "Triggered 'Stop Recording' from View";
+    m_pMyoController->stopRecording();
 }
 
 // Private Interface
-void RoboyController::executeCurrentRoboyPlan() {
+void RoboyController::preprocessCurrentRoboyPlan() {
     CONTROLLER_DBG << "Start to execute current Roboy Plan.";
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();

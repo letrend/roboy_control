@@ -29,7 +29,15 @@ private:
 public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);
 
+    void preprocessBehaviorPlan();
     void playBehaviorPlan();
+    void stopBehaviorPlan();
+    void pauseBehaviorPlan();
+    void rewindBehaviorPlan();
+
+    void recordBehavior();
+    void stopRecording();
+
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 
     //TODO: Trigger Initialization by button
@@ -37,10 +45,14 @@ public:
 
 signals:
     void signalInitialize();
+    void signalPreprocess();
     void signalPlay();
     void signalStop();
+    void signalPause();
     void signalRewind();
 
+    void signalRecord();
+    void signalStopRecording();
 };
 
 

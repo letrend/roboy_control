@@ -1,7 +1,12 @@
 #include "ROSMessageTransceiverService.h"
 
 ROSMessageTransceiverService::ROSMessageTransceiverService(qint32 motorId, QString name) : ITransceiverService(motorId, name) {
+    m_switchController = m_nodeHandle.serviceClient<controller_manager_msgs::SwitchController>("/controller_manager/switch_controller");
+    m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
 
+    m_recordClient     = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
+
+    m_steerRecording= m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_recording", 1000);
 }
 
 // MyoMaster Interface
@@ -31,12 +36,45 @@ void ROSMessageTransceiverService::sendInitializeRequest() {
         if (delegate != nullptr)
             delegate->receivedControllerStatusUpdate(controllers);
 
+        // Advertise topic for broadcasting steering messages
         m_steerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer", 1000);
 
     } else {
         TRANSCEIVER_LOG << "Failed to call Service";
     }
 }
+
+void ROSMessageTransceiverService::startControllers(const QList<qint32> & controllers) {
+    controller_manager_msgs::SwitchController message;
+
+    std::vector<std::string> resources;
+    for(qint8 id : controllers) {
+        QString name;
+        name.sprintf("motor%u", id);
+        resources.push_back(name.toStdString());
+    }
+
+    message.request.start_controllers = resources;
+    message.request.strictness = 1;
+
+    ros::Duration duration(1);
+    duration.sleep();
+    m_switchController.call(message);
+    TRANSCEIVER_LOG << "Start Call returned";
+}
+
+void ROSMessageTransceiverService::unloadControllers(const QList<qint32> & controllers) {
+    controller_manager_msgs::UnloadController message;
+
+    for(qint8 id : controllers) {
+        QString name;
+        name.sprintf("motor%u", id);
+        message.request.name = name.toStdString();
+        m_unloadController.call(message);
+    }
+    TRANSCEIVER_LOG << "Unload Calls returned";
+}
+
 
 // MotorController Interface
 void ROSMessageTransceiverService::sendTrajectory() {
@@ -83,16 +121,60 @@ void ROSMessageTransceiverService::sendSteeringMessage() {
 }
 
 void ROSMessageTransceiverService::listenOnControllerStatus() {
+    // Open topic to receive status updates for specific motor controller
+    TRANSCEIVER_LOG << "Subscribe to Status Topic";
     QString topic;
     topic.sprintf("/roboy/status_motor%u", m_motorId);
-    //ros::Subscriber subscriber = m_nodeHandle.subscribe(topic.toStdString(), 1000, &ROSMessageTransceiverService::callbackStatus);
-    //ros::spin();
+    m_statusSubscriber = m_nodeHandle.subscribe(topic.toStdString(), 1000, &ROSMessageTransceiverService::callbackStatus, this);
 }
 
-void ROSMessageTransceiverService::callbackStatus(common_utilities::ControllerState::ConstPtr & status) {
+void ROSMessageTransceiverService::startRecording() {
+    bool res = false;
+    TRANSCEIVER_LOG << "Start Recording";
+
+    common_utilities::Record message;
+    QList<qint32> ids;
+    QList<qint32> modes;
+    for(ROSController controller : m_recordRequest) {
+        ids.append(controller.id);
+        modes.append(controller.controlMode);
+    }
+
+    message.request.idList = ids.toVector().toStdVector();
+    message.request.controlmode = modes.toVector().toStdVector();
+    message.request.samplingTime = 10.0;
+
+    res = m_recordClient.call(message);
+
+    if(res) {
+        TRANSCEIVER_LOG << "Record successful";
+        std::vector<float> waypoints;
+
+        for(auto v : message.response.trajectories) {
+            TRANSCEIVER_LOG << "Received Waypoints for controller: " << v.waypoints.size();
+        }
+    } else {
+        TRANSCEIVER_WAR << "Record failed";
+    }
+
+}
+
+void ROSMessageTransceiverService::sendRecordingSteeringMessage(SteeringCommand command) {
+    TRANSCEIVER_LOG << "Send Steering Command " << command;
+
+    common_utilities::Steer message;
+    message.steeringCommand = command;
+    m_steerRecording.publish(message);
+
+
+}
+
+// Private Interface
+void ROSMessageTransceiverService::callbackStatus(const common_utilities::StatusConstPtr & status) {
     TRANSCEIVER_LOG << "Received Status Update";
     ROSController controller;
-    controller.id = status->id;
-    controller.state = (STATUS) status->state;
+    controller.id = m_motorId;
+    controller.state = (STATUS) status->statusCode;
     delegate->receivedControllerStatusUpdate(controller);
 }
+

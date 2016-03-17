@@ -14,4 +14,34 @@ View {
             text             : "Recorder View"
         }
     }*/
+
+    Row {
+        anchors.left    : parent.left
+        anchors.margins : Units.dp(0)
+        anchors.right   : parent.right
+        spacing         : Units.dp(16)
+
+        Button {
+            elevation : 1
+            id        : recordButton
+            onClicked : cpp_RecorderView.recordButtonClicked()
+
+            Icon {
+                anchors.centerIn : parent
+                name             : "av/play_arrow"
+            }
+        }
+
+        Button {
+            elevation : 1
+            id        : stopRecordButton
+            onClicked : cpp_RecorderView.stopRecordButtonClicked()
+
+            Icon {
+                anchors.centerIn : parent
+                name             : "av/stop"
+            }
+        }
+
+    }
 }

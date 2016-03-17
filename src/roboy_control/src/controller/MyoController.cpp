@@ -50,12 +50,16 @@ bool MyoController::initializeControllers() {
     }
 
     if(isInitializedCorrectly()) {
+        MYOCONTROLLER_DBG << "Controller Ready but Stopped";
+        // Controllers are initialized by MyoMaster but stopped
+        m_myoMasterTransceiver->startControllers(m_mapControllers.keys());
+
         MYOCONTROLLER_SUC << "Initialization completed successful" ;
         result = true;
 
-//        for(ROSController controller : m_mapControllers.values()) {
-//            controller.transceiver->listenOnControllerStatus();
-//        }
+        for(ROSController controller : m_mapControllers.values()) {
+            controller.transceiver->listenOnControllerStatus();
+        }
     } else {
         MYOCONTROLLER_WAR << "Initialization failed";
         result = false;
@@ -80,28 +84,61 @@ bool MyoController::sendRoboyPlan(RoboyBehaviorPlan & behaviorPlan) {
         controller.transceiver->sendTrajectory(mapTrajectories.value(id));
     }
 
-    while(!m_bReceivedAllControllerStates) {
-        m_mutexCVTransceiver.lock();
-        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
-        m_mutexCVTransceiver.unlock();
-    }
+//    while(!m_bReceivedAllControllerStates) {
+//        m_mutexCVTransceiver.lock();
+//        m_conditionTransceiver.wait(&m_mutexCVTransceiver);
+//        m_mutexCVTransceiver.unlock();
+//
+//        MYOCONTROLLER_DBG << "------------ Wait for Controllers -----------------";
+//        for(ROSController & controller : m_mapControllers.values())
+//            MYOCONTROLLER_DBG << controller.toString();
+//        MYOCONTROLLER_DBG << "---------------------------------------------------";
+//
+//    }
+//
+//    MYOCONTROLLER_DBG << "Received all Controller Status Updates";
+//    m_bReceivedAllControllerStates = false;
 
-    MYOCONTROLLER_DBG << "Received all Controller Status Updates";
-    m_bReceivedAllControllerStates = false;
-
-    if(isReadyToPlay(behaviorPlan)) {
-        MYOCONTROLLER_SUC << "Plan ready to play.";
-        result = true;
-        MYOCONTROLLER_DBG << "Send Steering Message: PLAY";
-        m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
-    } else {
-        MYOCONTROLLER_WAR << "Failed to Transmit Plan. Abort.";
-        for(ROSController & controller : m_mapControllers.values())
-            controller.state = STATUS::INITIALIZED;
-        result = false;
+    for(int i = 0; i < 30; i++) {
+        if (isReadyToPlay(behaviorPlan)) {
+            MYOCONTROLLER_SUC << "Plan ready to play.";
+            result = true;
+            break;
+        } else {
+            MYOCONTROLLER_WAR << "Failed to Transmit Plan. Abort.";
+            for (ROSController &controller : m_mapControllers.values())
+                controller.state = STATUS::INITIALIZED;
+            result = false;
+        }
+        usleep(100000);
     }
     return result;
 }
+
+bool MyoController::playPlanExecution() {
+    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
+}
+
+bool MyoController::pausePlanExecution() {
+    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PAUSE_TRAJECTORY);
+}
+
+bool MyoController::stopPlanExecution() {
+    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
+}
+
+bool MyoController::rewindPlanExecution() {
+    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::REWIND_TRAJECTORY);
+}
+
+bool MyoController::recordBehavior() {
+    m_myoMasterTransceiver->startRecording(m_mapControllers.values());
+}
+
+bool MyoController::stopRecording() {
+    m_myoMasterTransceiver->sendRecordingSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
+}
+
 
 // ITransceiverServiceDelegate - Callback-Interface Implementation
 void MyoController::receivedControllerStatusUpdate(const QList<ROSController> & controllers) {

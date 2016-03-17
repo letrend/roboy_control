@@ -7,6 +7,7 @@
 
 #include "DataTypes.h"
 #include "ITransceiverService.h"
+#include "IControllerHandle.h"
 #include "RoboyControlConfiguration.h"
 #include "ROSMessageTransceiverService.h"
 
@@ -16,7 +17,7 @@ class MyoController : public ITransceiverServiceDelegate{
 
 private:
     ITransceiverService             * m_myoMasterTransceiver;
-    QMap<qint8, ROSController>        m_mapControllers;
+    QMap<qint32, ROSController>        m_mapControllers;
 
     QMutex                m_mutexCVTransceiver;
     QWaitCondition        m_conditionTransceiver;
@@ -32,6 +33,13 @@ public:
     // RoboyController Interface
     bool initializeControllers();
     bool sendRoboyPlan(RoboyBehaviorPlan & roboyPlan);
+    bool playPlanExecution();
+    bool pausePlanExecution();
+    bool stopPlanExecution();
+    bool rewindPlanExecution();
+
+    bool recordBehavior();
+    bool stopRecording();
 
     // ITransceiverServiceDelegate - Callback-Interface Implementation
     void receivedControllerStatusUpdate(const QList<ROSController> & controllers);

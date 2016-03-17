@@ -70,6 +70,17 @@ View {
                     name             : "av/skip_next"
                 }
             }
+
+            Button {
+                elevation : 1
+                id        : preprocessButton
+                onClicked : cpp_PlayerView.preprocessButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "av/play_arrow"
+                }
+            }
         }
 
         View {

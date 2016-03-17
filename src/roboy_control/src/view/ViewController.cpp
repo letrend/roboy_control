@@ -29,14 +29,34 @@ void ViewController::triggerInit() {
     emit signalInitialize();
 }
 
-/**
- * @brief ViewController::playBehaviorPlan method for triggering playing the current behavior plan
- */
+void ViewController::preprocessBehaviorPlan() {
+    VIEW_DBG << "Preprocess Behavior Plan triggered.";
+    emit signalPreprocess();
+}
+
 void ViewController::playBehaviorPlan() {
     VIEW_DBG << "Play Behavior Plan triggered.";
     emit signalPlay();
-//    m_pRoboyController->fromViewController_triggerPlayPlan();
 }
+
+void ViewController::stopBehaviorPlan() {
+    emit signalStop();
+}
+void ViewController::pauseBehaviorPlan() {
+    emit signalPause();
+}
+void ViewController::rewindBehaviorPlan() {
+    emit signalRewind();
+}
+
+void ViewController::recordBehavior() {
+    emit signalRecord();
+}
+
+void ViewController::stopRecording() {
+    emit signalStopRecording();
+}
+
 
 /**
  * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan
