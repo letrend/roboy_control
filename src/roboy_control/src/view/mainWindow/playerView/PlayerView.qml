@@ -29,17 +29,6 @@ View {
 
             Button {
                 elevation : 1
-                id        : rewindButton
-                onClicked : cpp_PlayerView.rewindButtonClicked()
-
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "av/skip_previous"
-                }
-            }
-
-            Button {
-                elevation : 1
                 id        : playButton
                 onClicked : cpp_PlayerView.playButtonClicked()
 
@@ -71,33 +60,12 @@ View {
                 }
             }
 
-            Button {
-                elevation : 1
-                id        : skipButton
-                onClicked : cpp_PlayerView.skipButtonClicked()
-
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "av/skip_next"
-                }
-            }
-
-            Button {
-                elevation : 1
-                id        : preprocessButton
-                onClicked : cpp_PlayerView.preprocessButtonClicked()
-
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "av/play_arrow"
-                }
-            }
-/*
            Button {
                 anchors.right   : initButton.left
                 anchors.margins : Units.dp(16)
                 elevation       : 1
-                id              : processButton
+                id              : preprocessButton
+                onClicked       : cpp_PlayerView.preprocessButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
@@ -117,8 +85,6 @@ View {
 
                 }
             }
-*/
-
         }
 
         View {

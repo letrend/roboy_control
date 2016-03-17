@@ -25,7 +25,9 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 }
 
+// PlayerView - Interface
 void ViewController::triggerInit() {
+    VIEW_DBG << "Init Roboy triggered.";
     emit signalInitialize();
 }
 
@@ -34,24 +36,21 @@ void ViewController::preprocessBehaviorPlan() {
     emit signalPreprocess();
 }
 
-/**
- * @brief ViewController::playBehaviorPlan method for triggering playing the current behavior plan
- */
 void ViewController::playBehaviorPlan() {
     VIEW_DBG << "Play Behavior Plan triggered.";
     emit signalPlay();
 }
 
 void ViewController::stopBehaviorPlan() {
+    VIEW_DBG << "Stop Behavior Plan triggered.";
     emit signalStop();
 }
 void ViewController::pauseBehaviorPlan() {
+    VIEW_DBG << "Pause Behavior Plan triggered.";
     emit signalPause();
 }
-void ViewController::rewindBehaviorPlan() {
-    emit signalRewind();
-}
 
+// RecorderView - Interface
 void ViewController::recordBehavior() {
     emit signalRecord();
 }
@@ -60,48 +59,7 @@ void ViewController::stopRecording() {
     emit signalStopRecording();
 }
 
-
-///**
-// * @brief ViewController::pauseBehaviorPlan method for triggering pausing the current behavior plan
-// */
-//void ViewController::pauseBehaviorPlan() {
-//    emit signalPause();
-//}
-//
-///**
-// * @brief ViewController:stopBehaviorPlan method for triggering stopping the current behavior plan
-// */
-//void ViewController::stopBehaviorPlan() {
-//    emit signalStop();
-//}
-
-///**
-// * @brief ViewController::skipBehavior method for triggering skipping the current behavior
-// */
-//void ViewController::skipBehavior() {
-//    emit signalSkip();
-//}
-
-///**
-// * @brief ViewController::rewindBehavior method for rewinding the current behavior plan
-// */
-// void ViewController::rewindBehaviorPlan() {
-//    emit signalRewind();
-// }
-
-///**
-// * @rbrief ViewController::triggerInit method for triggering the initialization
-// */
-//void ViewController::triggerInit() {
-//    emit signalInitialize();
-//}
-//
-///**
-// * @brief ViewController::processBehaviorPlan method for triggering the processing of the current behavior plan
-// */
-//void ViewController::processBehaviorPlan() {
-//    emit signalProcess();
-//}
+// RoboyController - Interface
 
 /**
  * @brief ViewController::fromController_getCurrentRoboyPlan method fore retrieving the current behavior plan

@@ -39,7 +39,6 @@ public slots:
     void slotPlayPlan();
     void slotStopPlan();
     void slotPausePlan();
-    void slotRewindPlan();
 
     void slotRecordBehavior();
     void slotStopRecording();

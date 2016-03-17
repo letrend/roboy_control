@@ -37,11 +37,23 @@ void PlayerView::notify() {
 }
 
 /**
+ * @brief PlayerView::initButtonClicked click handler for the init button
+ */
+void PlayerView::initButtonClicked() {
+    VIEW_DBG << "init button clicked";
+    m_pViewController->triggerInit();
+}
+
+void PlayerView::preprocessButtonClicked() {
+    VIEW_DBG << "preprocess button clicked";
+    m_pViewController->preprocessBehaviorPlan();
+}
+
+/**
  * @brief PlayerView::playButtonClicked click handler for the play button
  */
 void PlayerView::playButtonClicked() {
     VIEW_DBG << "play button clicked";
-
     m_pViewController->playBehaviorPlan();
 }
 
@@ -60,42 +72,6 @@ void PlayerView::stopButtonClicked() {
     VIEW_DBG << "stop button clicked";
     m_pViewController->stopBehaviorPlan();
 }
-
-/**
- * @brief PlayerView::skipButtonClicked click handler for the skip button
- */
-void PlayerView::skipButtonClicked() {
-    VIEW_DBG << "skip button clicked";
-    m_pViewController->rewindBehaviorPlan();
-}
-
-void PlayerView::preprocessButtonClicked() {
-    VIEW_DBG << "preprocess button clicked";
-    m_pViewController->preprocessBehaviorPlan();
-}
-
-/**
- * @brief PlayeView::rewindButtonclicked click handler for the rewind button 
- */
-//void PlayerView::rewindButtonClicked() {
-//    m_pViewController->rewindBehaviorPlan();
-//}
-
-/**
- * @brief PlayerView::processButtonClicked click handler for the process button
- */
-//void PlayerView::processButtonClicked() {
-//    m_pViewController->processBehaviorPlan();
-//}
-
-/**
- * @brief PlayerView::initButtonClicked click handler for the init button
- */
-//void PlayerView::initButtonClicked() {
-//    m_pViewController->triggerInit();
-//>>>>>>> ac051b7dbd46760ef201e9a0c19bd726ca94d7c5
-//}
-
 
 /**
  * @brief PlayerView::addLaneButtonClicked click handler for the add lane button

@@ -22,15 +22,11 @@ public:
 
     void notify();
 
-    Q_INVOKABLE void playButtonClicked   ();
-    Q_INVOKABLE void pauseButtonClicked  ();
-    Q_INVOKABLE void stopButtonClicked   ();
-    Q_INVOKABLE void skipButtonClicked   ();
+    Q_INVOKABLE void initButtonClicked();
     Q_INVOKABLE void preprocessButtonClicked();
-
-//    Q_INVOKABLE void rewindButtonClicked ();
-//    Q_INVOKABLE void initButtonClicked   ();
-//    Q_INVOKABLE void processButtonClicked();
+    Q_INVOKABLE void playButtonClicked();
+    Q_INVOKABLE void pauseButtonClicked();
+    Q_INVOKABLE void stopButtonClicked();
 
     Q_INVOKABLE void addLaneButtonClicked();
 

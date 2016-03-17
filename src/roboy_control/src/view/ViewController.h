@@ -29,25 +29,18 @@ private:
 public:
     ViewController(RoboyController * pRoboyController, IModelService * pModelService);
 
-    void triggerInit        (); //TODO: Trigger Initialization by button
-
-
+    // PlayerView - Interface
+    void triggerInit();
     void preprocessBehaviorPlan();
     void playBehaviorPlan();
     void stopBehaviorPlan();
     void pauseBehaviorPlan();
-    void rewindBehaviorPlan();
 
+    // RecorderView - Interface
     void recordBehavior();
     void stopRecording();
 
-//    void playBehaviorPlan   ();
-//    void pauseBehaviorPlan  ();
-//    void stopBehaviorPlan   ();
-//    void skipBehavior       ();
-//    void rewindBehaviorPlan ();
-//    void processBehaviorPlan();
-
+    // RoboyController - Interface
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 
 public slots:
@@ -60,19 +53,9 @@ signals:
     void signalPlay();
     void signalStop();
     void signalPause();
-    void signalRewind();
 
     void signalRecord();
     void signalStopRecording();
-
-
-//    void signalPlay      ();
-//    void signalPause     ();
-//    void signalStop      ();
-//    void signalSkip      ();
-//    void signalRewind    ();
-//    void signalProcess   ();
-
 };
 
 
