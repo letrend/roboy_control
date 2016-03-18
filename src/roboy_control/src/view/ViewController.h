@@ -7,7 +7,6 @@
 
 #include "IModelService.h"
 #include "mainWindow/MainWindow.h"
-
 #include <QDateTime>
 #include <QThread>
 #include <QQmlApplicationEngine>

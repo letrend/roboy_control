@@ -7,12 +7,11 @@ set(SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/DataTypes.cpp)
 set(INCL ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(model)
-add_subdirectory(view)
-add_subdirectory(transceiver)
 add_subdirectory(communication)
 add_subdirectory(controller)
 add_subdirectory(interfaces)
+add_subdirectory(model)
+add_subdirectory(view)
 
 message(Include Directories:)
 foreach(include_dir ${INCL})

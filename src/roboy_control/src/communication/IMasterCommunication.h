@@ -5,49 +5,40 @@
 #ifndef ROBOYCONTROL_ITRANSCEIVERSERVICE_H
 #define ROBOYCONTROL_ITRANSCEIVERSERVICE_H
 
-#include "ros/ros.h"
-
-#include <QThread>
-#include <QWaitCondition>
-#include <QtCore/qmutex.h>
-
 #include "DataTypes.h"
 #include "LogDefines.h"
-#include "ITransceiverServiceDelegate.h"
+#include <QtCore/qmutex.h>
+#include <QThread>
+#include <QWaitCondition>
+#include "ros/ros.h"
 
-class ITransceiverService : public QThread {
+class IMasterCommunication : public QThread {
 
     Q_OBJECT
 
 protected:
-    qint32          m_motorId;
     QString         m_name;
-    ITransceiverServiceDelegate * delegate;
 
     QMutex                   m_mutexData;
-    std::list<ROSController> m_initializationList;
-    Trajectory               m_trajectory;
-    qint8                    m_steeringCommand;
-    QList<ROSController>     m_recordRequest;
+    QList<ROSController *>   m_initializationList;
+    SteeringCommand          m_steeringCommand;
+    QList<ROSController *>   m_recordRequest;
+    SteeringCommand          m_recordSteeringCommand;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
     bool            m_bSendInitialize = false;
-    bool            m_bSendTrajectory = false;
     bool            m_bSendSteering = false;
     bool            m_bStartRecording = false;
+    bool            m_bSendRecordSteering = false;
     bool            m_bTerminate = false;
 
 public:
-    ITransceiverService(qint32 motorId, QString name = QString()) {
-        m_motorId = motorId;
-        if(name.isEmpty())
-            m_name.sprintf("%i", motorId);
-        else
-            m_name = name;
+    IMasterCommunication() {
+        m_name = "transceiver";
     }
 
-    ~ITransceiverService() {
+    ~IMasterCommunication() {
         m_mutexCV.lock();
         m_bTerminate = true;
         m_condition.wakeAll();
@@ -60,31 +51,31 @@ public:
 
     void run() {
         bool run = true;
-        TRANSCEIVER_LOG << "Transceiver Thread started";
         TRANSCEIVER_LOG << "Wait for Events";
 
-        ros::AsyncSpinner spinner(1);
+        ros::AsyncSpinner spinner(10);
         spinner.start();
 
         while(run) {
             m_mutexCV.lock();
             m_condition.wait(&m_mutexCV);
 
-            if(m_bSendTrajectory) {
-                TRANSCEIVER_LOG << "Triggered 'Send Trajectory'";
-                m_bSendTrajectory = false;
-                sendTrajectory();
-            } else if (m_bSendInitialize) {
+            if (m_bSendInitialize) {
                 TRANSCEIVER_LOG << "Triggered 'Send Initialize'";
                 m_bSendInitialize = false;
-                sendInitializeRequest();
+                eventHandle_sendInitializeRequest();
             } else if (m_bSendSteering) {
                 TRANSCEIVER_LOG << "Triggered 'Send Steering Command'";
                 m_bSendSteering = false;
-                sendSteeringMessage();
+                eventHandle_sendSteeringMessage();
             } else if (m_bStartRecording) {
                 TRANSCEIVER_LOG << "Received: Start Recording";
-                startRecording();
+                m_bStartRecording = false;
+                eventHandle_sendStartRecording();
+            } else if (m_bSendRecordSteering) {
+                TRANSCEIVER_LOG << "Triggered 'Send Record Steering Command'";
+                m_bSendRecordSteering = false;
+                eventHandle_sendRecordSteeringMessage();
             } else if (m_bTerminate) {
                 TRANSCEIVER_LOG << "Received: Terminate Thread";
                 run = false;
@@ -94,28 +85,13 @@ public:
         TRANSCEIVER_LOG << "Thread interrupted. Exit.";
     }
 
-    void setDelegate(ITransceiverServiceDelegate * delegate) {
-        this->delegate = delegate;
-    }
-
-    void sendInitializeRequest(const std::list<ROSController> initializationList) {
+    void sendInitializeRequest(const QList<ROSController *> initializationList) {
         m_mutexData.lock();
         m_initializationList = initializationList;
         m_mutexData.unlock();
 
         m_mutexCV.lock();
         m_bSendInitialize = true;
-        m_condition.wakeAll();
-        m_mutexCV.unlock();
-    }
-
-    void sendTrajectory(Trajectory trajectory) {
-        m_mutexData.lock();
-        m_trajectory = trajectory;
-        m_mutexData.unlock();
-
-        m_mutexCV.lock();
-        m_bSendTrajectory = true;
         m_condition.wakeAll();
         m_mutexCV.unlock();
     }
@@ -131,7 +107,7 @@ public:
         m_mutexCV.unlock();
     }
 
-    void startRecording(const QList<ROSController> & controllers) {
+    void startRecording(const QList<ROSController *> controllers) {
         m_mutexData.lock();
         m_recordRequest = controllers;
         m_mutexData.unlock();
@@ -142,18 +118,26 @@ public:
         m_mutexCV.unlock();
     }
 
-    virtual void listenOnControllerStatus() = 0;
+    void sendRecordSteeringMessage(SteeringCommand command) {
+        m_mutexData.lock();
+        m_recordSteeringCommand = command;
+        m_mutexData.unlock();
+
+        m_mutexCV.lock();
+        m_bSendRecordSteering = true;
+        m_condition.wakeAll();
+        m_mutexCV.unlock();
+
+    }
 
     virtual void startControllers(const QList<qint32> & controllers) = 0;
 
-    virtual void sendRecordingSteeringMessage(SteeringCommand command) = 0;
-
 protected:
-    virtual void sendTrajectory() = 0;
-    virtual void sendInitializeRequest() = 0;
-    virtual void sendSteeringMessage() = 0;
+    virtual void eventHandle_sendInitializeRequest() = 0;
+    virtual void eventHandle_sendSteeringMessage() = 0;
 
-    virtual void startRecording() = 0;
+    virtual void eventHandle_sendStartRecording() = 0;
+    virtual void eventHandle_sendRecordSteeringMessage() = 0;
 };
 
 #endif //ROBOYCONTROL_ITRANSCEIVERSERVICE_H

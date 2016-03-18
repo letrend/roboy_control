@@ -3,7 +3,6 @@
 
 #include "DataTypes.h"
 #include "LogDefines.h"
-
 #include <QFile>
 #include <QProcessEnvironment>
 #include <QXmlStreamReader>

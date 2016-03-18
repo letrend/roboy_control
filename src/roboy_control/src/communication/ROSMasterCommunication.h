@@ -1,7 +1,7 @@
 #ifndef ROSMESSAGETRANSCEIVERSERVICE_H
 #define ROSMESSAGETRANSCEIVERSERVICE_H
 
-#include "ITransceiverService.h"
+#include "IMasterCommunication.h"
 
 #include "common_utilities/Initialize.h"
 
@@ -23,34 +23,34 @@
 #include <string>
 #include <sstream>
 
-class ROSMessageTransceiverService : public ITransceiverService
+class ROSMasterCommunication : public IMasterCommunication
 {
 private:
     ros::NodeHandle m_nodeHandle;
-    ros::Subscriber m_statusSubscriber;
-    ros::Publisher  m_steerPublisher;
-    ros::Publisher  m_steerRecording;
+
+    ros::ServiceClient m_initializeClient;
+    ros::Publisher     m_steerPublisher;
+
     ros::ServiceClient m_switchController;
     ros::ServiceClient m_unloadController;
+
+    ros::Publisher     m_recordSteerPublisher;
     ros::ServiceClient m_recordClient;
 
     void callbackStatus(const common_utilities::StatusConstPtr & status);
 
 public:
-    ROSMessageTransceiverService(qint32 motorId, QString name = QString());
+    ROSMasterCommunication();
 
-    void sendInitializeRequest();
-    void sendTrajectory();
+    void eventHandle_sendInitializeRequest();
+    void eventHandle_sendSteeringMessage();
 
-    void sendSteeringMessage();
-
-    void startRecording();
+    void eventHandle_sendStartRecording();
+    void eventHandle_sendRecordSteeringMessage();
 
     void startControllers(const QList<qint32> & controllers);
-
     void unloadControllers(const QList<qint32> & controllers);
 
-    void listenOnControllerStatus();
     void sendRecordingSteeringMessage(SteeringCommand command);
 };
 

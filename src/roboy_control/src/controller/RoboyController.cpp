@@ -10,6 +10,7 @@ RoboyController::RoboyController() {
 
     connect(m_pViewController, SIGNAL(signalInitialize()), this, SLOT(slotInitializeRoboy()));
     connect(m_pViewController, SIGNAL(signalPreprocess()), this, SLOT(slotPreprocessPlan()));
+
     connect(m_pViewController, SIGNAL(signalPlay()), this, SLOT(slotPlayPlan()));
     connect(m_pViewController, SIGNAL(signalStop()), this, SLOT(slotStopPlan()));
     connect(m_pViewController, SIGNAL(signalPause()), this, SLOT(slotPausePlan()));
@@ -41,47 +42,53 @@ void RoboyController::run() {
 
 // Slots
 void RoboyController::slotInitializeRoboy() {
-    CONTROLLER_DBG << "Triggered 'Initialize' from View";
-    if(m_pMyoController->initializeControllers())
+    CONTROLLER_DBG << "\n\n";
+    CONTROLLER_SUC << "---------------- EVENT: Initialize ------------------";
+    if(m_pMyoController->handleEvent_initializeControllers())
         CONTROLLER_SUC << "Initialization Complete";
     else
         CONTROLLER_WAR << "Initialization failed.";
+    CONTROLLER_SUC << "------------------ /EVENT: Initialize -----------------\n\n";
 }
 
 void RoboyController::slotPreprocessPlan() {
-    CONTROLLER_DBG << "Triggered 'Preprocess Execution' from View";
+    CONTROLLER_DBG << "\n\n";
+    CONTROLLER_SUC << "---------------- EVENT: Preprocess ------------------";
     preprocessCurrentRoboyPlan();
+    CONTROLLER_SUC << "------------------ /EVENT: Preprocess -----------------\n\n";
+
 }
 
 void RoboyController::slotPlayPlan() {
-    CONTROLLER_DBG << "Triggered 'Start Execution' from View";
-    m_pMyoController->playPlanExecution();
+    CONTROLLER_SUC << "---------------- EVENT: Play ------------------";
+    m_pMyoController->handleEvent_playPlanExecution();
+    CONTROLLER_SUC << "<3";
+    CONTROLLER_SUC << "------------------ /EVENT: Play -----------------\n\n";
 
 }
 
 void RoboyController::slotStopPlan() {
     CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
-    m_pMyoController->stopPlanExecution();
+    m_pMyoController->handleEvent_stopPlanExecution();
 }
 
 void RoboyController::slotPausePlan() {
     CONTROLLER_DBG << "Triggered 'Pause Execution' from View";
-    m_pMyoController->pausePlanExecution();
+    m_pMyoController->handleEvent_pausePlanExecution();
 }
 
 void RoboyController::slotRecordBehavior() {
     CONTROLLER_DBG << "Triggered 'Record Behavior' from View";
-    m_pMyoController->recordBehavior();
+    m_pMyoController->handleEvent_recordBehavior();
 }
 
 void RoboyController::slotStopRecording() {
     CONTROLLER_DBG << "Triggered 'Stop Recording' from View";
-    m_pMyoController->stopRecording();
+    m_pMyoController->handleEvent_stopRecording();
 }
 
 // Private Interface
 void RoboyController::preprocessCurrentRoboyPlan() {
-    CONTROLLER_DBG << "Start to execute current Roboy Plan.";
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
@@ -93,9 +100,8 @@ void RoboyController::preprocessCurrentRoboyPlan() {
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
     if(plan.isValid()){
-        if(m_pMyoController->sendRoboyPlan(plan)) {
-            CONTROLLER_SUC << "Plan is now executed on Roboy";
-            CONTROLLER_SUC << "<3";
+        if(m_pMyoController->handleEvent_preprocessRoboyPlan(plan)) {
+            CONTROLLER_SUC << "Plan is ready to be executed on Roboy";
         } else {
             CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
         }

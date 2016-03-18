@@ -6,49 +6,46 @@
 #define ROBOY_CONTROL_MYOCONTROLLER_H
 
 #include "DataTypes.h"
-#include "ITransceiverService.h"
-#include "IControllerHandle.h"
+#include "IMasterCommunication.h"
+#include "IControllerCommunication.h"
 #include "RoboyControlConfiguration.h"
-#include "ROSMessageTransceiverService.h"
+#include "ROSMasterCommunication.h"
 
 #include <QThread>
 
-class MyoController : public ITransceiverServiceDelegate{
+class MyoController : public QObject {
+
+    Q_OBJECT
 
 private:
-    ITransceiverService             * m_myoMasterTransceiver;
-    QMap<qint32, ROSController>        m_mapControllers;
+    IMasterCommunication * m_myoMasterTransceiver;
+    QMap<qint32, ROSController *>       m_mapControllers;
 
-    QMutex                m_mutexCVTransceiver;
-    QWaitCondition        m_conditionTransceiver;
-
-    bool    m_bInitializationComplete = false;
-    bool    m_bReceivedAllControllerStates = false;
-
+    QMutex                m_mutexCVController;
+    QWaitCondition        m_conditionStatusUpdated;
 
 public:
     MyoController();
     ~MyoController();
 
     // RoboyController Interface
-    bool initializeControllers();
-    bool sendRoboyPlan(RoboyBehaviorPlan & roboyPlan);
-    bool playPlanExecution();
-    bool pausePlanExecution();
-    bool stopPlanExecution();
-    bool rewindPlanExecution();
+    bool handleEvent_initializeControllers();
+    bool handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan &roboyPlan);
 
-    bool recordBehavior();
-    bool stopRecording();
+    bool handleEvent_playPlanExecution();
+    bool handleEvent_pausePlanExecution();
+    bool handleEvent_stopPlanExecution();
 
-    // ITransceiverServiceDelegate - Callback-Interface Implementation
-    void receivedControllerStatusUpdate(const QList<ROSController> & controllers);
-    void receivedControllerStatusUpdate(const ROSController & controller);
+    bool handleEvent_recordBehavior();
+    bool handleEvent_stopRecording();
+
+public slots:
+    // ControllerCommunication - Interface
+    void slotControllerStatusUpdated();
 
 private:
-    bool isInitializedCorrectly();
-    bool didReceiveAllStatusUpdates();
-    bool isReadyToPlay(RoboyBehaviorPlan & plan);
+    bool waitForControllerStatus(QList<qint32> idList, ControllerState state, quint32 timeout = 0);
+    bool checkControllersForState(QList<qint32> idList, ControllerState state);
 };
 
 

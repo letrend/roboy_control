@@ -14,7 +14,7 @@
 struct ROSController {
     qint8                 id;
     ControlMode           controlMode;
-    STATUS                state;
+    ControllerState                state;
     QProcess *            process;
 
     QString toString() const {

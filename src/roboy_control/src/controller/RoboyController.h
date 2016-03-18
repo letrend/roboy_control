@@ -5,10 +5,9 @@
 #ifndef ROBOYCONTROL_ROBOYCONTROLLER_H
 #define ROBOYCONTROL_ROBOYCONTROLLER_H
 
-#include "ITransceiverService.h"
-#include "ITransceiverServiceDelegate.h"
+#include "IMasterCommunication.h"
 #include "MyoController.h"
-#include "ROSMessageTransceiverService.h"
+#include "ROSMasterCommunication.h"
 #include "ViewController.h"
 #include "XmlModelService.h"
 
@@ -36,6 +35,7 @@ public:
 public slots:
     void slotInitializeRoboy();
     void slotPreprocessPlan();
+
     void slotPlayPlan();
     void slotStopPlan();
     void slotPausePlan();

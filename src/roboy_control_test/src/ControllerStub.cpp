@@ -2,10 +2,9 @@
 // Created by bruh on 1/24/16.
 //
 
-#include <common_utilities/ControllerState.h>
 #include "DataTypes.h"
-
 #include "common_utilities/Steer.h"
+#include <common_utilities/ControllerState.h>
 #include "common_utilities/Trajectory.h"
 
 #include "ros/ros.h"
@@ -13,10 +12,16 @@
 QString nodeName;
 QString serviceName;
 qint32 id;
-STATUS state;
+ControllerState state;
+
+ros::ServiceServer trajectoryServer;
+ros::Subscriber steeringSubscriber;
+ros::Publisher statusPublisher;
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res);
-//void callbackSteering(common_utilities::Steer::ConstPtr & msg);
+void callbackSteering(const common_utilities::Steer::ConstPtr & msg);
+
+void setState(ControllerState cs);
 
 int main(int argc, char ** argv) {
 
@@ -29,28 +34,23 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, nodeName.toStdString());
     ros::NodeHandle n;
 
-    state = STATUS::INITIALIZED;
-
-    ros::ServiceServer trajectoryServer =  n.advertiseService(serviceName.toStdString(), callbackMotor);
-
-    //ros::Subscriber steeringSubscriber = n.subscribe("roboy/steering", 1000, callbackSteering);
-
     ros::AsyncSpinner spinner(1);
     spinner.start();
 
     QString statusTopic;
     statusTopic.sprintf("/roboy/status_motor%u", id);
-    ros::Publisher statusPublisher = n.advertise<common_utilities::ControllerState>(statusTopic.toStdString(), 1000);
 
-    ros::Duration duration(1,0);
-    while(1) {
-        qDebug() << "Advertixe 'ControllerState' Message";
-        common_utilities::ControllerState stateMessage;
-        stateMessage.id = id;
-        stateMessage.state = STATUS::INITIALIZED;
-        statusPublisher.publish(stateMessage);
+    trajectoryServer =  n.advertiseService(serviceName.toStdString(), callbackMotor);
+    steeringSubscriber = n.subscribe("roboy/steer", 1000, callbackSteering);
+    statusPublisher = n.advertise<common_utilities::ControllerState>(statusTopic.toStdString(), 1000);
+
+    ros::Duration duration(1);
+    while(statusPublisher.getNumSubscribers() == 0)
         duration.sleep();
-    }
+
+    setState(ControllerState::INITIALIZED);
+
+    ros::spin();
 }
 
 bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities::Trajectory::Response & res){
@@ -62,12 +62,22 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
     }
 
     qDebug() << "[" << nodeName << "] " << "Send Service Response on topic 'motor1'";
-    res.state = STATUS::TRAJECTORY_READY ;
+    setState(ControllerState::TRAJECTORY_READY);
     qDebug() << "\t- Update Controller State: [id:" << id << "][state:" << res.state << "]";
 
     return true;
 }
 
-//void callbackSteering(common_utilities::Steer::ConstPtr & msg) {
-//    qDebug() << "Received Steering Message";
-//}
+void callbackSteering(const common_utilities::Steer::ConstPtr & msg) {
+    qDebug() << "Received Steering Message";
+}
+
+void setState(ControllerState cs) {
+    state = cs;
+
+    common_utilities::ControllerState stateMessage;
+    stateMessage.id = id;
+    stateMessage.state = cs;
+
+    statusPublisher.publish(stateMessage);
+}

@@ -36,9 +36,9 @@ bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, c
         controller.controlMode = (ControlMode) req.controlmode[i];
 
         if(startNode(controller.id, nodeName, serviceName, controller)){
-            controller.state = STATUS::INITIALIZED;
+            controller.state = ControllerState::INITIALIZED;
         } else {
-            controller.state = STATUS::INITIALIZE_ERROR;
+            controller.state = ControllerState::INITIALIZE_ERROR;
         }
 
         m_listControllers.append(controller);

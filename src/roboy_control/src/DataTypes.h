@@ -8,7 +8,8 @@
 #include <QMap>
 
 class IModelService;
-class ITransceiverService;
+class IMasterCommunication;
+class IControllerCommunication;
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
@@ -124,14 +125,15 @@ private:
 };
 
 struct ROSController {
-    qint8                 id;
-    ControlMode           controlMode;
-    STATUS                state;
-    ITransceiverService * transceiver;
+    qint32                m_id;
+    ControlMode           m_controlMode;
+    ControllerState       m_state;
+
+    IControllerCommunication * m_communication;
 
     QString toString() const {
         QString string;
-        string.sprintf("ROSController: [id:%i][controlMode:%i][state:%i]", id, controlMode, state);
+        string.sprintf("ROSController: [id:%i][controlMode:%i][state:%i]", m_id, m_controlMode, m_state);
         return string;
     }
 };

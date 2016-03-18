@@ -50,35 +50,32 @@ void RoboyControlConfiguration::readModelConfig() {
 }
 
 void RoboyControlConfiguration::readControllersConfig() {
-    ROSController controller;
     while(m_xmlReader.readNextStartElement()) {
         if(m_xmlReader.name() == "Controller") {
             qint8 id = m_xmlReader.attributes().value("id").toString().toShort();
-            controller.id = id;
-            controller.state = STATUS::UNDEFINED;
-            QString controlMode = m_xmlReader.attributes().value("controlmode").toString();
+            QString controlString = m_xmlReader.attributes().value("controlmode").toString();
+            ControlMode controlMode;
             bool enable = false;
             m_xmlReader.readElementText() == "true" ? enable = true : enable = false;
 
-            if(controlMode == "position") {
-                controller.controlMode = ControlMode::POSITION_CONTROL;
-            }
-            else if (controlMode == "force") {
-                controller.controlMode = ControlMode::FORCE_CONTROL;
-            }
-            else if (controlMode == "velocity") {
-                controller.controlMode = ControlMode::VELOCITY_CONTROL;
-            }
-            else {
+            if(controlString == "position") {
+                controlMode = ControlMode::POSITION_CONTROL;
+            } else if (controlString == "force") {
+                controlMode = ControlMode::FORCE_CONTROL;
+            } else if (controlString == "velocity") {
+                controlMode = ControlMode::VELOCITY_CONTROL;
+            } else {
                 CONFIG_DBG << "Invalid controlMode for controller " << id;
                 enable = false;
             }
 
             if(enable) {
+                ROSController controller;
+                controller.m_id = id;
+                controller.m_controlMode = controlMode;
                 CONFIG_DBG << "Parsed Controller: " << controller.toString();
                 m_listControllerConfig.append(controller);
             }
-
         } else {
             m_xmlReader.skipCurrentElement();
         }
