@@ -33,19 +33,23 @@ public:
     ~RoboyController();
 
 public slots:
+    // Roboy (Tab) - Interface
     void slotInitializeRoboy();
+
+    // Player - Interface
     void slotPreprocessPlan();
 
     void slotPlayPlan();
     void slotStopPlan();
     void slotPausePlan();
 
+    // Recorder - Interface
     void slotRecordBehavior();
     void slotStopRecording();
 
 signals:
-    void updateRoboyStatus();
-    void updatecontrollerStatus();
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
 
 private:
     void preprocessCurrentRoboyPlan();

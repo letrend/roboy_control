@@ -11,6 +11,8 @@ class IModelService;
 class IMasterCommunication;
 class IControllerCommunication;
 
+enum PlayerState {};
+
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
     QString   m_sBehaviorName;
