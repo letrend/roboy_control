@@ -9,8 +9,8 @@ class RoboyMultiLaneModel : public IMultiLaneViewModel {
     Q_OBJECT
 
 public:
-    RoboyMultiLaneModel() {}
-    ~RoboyMultiLaneModel() {}
+    RoboyMultiLaneModel();
+    ~RoboyMultiLaneModel();
     qint8  addLane            ();
     qint8  insertLane         (qint32 index);
     qint8  removeLane         (qint32 index);

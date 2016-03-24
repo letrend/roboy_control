@@ -6,6 +6,20 @@
 /* public methods */
 
 /**
+ * @brief RoboyMultiLaneModel::RoboyMultiLaneModel constructor of RoboyMultiLaneModel
+ */
+RoboyMultiLaneModel::RoboyMultiLaneModel() {
+    addLane(); // initially one lane
+}
+
+/**
+ * @brief RoboyMultiLaneModel::~RoboyMultiLaneModel destructor of RoboyMultiLaneModel
+ */
+RoboyMultiLaneModel::~RoboyMultiLaneModel() {
+
+}
+
+/**
  * @brief RoboyMultiLaneModel::addLane method to add a lane to the MultiLaneWidget
  * @return 0 for success, -1 on failure
  */

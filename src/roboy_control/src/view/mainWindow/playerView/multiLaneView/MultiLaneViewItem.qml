@@ -12,7 +12,6 @@ View {
     property string iconName     : ""
 
     backgroundColor : Theme.accentColor
-    elevation       : 1
     height          : Units.dp(36)
 
     RowLayout {

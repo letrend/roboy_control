@@ -1,9 +1,10 @@
-#ifndef RECORDERVIEW_H
-#define RECORDERVIEW_H
+#ifndef ROBOYVIEW_H
+#define ROBOYVIEW_H
 
 #include <QObject>
 #include <QQmlApplicationEngine>
 
+#include "../BehaviorListModel.h"
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
@@ -11,20 +12,19 @@
 
 class ViewController;
 
-class RecorderView : public QObject, public IObserver {
+class RoboyView : public QObject, public IObserver {
     
     Q_OBJECT
 
 public:
-    explicit RecorderView(IModelService * pModelService, ViewController * pViewController, QQmlApplicationEngine *pAppEngine, QObject * pParent = 0);
-    ~RecorderView();
+    explicit RoboyView(IModelService * pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent = 0);
+    ~RoboyView();
 
     void notify();
     void signalPlayerStatusUpdated(PlayerState state);
     void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
 
-	Q_INVOKABLE void recordButtonClicked();
-	Q_INVOKABLE void stopRecordButtonClicked();
+    Q_INVOKABLE void initalizeButtonClicked();
 
 private:
 	ViewController          * m_pViewController;
@@ -33,4 +33,4 @@ private:
 
 };
 
-#endif // RECORDERVIEW_H
+#endif // ROBOYVIEW_H

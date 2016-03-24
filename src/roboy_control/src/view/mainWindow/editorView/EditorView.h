@@ -13,6 +13,7 @@
 class ViewController;
 
 class EditorView : public QObject, public IObserver {
+    
     Q_OBJECT
 
 public:
@@ -20,6 +21,8 @@ public:
     ~EditorView();
 
     void notify();
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
 
     Q_INVOKABLE bool setSelectedBehaviorIndex(int index);
 

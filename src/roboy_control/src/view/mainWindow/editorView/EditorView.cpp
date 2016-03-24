@@ -31,6 +31,23 @@ void EditorView::notify() {
 }
 
 /**
+ * @brief EditorView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
+ * @param state state of the playerview
+ */
+void EditorView::signalPlayerStatusUpdated(PlayerState state) {
+    VIEW_DBG << "signalPlayerStatusUpdated emitted";
+}
+
+/**
+ * @brief EditorView::controllerStateChanged method to notify the gui about a when the state of a motor changed
+ * @param motorId id of the motor of which the state changed
+ * @param state state of the motor
+ */
+void EditorView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+    VIEW_DBG << "signalControllerStatusUpdated emitted";
+}
+
+/**
  * @brief EditorVire::setSelectedBehaviorIndex method to set the current behavior selection by index
  * @param index index of the behavior that should be selected
  * @return true for success, false for failure

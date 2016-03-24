@@ -26,11 +26,34 @@ void RecorderView::notify() {
 
 }
 
+/**
+ * @brief RecorderView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
+ * @param state state of the playerview
+ */
+void RecorderView::signalPlayerStatusUpdated(PlayerState state) {
+    VIEW_DBG << "signalPlayerStatusUpdated emitted";
+}
+
+/**
+ * @brief RecorderView::controllerStateChanged method to notify the gui about a when the state of a motor changed
+ * @param motorId id of the motor of which the state changed
+ * @param state state of the motor
+ */
+void RecorderView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+    VIEW_DBG << "signalControllerStatusUpdated emitted";
+}
+
+/**
+ * @brief RecorderView::recordButtonClicked click handler for the record button
+ */
 void RecorderView::recordButtonClicked() {
     VIEW_DBG << "Record Button Clicked";
     m_pViewController->recordBehavior();
 }
 
+/**
+ * @brief RecorderView::stopRecordButtonClicked click handler for the stop record button
+ */
 void RecorderView::stopRecordButtonClicked() {
     VIEW_DBG << "Stop Record Button Clicked";
     m_pViewController->stopRecording();

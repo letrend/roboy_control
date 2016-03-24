@@ -61,6 +61,7 @@ Page {
 		        	anchors.left    : parent.left
 		        	anchors.right   : parent.right
 		        	backgroundColor : Theme.primaryColor
+		        	elevation       : motorListView.atYBeginning ? 0 : 1
 		        	height          : topColumn.implicitHeight + Units.dp(16)
 		        	id              : topView
 
@@ -142,7 +143,7 @@ Page {
 			                action : Icon {
 			                    anchors.centerIn : parent
 			                    color            : "white"
-			                    name             : "av/album"
+			                    name             : "hardware/developer_board"
 			                }
 
 			                content : Label {
@@ -162,6 +163,7 @@ Page {
                     anchors.left   : parent.left
                     anchors.right  : parent.right
                     anchors.top    : topView.bottom
+                    clip           : true
                     height         : Units.dp(200)
                     id             : motorListView
 
@@ -176,34 +178,44 @@ Page {
                 }
 
 	            Item {
-	            	anchors.bottom : buttonLayout.top
+	            	anchors.bottom : buttonView.top
 	                anchors.left   : parent.left
 	                anchors.right  : parent.right
 	                height         : Units.dp(8)
 	                id             : seperator
 	            }
 
-	            RowLayout {
+	            View {
 	            	anchors.bottom   : parent.bottom
-	            	anchors.margins  : Units.dp(16)
+            		anchors.left     : parent.left
 	            	anchors.right    : parent.right
-	            	id               : buttonLayout
-	                Layout.alignment : Qt.AlignRight
-	                spacing          : Units.dp(8)
+	            	backgroundColor  : "white"
+	            	elevation        : motorListView.atYEnd ? 0 : 1
+	            	id               : buttonView
+		            
+		            RowLayout {
+		            	anchors.bottom   : parent.bottom
+		            	anchors.right    : parent.right
+		            	anchors.top      : parent.top
+		            	anchors.margins  : Units.dp(16)	
+		            	id               : buttonLayout
+		                Layout.alignment : Qt.AlignRight
+		                spacing          : Units.dp(8)
 
-	                Button {
-	                    text      : "Cancel"
-	                    textColor : Theme.accentColor
-	                }
+		                Button {
+		                    text      : "Cancel"
+		                    textColor : Theme.accentColor
+		                }
 
-	                Button {
-	                	onClicked : {
-	                		cpp_EditorView.saveButtonClicked();
-	                		snackbar.open("Behavior updated")
-	                	}
-	                    text      : "Save"
-	                    textColor : Theme.accentColor
-	                }
+		                Button {
+		                	onClicked : {
+		                		cpp_EditorView.saveButtonClicked();
+		                		snackbar.open("Behavior updated")
+		                	}
+		                    text      : "Save"
+		                    textColor : Theme.accentColor
+		                }
+		            }
 	            }
 	        }
         }

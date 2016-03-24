@@ -10,13 +10,16 @@
 #include "editorView/EditorView.h"
 #include "playerView/PlayerView.h"
 #include "recorderView/RecorderView.h"
+#include "roboyView/RoboyView.h"
 
 class ViewController;
 class EditorView;
 class PlayerView;
 class RecorderView;
+class RoboyView;
 
 class MainWindow : public QObject, public IObserver {
+    
 	Q_OBJECT
 
 public:
@@ -24,6 +27,9 @@ public:
     ~MainWindow();
 
     void notify();
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+
     RoboyBehaviorMetaplan fromMainWindow_getCurrentRoboyPlan();
 
 private:
@@ -31,6 +37,7 @@ private:
     EditorView	   * m_pEditorView;
     PlayerView     * m_pPlayerView;
     RecorderView   * m_pRecorderView;
+    RoboyView      * m_pRoboyView;
 
 };
 

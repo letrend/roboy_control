@@ -5,12 +5,13 @@
 #ifndef ROBOYCONTROL_VIEWCONTROLLER_H
 #define ROBOYCONTROL_VIEWCONTROLLER_H
 
-#include "IModelService.h"
-#include "mainWindow/MainWindow.h"
 #include <QDateTime>
-#include <QThread>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QThread>
+
+#include "IModelService.h"
+#include "mainWindow/MainWindow.h"
 
 class RoboyController;
 class MainWindow;
@@ -43,8 +44,8 @@ public:
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 
 public slots:
-    void controllerStateChanged(ROSController controller       );
-    void controllerStateChanged(QList<ROSController> controller);
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
 
 signals:
     void signalInitialize();

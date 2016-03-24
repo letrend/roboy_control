@@ -11,11 +11,13 @@ MainWindow::MainWindow(IModelService *pModelService, ViewController * pViewContr
     m_pEditorView   = new EditorView  (pModelService, pViewController, pAppEngine);
     m_pPlayerView   = new PlayerView  (pModelService, pViewController, pAppEngine);
     m_pRecorderView = new RecorderView(pModelService, pViewController, pAppEngine);
+    m_pRecorderView = new RecorderView(pModelService, pViewController, pAppEngine);
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
     pQmlContext->setContextProperty("cpp_EditorView",   m_pEditorView  );
     pQmlContext->setContextProperty("cpp_PlayerView",   m_pPlayerView  );
     pQmlContext->setContextProperty("cpp_RecorderView", m_pRecorderView);
+    pQmlContext->setContextProperty("cpp_RoboyView",    m_pRoboyView   );
 }
 
 /**
@@ -25,6 +27,7 @@ MainWindow::~MainWindow() {
     delete m_pEditorView;
     delete m_pPlayerView;
     delete m_pRecorderView;
+    delete m_pRoboyView;
 }
 
 /**
@@ -34,6 +37,30 @@ void MainWindow::notify() {
     m_pEditorView->notify();
     m_pPlayerView->notify();
     m_pRecorderView->notify();
+    m_pRoboyView->notify();
+}
+
+/**
+ * @brief MainWindow::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
+ * @param state state of the playerview
+ */
+void MainWindow::signalPlayerStatusUpdated(PlayerState state) {
+    m_pEditorView->signalPlayerStatusUpdated(state);
+    m_pPlayerView->signalPlayerStatusUpdated(state);
+    m_pRecorderView->signalPlayerStatusUpdated(state);
+    m_pRoboyView->signalPlayerStatusUpdated(state);
+}
+
+/**
+ * @brief MainWindow::controllerStateChanged method to notify the gui about a when the state of a motor changed
+ * @param motorId id of the motor of which the state changed
+ * @param state state of the motor
+ */
+void MainWindow::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+    m_pEditorView->signalControllerStatusUpdated(motorId, state);
+    m_pPlayerView->signalControllerStatusUpdated(motorId, state);
+    m_pRecorderView->signalControllerStatusUpdated(motorId, state);
+    m_pRoboyView->signalControllerStatusUpdated(motorId, state);
 }
 
 /**

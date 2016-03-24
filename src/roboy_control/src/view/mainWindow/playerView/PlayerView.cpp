@@ -37,15 +37,26 @@ void PlayerView::notify() {
 }
 
 /**
- * @brief PlayerView::initButtonClicked click handler for the init button
+ * @brief PlayerView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
+ * @param state state of the playerview
  */
-void PlayerView::initButtonClicked() {
-    VIEW_DBG << "init button clicked";
-    m_pViewController->triggerInit();
+void PlayerView::signalPlayerStatusUpdated(PlayerState state) {
+    VIEW_DBG << "signalPlayerStatusUpdated emitted";
 }
 
+/**
+ * @brief PlayerView::controllerStateChanged method to notify the gui about a when the state of a motor changed
+ * @param motorId id of the motor of which the state changed
+ * @param state state of the motor
+ */
+void PlayerView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+    VIEW_DBG << "signalControllerStatusUpdated emitted";
+}
+
+/**
+ * @brief PlayerView::preprocessButtonClicked click handler for the preprocess button
+ */
 void PlayerView::preprocessButtonClicked() {
-    VIEW_DBG << "preprocess button clicked";
     m_pViewController->preprocessBehaviorPlan();
 }
 
@@ -53,7 +64,6 @@ void PlayerView::preprocessButtonClicked() {
  * @brief PlayerView::playButtonClicked click handler for the play button
  */
 void PlayerView::playButtonClicked() {
-    VIEW_DBG << "play button clicked";
     m_pViewController->playBehaviorPlan();
 }
 
@@ -61,7 +71,6 @@ void PlayerView::playButtonClicked() {
  * @brief PlayerView::pauseButtonClicked click handler for the pause button
  */
 void PlayerView::pauseButtonClicked() {
-    VIEW_DBG << "pause button clicked";
     m_pViewController->pauseBehaviorPlan();
 }
 
@@ -69,7 +78,6 @@ void PlayerView::pauseButtonClicked() {
  * @brief PlayerView::stopButtonClicked click handler for the stop button
  */
 void PlayerView::stopButtonClicked() {
-    VIEW_DBG << "stop button clicked";
     m_pViewController->stopBehaviorPlan();
 }
 

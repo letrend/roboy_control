@@ -17,24 +17,12 @@ View {
 
             Button {
                 elevation : 1
-                id        : recordButton
-                onClicked : cpp_RecorderView.recordButtonClicked()
+                id        : initializeButton
+                onClicked : cpp_RoboyView.initalizeButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
-                    color            : "#C62828"
-                    name             : "av/fiber_manual_record"
-                }
-            }
-
-            Button {
-                elevation : 1
-                id        : stopRecordButton
-                onClicked : cpp_RecorderView.stopRecordButtonClicked()
-
-                Icon {
-                    anchors.centerIn : parent
-                    name             : "av/stop"
+                    name             : "action/autorenew"
                 }
             }
         }

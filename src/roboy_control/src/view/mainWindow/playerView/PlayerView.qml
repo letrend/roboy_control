@@ -61,28 +61,14 @@ View {
             }
 
            Button {
-                anchors.right   : initButton.left
-                anchors.margins : Units.dp(16)
+                anchors.right   : parent.right
                 elevation       : 1
                 id              : preprocessButton
                 onClicked       : cpp_PlayerView.preprocessButtonClicked()
 
                 Icon {
                     anchors.centerIn : parent
-                    name             : "action/autorenew"
-                }
-            }
-
-            Button {
-                anchors.right : parent.right
-                elevation     : 1
-                id            : initButton
-                onClicked     : cpp_PlayerView.initButtonClicked()
-
-                Icon {
-                    anchors.centerIn : parent
                     name             : "action/build"
-
                 }
             }
         }
@@ -92,20 +78,31 @@ View {
             Layout.fillHeight : true
             Layout.fillWidth  : true
 
-            MultiLaneView {
-                anchors.bottom : parent.bottom
-                anchors.left   : parent.left
-                anchors.right  : parent.right
-                anchors.top    : parent.top
-                id             : multiLaneView
-                model          : cpp_MultiLaneViewModel
+            ColumnLayout {
+                anchors.fill : parent
+                spacing      : 0
 
-                ActionButton {
-                    anchors.bottom  : parent.bottom
-                    anchors.margins : Units.dp(16)
-                    anchors.right   : parent.right
-                    iconName        : "content/add"
-                    onClicked       : cpp_PlayerView.addLaneButtonClicked()
+                MultiLaneView {
+                    id                : multiLaneView
+                    Layout.fillHeight : true
+                    Layout.fillWidth  : true
+                    model             : cpp_MultiLaneViewModel
+                }
+
+                View {
+                    backgroundColor : "white"
+                    elevation : multiLaneView.atYEnd ? 0 : 1
+                    height           : Units.dp(68)
+                    Layout.fillWidth : true
+
+                    Button {
+                        anchors.right          : parent.right
+                        anchors.margins        : Units.dp(16)
+                        anchors.verticalCenter : parent.verticalCenter
+                        textColor              : Theme.accentColor
+                        onClicked              : cpp_PlayerView.addLaneButtonClicked()
+                        text                   : "ADD LANE"
+                    }
                 }
             }
         }
@@ -208,6 +205,7 @@ View {
                     anchors.right   : parent.right
                     anchors.top     : parent.top
                     backgroundColor : Theme.primaryColor
+                    elevation       : detailListView.atYBeginning ? 0 : 1
                     height          : detailTopColumn.implicitHeight + Units.dp(16)
                     id              : detailTopView
 
@@ -281,7 +279,7 @@ View {
                             action : Icon {
                                 anchors.centerIn : parent
                                 color            : "white"
-                                name             : "av/album"
+                                name             : "hardware/developer_board"
                             }
 
                             content : Label {
@@ -303,6 +301,7 @@ View {
                     anchors.left     : parent.left
                     anchors.right    : parent.right
                     anchors.top      : detailTopView.bottom
+                    clip             : true
                     id               : detailListView
                     Layout.fillWidth : true
 
@@ -316,11 +315,13 @@ View {
                 }
 
                 View {
-                    anchors.bottom : parent.bottom
-                    anchors.left   : parent.left
-                    anchors.right  : parent.right
-                    height         : Units.dp(68)
-                    id             : detailViewButtonView
+                    anchors.bottom  : parent.bottom
+                    anchors.left    : parent.left
+                    anchors.right   : parent.right
+                    backgroundColor : "white"
+                    elevation       : detailListView.atYEnd ? 0 : 1
+                    height          : Units.dp(68)
+                    id              : detailViewButtonView
 
                     RowLayout {
                         anchors.fill    : parent

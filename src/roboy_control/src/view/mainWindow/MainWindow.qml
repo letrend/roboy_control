@@ -1,9 +1,10 @@
 import QtQuick 2.4
 import Material 0.2
 
+import "./editorView"
 import "./playerView"
 import "./recorderView"
-import "./editorView"
+import "./roboyView"
 
 ApplicationWindow {
 
@@ -21,16 +22,6 @@ ApplicationWindow {
 
     initialPage : TabbedPage {
         actions : [
-        /*
-            Action {
-                iconName       : "action/autorenew"
-                name           : "Initialize"
-            },
-
-            Action {
-                iconName       : "action/build"
-                name           : "Process"
-            },*/
 
             Action {
                 iconName       : "action/settings"
@@ -41,6 +32,14 @@ ApplicationWindow {
         ]
 
         title   : "Roboy Control"
+
+        Tab {
+            title : "Roboy"
+
+            RoboyView {
+            
+            }
+        }
 
         Tab {
             title : "Player"

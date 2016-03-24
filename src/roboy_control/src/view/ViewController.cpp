@@ -15,7 +15,7 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     VIEW_DBG << "View Thread ID is: " << QThread::currentThreadId();
 
     m_pRoboyController = pRoboyController;
-    m_pModelSerivce = pModelService;
+    m_pModelSerivce    = pModelService;
 
     m_pApplicationEngine = new QQmlApplicationEngine();
     m_pApplicationEngine->addImportPath("qrc:/");
@@ -23,6 +23,9 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     m_pMainWindow = new MainWindow(m_pModelSerivce, this, m_pApplicationEngine);
 
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
+
+    ViewController::connect(pRoboyController, SIGNAL(signalPlayerStatusUpdated(PlayerState)), this, SLOT(signalPlayerStatusUpdated(PlayerState)));
+    ViewController::connect(pRoboyController, SIGNAL(signalControllerStatusUpdated(qint32, ControllerState)), this, SLOT(signalControllerStatusUpdated(qint32, ControllerState)));
 }
 
 // PlayerView - Interface
@@ -70,15 +73,18 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
 }
 
 /**
- * @brief ViewController::controllerStateChanged slot to notfiy the gui when a controllers state changes
+ * @brief ViewController::signalPlayerStatusUpdated slot to notfiy the gui when the players state changes
+ * @param state state of the playerview
  */
-void ViewController::controllerStateChanged(ROSController controller) {
-
+void ViewController::signalPlayerStatusUpdated(PlayerState state) {
+    m_pMainWindow->signalPlayerStatusUpdated(state);
 }
 
 /**
- * @brief ViewController::controllerStateChanged slot to notify the gui about multiple controller state changes
+ * @brief ViewController::controllerStateChanged slot to notify the gui about a when the state of a motor changed
+ * @param motorId id of the motor of which the state changed
+ * @param state state of the motor
  */
-void ViewController::controllerStateChanged(QList<ROSController> controller) {
-
+void ViewController::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+    m_pMainWindow->signalControllerStatusUpdated(motorId, state);
 }

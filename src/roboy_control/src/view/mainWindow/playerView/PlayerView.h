@@ -14,6 +14,7 @@
 class ViewController;
 
 class PlayerView : public QObject, public IObserver {
+    
     Q_OBJECT
 
 public:
@@ -21,8 +22,11 @@ public:
     ~PlayerView();
 
     void notify();
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
 
-    Q_INVOKABLE void initButtonClicked();
+    // the following methods are defined as Q_INVOKABLE and 
+    // not as slots so their return value can be used
     Q_INVOKABLE void preprocessButtonClicked();
     Q_INVOKABLE void playButtonClicked();
     Q_INVOKABLE void pauseButtonClicked();

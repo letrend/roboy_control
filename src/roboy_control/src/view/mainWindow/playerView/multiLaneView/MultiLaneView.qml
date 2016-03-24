@@ -7,6 +7,9 @@ import Material 0.2
 View {
     id : multiLaneView
 
+    property alias atYBeginning : laneFlickable.atYBeginning
+    property alias atYEnd       : laneFlickable.atYEnd
+
     property var model
 
     onModelChanged : {
@@ -39,13 +42,17 @@ View {
         }
     }
 
-    ScrollView {
-        anchors.fill: parent
+    Flickable {
+        anchors.fill      : parent
+        contentWidth      : laneBackground.width
+        contentHeight     : laneBackground.height
+        id                : laneFlickable
+        interactive       : laneBackground.height > height
 
         View {
-            id: laneBackground
-            height: Units.dp(68  + 2*16)
-            width:  100 + Units.dp(2*16)
+            id     : laneBackground
+            height : Units.dp(68  + 2*16)
+            width  :  100 + Units.dp(2*16)
         }
     }
 
