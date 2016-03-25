@@ -8,10 +8,10 @@
  */
 MainWindow::MainWindow(IModelService *pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent) : QObject(pParent) {
     pModelService->subscribe(this);
-    m_pEditorView   = new EditorView  (pModelService, pViewController, pAppEngine);
-    m_pPlayerView   = new PlayerView  (pModelService, pViewController, pAppEngine);
-    m_pRecorderView = new RecorderView(pModelService, pViewController, pAppEngine);
-    m_pRecorderView = new RecorderView(pModelService, pViewController, pAppEngine);
+    m_pEditorView   = new EditorView   (pModelService, pViewController, pAppEngine);
+    m_pPlayerView   = new PlayerView   (pModelService, pViewController, pAppEngine);
+    m_pRecorderView = new RecorderView (pModelService, pViewController, pAppEngine);
+    m_pRoboyView    = new RoboyView    (pModelService, pViewController, pAppEngine);
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
     pQmlContext->setContextProperty("cpp_EditorView",   m_pEditorView  );

@@ -41,6 +41,7 @@ View {
     MouseArea {
         acceptedButtons : Qt.RightButton
         anchors.fill    : parent
+        id              : mouseArea
 
         onClicked: {
             if (Qt.RightButton) {
@@ -68,5 +69,10 @@ View {
                 name     : "Cancel"
             }
         ]
+    }
+
+    Ink {
+        anchors.fill   : parent
+        id             : ink
     }
 }
