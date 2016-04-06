@@ -35,7 +35,7 @@ void EditorView::notify() {
  * @param state state of the playerview
  */
 void EditorView::signalPlayerStatusUpdated(PlayerState state) {
-    VIEW_DBG << "signalPlayerStatusUpdated emitted";
+
 }
 
 /**
@@ -44,7 +44,7 @@ void EditorView::signalPlayerStatusUpdated(PlayerState state) {
  * @param state state of the motor
  */
 void EditorView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
-    VIEW_DBG << "signalControllerStatusUpdated emitted";
+
 }
 
 /**

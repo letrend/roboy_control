@@ -85,7 +85,7 @@ public:
     }
 
 signals:
-    void signalControllerStatusUpdated();
+    void signalControllerStatusUpdated(qint32 motorId);
 
 protected:
     virtual void eventHandle_sendTrajectory() = 0;

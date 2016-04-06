@@ -11,7 +11,13 @@ class IModelService;
 class IMasterCommunication;
 class IControllerCommunication;
 
-enum PlayerState {};
+enum PlayerState {  PLAYER_UNINITIALIZED,
+                    PLAYER_INITIALIZED,
+                    PLAYER_PREPROCESSING,
+                    PLAYER_TRAJECTORY_READY,
+                    PLAYER_TRAJECTORY_FAILED,
+                    PLAYER_PAUSED,
+                    PLAYER_PLAYING};
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

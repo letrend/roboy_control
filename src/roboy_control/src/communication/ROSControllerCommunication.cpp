@@ -28,9 +28,6 @@ void ROSControllerCommunication::eventHandle_sendTrajectory() {
     } else {
         TRANSCEIVER_LOG << "Call " << topic << "failed";
     }
-
-//    TRANSCEIVER_LOG << "Received Controller State: " << srv.response.state;
-//    m_pController->m_state = (ControllerState) srv.response.state;
 }
 
 // Private Interface
@@ -45,5 +42,5 @@ void ROSControllerCommunication::listenOnControllerStatus() {
 void ROSControllerCommunication::callbackStatus(const common_utilities::ControllerStateConstPtr & status) {
     TRANSCEIVER_LOG << "Received Status Update: " << status->state;
     m_pController->m_state = (ControllerState) status->state;
-    emit signalControllerStatusUpdated();
+    emit signalControllerStatusUpdated(m_id);
 }

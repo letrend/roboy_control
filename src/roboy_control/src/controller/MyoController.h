@@ -13,11 +13,15 @@
 
 #include <QThread>
 
+class RoboyController;
+
 class MyoController : public QObject {
 
     Q_OBJECT
 
 private:
+     const RoboyController      & m_roboyController;
+
     IMasterCommunication * m_myoMasterTransceiver;
     QMap<qint32, ROSController *>       m_mapControllers;
 
@@ -25,7 +29,7 @@ private:
     QWaitCondition        m_conditionStatusUpdated;
 
 public:
-    MyoController();
+    MyoController(const RoboyController & controller);
     ~MyoController();
 
     // RoboyController Interface
@@ -41,7 +45,7 @@ public:
 
 public slots:
     // ControllerCommunication - Interface
-    void slotControllerStatusUpdated();
+    void slotControllerStatusUpdated(qint32 motorId);
 
 private:
     bool waitForControllerStatus(QList<qint32> idList, ControllerState state, quint32 timeout = 0);

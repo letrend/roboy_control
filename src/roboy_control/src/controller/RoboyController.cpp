@@ -32,7 +32,7 @@ void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Started";
     CONTROLLER_DBG << "ControllerThread-Id is: " << this->currentThreadId();
 
-    m_pMyoController = new MyoController();
+    m_pMyoController = new MyoController(*this);
     msleep(1000);
 
     exec();

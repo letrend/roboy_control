@@ -31,7 +31,7 @@ void RecorderView::notify() {
  * @param state state of the playerview
  */
 void RecorderView::signalPlayerStatusUpdated(PlayerState state) {
-    VIEW_DBG << "signalPlayerStatusUpdated emitted";
+
 }
 
 /**
@@ -40,7 +40,7 @@ void RecorderView::signalPlayerStatusUpdated(PlayerState state) {
  * @param state state of the motor
  */
 void RecorderView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
-    VIEW_DBG << "signalControllerStatusUpdated emitted";
+
 }
 
 /**

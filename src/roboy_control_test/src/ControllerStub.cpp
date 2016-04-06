@@ -70,6 +70,13 @@ bool callbackMotor(common_utilities::Trajectory::Request & req, common_utilities
 
 void callbackSteering(const common_utilities::Steer::ConstPtr & msg) {
     qDebug() << "Received Steering Message";
+    if(msg->steeringCommand == SteeringCommand::PLAY_TRAJECTORY){
+        setState(ControllerState::TRAJECTORY_PLAYING);
+    } else if (msg->steeringCommand == SteeringCommand::STOP_TRAJECTORY) {
+        setState(ControllerState::TRAJECTORY_READY);
+    } else if (msg->steeringCommand == SteeringCommand::PAUSE_TRAJECTORY) {
+        setState(ControllerState::TRAJECTORY_PAUSED);
+    }
 }
 
 void setState(ControllerState cs) {

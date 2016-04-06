@@ -48,8 +48,8 @@ public slots:
     void slotStopRecording();
 
 signals:
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void signalPlayerStatusUpdated(PlayerState state) const;
+    void signalControllerStatusUpdated(qint32 motorId, ControllerState state) const;
 
 private:
     void preprocessCurrentRoboyPlan();
