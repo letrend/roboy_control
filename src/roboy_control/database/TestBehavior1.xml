@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<roboybehavior name="TestBehavior1" behaviorid="1">
+    <trajectory motorid="1" controlmode="1" samplerate="100">
+        <waypointlist>0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38</waypointlist>
+    </trajectory>
+</roboybehavior>

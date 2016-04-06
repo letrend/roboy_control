@@ -17,9 +17,9 @@ private:
     QXmlStreamReader m_xmlReader;
     QXmlStreamWriter  m_xmlWriter;
 
-    void writeMotorData( const RoboyBehavior & behavior );
+    void writeTrajectories(const RoboyBehavior &behavior);
     bool readBehaviorHeader( RoboyBehaviorMetadata & behavior );
-    bool readMotorData( RoboyBehavior & behavior );
+    bool readTrajectories(RoboyBehavior &behavior);
 public:
     RoboyBehaviorXmlParser();
 

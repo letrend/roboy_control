@@ -33,7 +33,7 @@ void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior & behavio
     m_xmlWriter.writeAttribute("name", behavior.m_metadata.m_sBehaviorName);
     m_xmlWriter.writeAttribute("behaviorid", QString::number(behavior.m_metadata.m_ulBehaviorId));
 
-    writeMotorData(behavior);
+    writeTrajectories(behavior);
 
     m_xmlWriter.writeEndElement();
     m_xmlWriter.writeEndDocument();
@@ -41,21 +41,25 @@ void RoboyBehaviorXmlParser::persistRoboyBehavior( const RoboyBehavior & behavio
     MODEL_DBG << " - INFO - Finished successfully";
 }
 
-void RoboyBehaviorXmlParser::writeMotorData( const RoboyBehavior & behavior ) {
+void RoboyBehaviorXmlParser::writeTrajectories(const RoboyBehavior &behavior) {
     for (quint32 motor : behavior.m_mapMotorTrajectory.keys()) {
         Trajectory currentTrajectory = behavior.m_mapMotorTrajectory.value(motor);
 
-        m_xmlWriter.writeStartElement("motor");
+        m_xmlWriter.writeStartElement("trajectory");
         m_xmlWriter.writeAttribute("motorid", QString::number(motor));
         m_xmlWriter.writeAttribute("controlmode", QString::number(currentTrajectory.m_controlMode));
         m_xmlWriter.writeAttribute("samplerate", QString::number(currentTrajectory.m_sampleRate));
 
+        QChar separator(',');
+        QString list;
         for (RoboyWaypoint wp : currentTrajectory.m_listWaypoints) {
-            m_xmlWriter.writeStartElement("waypoint");
-            m_xmlWriter.writeAttribute("id", QString::number(wp.m_ulId));
-            m_xmlWriter.writeCharacters(QString::number(wp.m_ulValue));
-            m_xmlWriter.writeEndElement();
+            list.append(QString::number(wp.m_ulValue));
+            list.append(separator);
         }
+        // Remove additional ',' which was added after the last list element
+        list.chop(1);
+
+        m_xmlWriter.writeTextElement("waypointlist", list);
         m_xmlWriter.writeEndElement();
     }
 }
@@ -98,8 +102,8 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior & behavior ) {
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
             readBehaviorHeader(behavior.m_metadata);
-        } else if ( m_xmlReader.name() == "motor" ) {
-            readMotorData(behavior);
+        } else if ( m_xmlReader.name() == "trajectory" ) {
+            readTrajectories(behavior);
         } else {
             m_xmlReader.skipCurrentElement();
         }
@@ -126,8 +130,8 @@ bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata & metadat
     return false;
 }
 
-bool RoboyBehaviorXmlParser::readMotorData( RoboyBehavior & behavior ) {
-    if ( m_xmlReader.name() == "motor" ) {
+bool RoboyBehaviorXmlParser::readTrajectories(RoboyBehavior &behavior) {
+    if ( m_xmlReader.name() == "trajectory" ) {
         quint32 motor_id = m_xmlReader.attributes().value("motorid").toString().toUInt();
         qint32 controlMode = m_xmlReader.attributes().value("controlmode").toString().toInt();
         qint32 sampleRate = m_xmlReader.attributes().value("samplerate").toString().toInt();
@@ -135,21 +139,25 @@ bool RoboyBehaviorXmlParser::readMotorData( RoboyBehavior & behavior ) {
         Trajectory trajectory;
         trajectory.m_controlMode = (ControlMode) controlMode;
         trajectory.m_sampleRate = sampleRate;
-        RoboyWaypoint waypoint;
 
-        while (m_xmlReader.readNextStartElement()) {
-            if (m_xmlReader.name() == "waypoint") {
-                waypoint.m_ulId = m_xmlReader.attributes().value("id").toString().toULong();
-                waypoint.m_ulValue = m_xmlReader.readElementText().toULong();
+        m_xmlReader.readNextStartElement();
+
+        if(m_xmlReader.name() == "waypointlist") {
+            RoboyWaypoint waypoint;
+
+            QString valueList = m_xmlReader.readElementText();
+            QChar separator(',');
+            qint64 id = 0;
+            for (auto string : valueList.split(separator)) {
+                waypoint.m_ulValue = string.toLong();
+                waypoint.m_ulId = id++;
                 trajectory.m_listWaypoints.append(waypoint);
-            } else {
-                m_xmlReader.skipCurrentElement();
             }
         }
 
         behavior.m_mapMotorTrajectory.insert(motor_id, trajectory);
 
-        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << trajectory.m_listWaypoints.count();
+        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << behavior.m_mapMotorTrajectory[motor_id].m_listWaypoints.count();
 
         return true;
     }
