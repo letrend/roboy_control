@@ -72,6 +72,7 @@ public:
                 TRANSCEIVER_LOG << "Received: Start Recording";
                 m_bStartRecording = false;
                 eventHandle_sendStartRecording();
+                TRANSCEIVER_SUC << "Return from Record Call";
             } else if (m_bSendRecordSteering) {
                 TRANSCEIVER_LOG << "Triggered 'Send Record Steering Command'";
                 m_bSendRecordSteering = false;
@@ -119,14 +120,16 @@ public:
     }
 
     void sendRecordSteeringMessage(SteeringCommand command) {
-        m_mutexData.lock();
+//        m_mutexData.lock();
+//        m_recordSteeringCommand = command;
+//        m_mutexData.unlock();
+//
+//        m_mutexCV.lock();
+//        m_bSendRecordSteering = true;
+//        m_condition.wakeAll();
+//        m_mutexCV.unlock();
         m_recordSteeringCommand = command;
-        m_mutexData.unlock();
-
-        m_mutexCV.lock();
-        m_bSendRecordSteering = true;
-        m_condition.wakeAll();
-        m_mutexCV.unlock();
+        eventHandle_sendRecordSteeringMessage();
 
     }
 

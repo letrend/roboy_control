@@ -15,15 +15,15 @@ void ROSControllerCommunication::eventHandle_sendTrajectory() {
     topic.sprintf("/roboy/trajectory_motor%u", m_id);
     TRANSCEIVER_LOG << "Send Trajectory: topic: " << topic;
 
-    ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::Trajectory>(topic.toStdString());
+    ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::SetTrajectory>(topic.toStdString());
 
-    common_utilities::Trajectory srv;
-    srv.request.samplerate = m_trajectory.m_sampleRate;
+    common_utilities::SetTrajectory service;
+    service.request.trajectory.samplerate = m_trajectory.m_sampleRate;
     for(RoboyWaypoint wp : m_trajectory.m_listWaypoints) {
-        srv.request.waypoints.push_back(wp.m_ulValue);
+        service.request.trajectory.waypoints.push_back(wp.m_ulValue);
     }
 
-    if(client.call(srv)) {
+    if(client.call(service)) {
         TRANSCEIVER_LOG << "Call " << topic << "successfull";
     } else {
         TRANSCEIVER_LOG << "Call " << topic << "failed";

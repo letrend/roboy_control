@@ -7,7 +7,7 @@
 
 #include <CommonDefinitions.h>
 #include <common_utilities/ControllerState.h>
-#include <common_utilities/Trajectory.h>
+#include <common_utilities/SetTrajectory.h>
 #include <ros/node_handle.h>
 #include <ros/service_client.h>
 #include "IControllerCommunication.h"

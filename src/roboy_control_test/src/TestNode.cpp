@@ -6,9 +6,13 @@
 
 TestNode::TestNode() {
     qDebug() << "Advertise Service 'roboy/initialize'";
-    ros::ServiceServer initializeServer = m_nodeHandle.advertiseService("roboy/initialize", &TestNode::callbackInitialize, this);
 
-    ros::spin();
+    ros::AsyncSpinner spinner(4);
+    spinner.start();
+
+    m_initializeServer = m_nodeHandle.advertiseService("/roboy/initialize", &TestNode::callbackInitialize, this);
+    m_recordServer = m_nodeHandle.advertiseService("/roboy/record", &TestNode::callbackRecord, this);
+    m_recordSteeringSubscriber = m_nodeHandle.subscribe("/roboy/steer_record", 1000, &TestNode::callbackSteerRecord, this);
 }
 
 TestNode::~TestNode() {
@@ -16,8 +20,6 @@ TestNode::~TestNode() {
         delete controller.process;
     }
 }
-
-
 
 bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, common_utilities::Initialize::Response & res){
     qDebug() << "Process 'roboy/initialize' request";
@@ -53,8 +55,44 @@ bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, c
     return true;
 }
 
-void TestNode::callbackSteering(const common_utilities::Steer & msg){
-    qDebug() << "Heard steering message: " << msg.steeringCommand;
+bool TestNode::callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res) {
+    m_bInterrupted = false;
+
+    qCritical() << "Start Recording";
+
+    ros::Duration duration(0, 500000000);
+
+//    common_utilities::Trajectory trajectory1;
+//    common_utilities::Trajectory trajectory2;
+//
+//    trajectory1.samplerate = 100;
+//    trajectory2.samplerate = 100;
+//
+//    res.trajectories.push_back(trajectory1);
+//    res.trajectories.push_back(trajectory2);
+//
+//    double v1 = 0.0;
+//    double v2 = 100.0;
+
+    while(!m_bInterrupted) {
+//        qDebug() << "Wait.";
+        duration.sleep();
+//        res.trajectories[0].waypoints.push_back(v1);
+//        res.trajectories[1].waypoints.push_back(v2);
+//        v1 += 1;
+//        v2 += 2;
+    }
+
+//    qDebug() << "Return " << res.trajectories.at(0).waypoints.size() << " Waypoints";
+
+    return true;
+}
+
+void TestNode::callbackSteerRecord(const common_utilities::Steer & msg) {
+    qWarning() << "Received Record Steering Message";
+    m_mutexCV.lock();
+    m_bInterrupted = true;
+    m_mutexCV.unlock();
 }
 
 bool TestNode::startNode(qint32 id, QString nodeName, QString serviceName, ROSController & controller) {

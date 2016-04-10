@@ -8,7 +8,7 @@ ROSMasterCommunication::ROSMasterCommunication() {
     m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
 
     m_recordClient = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
-    m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_recording", 1000);
+    m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_record", 1000);
 }
 
 // MyoMaster Interface
@@ -46,25 +46,26 @@ void ROSMasterCommunication::eventHandle_sendStartRecording() {
     bool res = false;
 
     common_utilities::Record message;
+    common_utilities::ControllerRequest controllerRequest;
     QList<qint32> ids;
     QList<qint32> modes;
     for(auto controller : m_recordRequest) {
-        ids.append(controller->m_id);
-        modes.append(controller->m_controlMode);
+        controllerRequest.id = controller->m_id;
+        controllerRequest.controlmode = controller->m_controlMode;
+
+        message.request.controllers.push_back(controllerRequest);
     }
 
-    message.request.idList = ids.toVector().toStdVector();
-    message.request.controlmode = modes.toVector().toStdVector();
     message.request.samplingTime = 10.0;
 
     res = m_recordClient.call(message);
 
     if(res) {
         TRANSCEIVER_LOG << "Record successful";
+        Trajectory trajectory;
         std::vector<float> waypoints;
-
-        for(auto v : message.response.trajectories) {
-            TRANSCEIVER_LOG << "Received Waypoints for controller: " << v.waypoints.size();
+        for(auto t : message.response.trajectories) {
+            TRANSCEIVER_LOG << "Received Waypoints for controller: " << t.waypoints.size();
         }
     } else {
         TRANSCEIVER_WAR << "Record failed";
