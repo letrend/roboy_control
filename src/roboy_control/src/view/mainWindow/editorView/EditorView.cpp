@@ -34,7 +34,7 @@ void EditorView::notify() {
  * @brief EditorView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void EditorView::signalPlayerStatusUpdated(PlayerState state) {
+void EditorView::playerStatusUpdated(PlayerState state) {
 
 }
 
@@ -43,7 +43,7 @@ void EditorView::signalPlayerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void EditorView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+void EditorView::controllerStatusUpdated(qint32 motorId, ControllerState state) {
 
 }
 

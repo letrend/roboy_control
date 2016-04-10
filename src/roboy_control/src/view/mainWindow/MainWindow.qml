@@ -37,7 +37,7 @@ ApplicationWindow {
             title : "Roboy"
 
             RoboyView {
-            
+
             }
         }
 

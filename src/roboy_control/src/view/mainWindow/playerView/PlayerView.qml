@@ -16,6 +16,37 @@ View {
     id      : playerView
     width   : 640
 
+    Connections {
+        target                      : cpp_PlayerView
+        onSignalPlayerStatusUpdated : {
+            switch(state) {
+                case 0: // PLAYER_UNINITIALIZED
+                    statusLabel.text = "uninitialized"
+                    break;
+                case 1: // PLAYER_INITIALIZED
+                    statusLabel.text = "initialized"
+                    break;
+                case 2: // PLAYER_PREPROCESSING
+                    statusLabel.text = "preprocessing"
+                    break;
+                case 3: // PLAYER_TRAJECTORY_READY
+                    statusLabel.text = "trajectory ready"
+                    break;
+                case 4: // PLAYER_TRAJECTORY_FAILED
+                    statusLabel.text = "trajectory failed"
+                    break;
+                case 5: // PLAYER_PAUSED
+                    statusLabel.text = "paused"
+                    break;
+                case 6: // PLAYER_PLAYING
+                    statusLabel.text = "playing"
+                    break;
+                default:
+                    statusLabel.text = "undefined"
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill    : parent
         anchors.margins : Units.dp(32)
@@ -60,8 +91,7 @@ View {
                 }
             }
 
-           Button {
-                anchors.right   : parent.right
+            Button {
                 elevation       : 1
                 id              : preprocessButton
                 onClicked       : cpp_PlayerView.preprocessButtonClicked()
@@ -69,6 +99,23 @@ View {
                 Icon {
                     anchors.centerIn : parent
                     name             : "action/build"
+                }
+            }
+
+            View {
+                elevation         : 1
+                height            : Units.dp(36)
+                Layout.fillWidth  : true
+
+                Label {
+                    anchors.left           : parent.left
+                    anchors.verticalCenter : parent.verticalCenter
+                    anchors.margins        : Units.dp(16)
+                    color                  : Theme.light.subTextColor
+                    elide                  : Text.ElideRight
+                    horizontalAlignment    : Qt.AlignHCenter
+                    id                     : statusLabel
+                    style                  : "subheading"
                 }
             }
         }

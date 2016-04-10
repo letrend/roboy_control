@@ -30,7 +30,7 @@ void RecorderView::notify() {
  * @brief RecorderView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void RecorderView::signalPlayerStatusUpdated(PlayerState state) {
+void RecorderView::playerStatusUpdated(PlayerState state) {
 
 }
 
@@ -39,7 +39,7 @@ void RecorderView::signalPlayerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void RecorderView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+void RecorderView::controllerStatusUpdated(qint32 motorId, ControllerState state) {
 
 }
 

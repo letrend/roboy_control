@@ -20,8 +20,8 @@ public:
     ~RecorderView();
 
     void notify();
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void playerStatusUpdated(PlayerState state);
+    void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
 	Q_INVOKABLE void recordButtonClicked();
 	Q_INVOKABLE void stopRecordButtonClicked();

@@ -47,7 +47,7 @@ View {
         contentWidth      : laneBackground.width
         contentHeight     : laneBackground.height
         id                : laneFlickable
-        interactive       : laneBackground.height > height
+        //interactive       : laneBackground.height > height
 
         View {
             id     : laneBackground
