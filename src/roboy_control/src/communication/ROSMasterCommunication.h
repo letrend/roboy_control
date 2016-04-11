@@ -45,7 +45,7 @@ public:
     void eventHandle_sendInitializeRequest();
     void eventHandle_sendSteeringMessage();
 
-    void eventHandle_sendStartRecording();
+    void eventHandle_recordBehavior();
     void eventHandle_sendRecordSteeringMessage();
 
     void startControllers(const QList<qint32> & controllers);

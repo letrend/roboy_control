@@ -94,7 +94,6 @@ bool RoboyBehaviorPlan::doFlattening() {
     trajectory.m_sampleRate =  m_sampleRate;
 
     RoboyWaypoint waypoint;
-    waypoint.m_ulId    = 0;
     waypoint.m_ulValue = 0xffffffffffffffff;
 
     for(RoboyBehaviorExecution execution : m_listExecutions) {
@@ -102,7 +101,6 @@ bool RoboyBehaviorPlan::doFlattening() {
             if(!m_mapMotorTrajectories.contains(motorId)){
                 trajectory.m_listWaypoints.clear();
                 for(int i = 0; i < waypointCount; i++) {
-                    waypoint.m_ulId = i;
                     trajectory.m_listWaypoints.append(waypoint);
                 }
                 m_mapMotorTrajectories.insert(motorId, trajectory);

@@ -24,6 +24,7 @@ protected:
     SteeringCommand          m_steeringCommand;
     QList<ROSController *>   m_recordRequest;
     SteeringCommand          m_recordSteeringCommand;
+    RoboyBehavior *          m_pRecordedBehavior;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
@@ -45,6 +46,8 @@ public:
         m_mutexCV.unlock();
 
         QThread::wait();
+
+        delete m_pRecordedBehavior;
 
         TRANSCEIVER_LOG << "Thread terminated regularly";
     }
@@ -71,7 +74,7 @@ public:
             } else if (m_bStartRecording) {
                 TRANSCEIVER_LOG << "Received: Start Recording";
                 m_bStartRecording = false;
-                eventHandle_sendStartRecording();
+                eventHandle_recordBehavior();
                 TRANSCEIVER_SUC << "Return from Record Call";
             } else if (m_bSendRecordSteering) {
                 TRANSCEIVER_LOG << "Triggered 'Send Record Steering Command'";
@@ -133,14 +136,21 @@ public:
 
     }
 
+    RoboyBehavior * getRecordedBehavior() {
+        return m_pRecordedBehavior;
+    }
+
     virtual void startControllers(const QList<qint32> & controllers) = 0;
 
 protected:
     virtual void eventHandle_sendInitializeRequest() = 0;
     virtual void eventHandle_sendSteeringMessage() = 0;
 
-    virtual void eventHandle_sendStartRecording() = 0;
+    virtual void eventHandle_recordBehavior() = 0;
     virtual void eventHandle_sendRecordSteeringMessage() = 0;
+
+signals:
+    void signalRecordFinished(bool result);
 };
 
 #endif //ROBOYCONTROL_ITRANSCEIVERSERVICE_H

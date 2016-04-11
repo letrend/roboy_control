@@ -18,6 +18,7 @@ void ROSControllerCommunication::eventHandle_sendTrajectory() {
     ros::ServiceClient client = m_nodeHandle.serviceClient<common_utilities::SetTrajectory>(topic.toStdString());
 
     common_utilities::SetTrajectory service;
+    service.request.trajectory.id = m_id;
     service.request.trajectory.samplerate = m_trajectory.m_sampleRate;
     for(RoboyWaypoint wp : m_trajectory.m_listWaypoints) {
         service.request.trajectory.waypoints.push_back(wp.m_ulValue);

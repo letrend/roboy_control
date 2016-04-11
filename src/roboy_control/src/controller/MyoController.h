@@ -46,6 +46,7 @@ public:
 public slots:
     // ControllerCommunication - Interface
     void slotControllerStatusUpdated(qint32 motorId);
+    void slotRecordFinished(bool result);
 
 private:
     bool waitForControllerStatus(QList<qint32> idList, ControllerState state, quint32 timeout = 0);

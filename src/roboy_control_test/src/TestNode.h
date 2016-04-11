@@ -5,12 +5,15 @@
 #ifndef ROBOY_CONTROL_TESTNODE_H
 #define ROBOY_CONTROL_TESTNODE_H
 
+
+#include "boost/function.hpp"
 #include "common_utilities/ControllerState.h"
 #include "common_utilities/Initialize.h"
 #include <common_utilities/Record.h>
 #include "common_utilities/Steer.h"
 #include "common_utilities/Status.h"
 #include "ros/ros.h"
+#include "ros/callback_queue.h"
 
 #include "DataTypes.h"
 #include <QMutex>

@@ -25,8 +25,7 @@ struct RoboyBehaviorMetadata {
 };
 
 struct RoboyWaypoint {
-    quint64   m_ulId;
-    quint64   m_ulValue;
+    float   m_ulValue;
 };
 
 struct Trajectory {

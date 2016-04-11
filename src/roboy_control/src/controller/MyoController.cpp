@@ -3,6 +3,7 @@
 //
 
 #include <communication/ROSControllerCommunication.h>
+#include "DataPool.h"
 #include "MyoController.h"
 #include "RoboyController.h"
 
@@ -16,6 +17,8 @@ MyoController::MyoController(const RoboyController & controller) :
     name.sprintf("myomaster");
     m_myoMasterTransceiver = new ROSMasterCommunication();
     m_myoMasterTransceiver->start();
+
+    connect(m_myoMasterTransceiver, SIGNAL(signalRecordFinished(bool)), this, SLOT(slotRecordFinished(bool)));
 
     // Create Controller Status Structs
     MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
@@ -119,6 +122,16 @@ void MyoController::slotControllerStatusUpdated(qint32 motorId) {
     m_mutexCVController.unlock();
 
     emit m_roboyController.signalControllerStatusUpdated(motorId, m_mapControllers[motorId]->m_state);
+}
+
+void MyoController::slotRecordFinished(bool result) {
+    MYOCONTROLLER_DBG << "Record finished with status " << result;
+    RoboyBehavior * behavior = m_myoMasterTransceiver->getRecordedBehavior();
+    for(auto id : behavior->m_mapMotorTrajectory.keys()) {
+        MYOCONTROLLER_DBG << "Trajectory: " << "motor-id: " << id << " wp-count: " << behavior->m_mapMotorTrajectory[id].m_listWaypoints.size();
+    }
+
+    DataPool::getInstance()->setRecordResult(result, behavior);
 }
 
 // private

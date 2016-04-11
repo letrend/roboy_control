@@ -150,7 +150,6 @@ bool RoboyBehaviorXmlParser::readTrajectories(RoboyBehavior &behavior) {
             qint64 id = 0;
             for (auto string : valueList.split(separator)) {
                 waypoint.m_ulValue = string.toLong();
-                waypoint.m_ulId = id++;
                 trajectory.m_listWaypoints.append(waypoint);
             }
         }

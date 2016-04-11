@@ -42,7 +42,7 @@ void ROSMasterCommunication::eventHandle_sendSteeringMessage() {
     m_steerPublisher.publish(steer);
 }
 
-void ROSMasterCommunication::eventHandle_sendStartRecording() {
+void ROSMasterCommunication::eventHandle_recordBehavior() {
     bool res = false;
 
     common_utilities::Record message;
@@ -56,20 +56,42 @@ void ROSMasterCommunication::eventHandle_sendStartRecording() {
         message.request.controllers.push_back(controllerRequest);
     }
 
-    message.request.samplingTime = 10.0;
+    message.request.samplingTime = 2.0;
 
     res = m_recordClient.call(message);
 
     if(res) {
         TRANSCEIVER_LOG << "Record successful";
+        RoboyBehavior * behavior = new RoboyBehavior();
         Trajectory trajectory;
+        RoboyWaypoint waypoint;
         std::vector<float> waypoints;
+        qint32 i = 0;
         for(auto t : message.response.trajectories) {
-            TRANSCEIVER_LOG << "Received Waypoints for controller: " << t.waypoints.size();
+            TRANSCEIVER_LOG << "Trajectory : " << i++ << " motor-id: " << t.id << " waypoints: " << t.waypoints.size();
+            trajectory.m_listWaypoints.clear();
+            trajectory.m_sampleRate = t.samplerate;
+            trajectory.m_controlMode = ControlMode::POSITION_CONTROL; // TODO ???
+            for(auto wp : t.waypoints) {
+                waypoint.m_ulValue = wp;
+                trajectory.m_listWaypoints.append(waypoint);
+            }
+            behavior->m_mapMotorTrajectory.insert(t.id, trajectory);
         }
+
+        m_mutexData.lock();
+        m_pRecordedBehavior = behavior;
+        m_mutexData.unlock();
+
+        res = true;
     } else {
         TRANSCEIVER_WAR << "Record failed";
+        m_mutexData.lock();
+        m_pRecordedBehavior = nullptr;
+        m_mutexData.unlock();
+        res = false;
     }
+    emit signalRecordFinished(res);
 }
 
 void ROSMasterCommunication::eventHandle_sendRecordSteeringMessage() {

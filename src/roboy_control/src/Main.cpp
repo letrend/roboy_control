@@ -60,7 +60,6 @@ void initializeDatabase() {
     trajectory.m_sampleRate = 100;
     RoboyWaypoint wp;
     for(int i = 0; i < 20; i++) {
-        wp.m_ulId = i;
         wp.m_ulValue = i * 2;
         trajectory.m_listWaypoints.append(wp);
     }
@@ -76,7 +75,6 @@ void initializeDatabase() {
     trajectory.m_listWaypoints.clear();
     behavior.m_mapMotorTrajectory.clear();
     for (int i = 0; i < 20; i++) {
-        wp.m_ulId = i;
         wp.m_ulValue = pow(i, 2) + i;
         trajectory.m_listWaypoints.append(wp);
     }
