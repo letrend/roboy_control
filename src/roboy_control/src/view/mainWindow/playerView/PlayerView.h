@@ -22,8 +22,8 @@ public:
     ~PlayerView();
 
     void notify();
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void playerStatusUpdated(PlayerState state);
+    void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
     // the following methods are defined as Q_INVOKABLE and 
     // not as slots so their return value can be used
@@ -40,6 +40,10 @@ public:
     Q_INVOKABLE int  insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp);
 
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
+
+signals: 
+    void signalPlayerStatusUpdated(PlayerState state);
+    void signlaControllerStatusUpdated(qint32 motorId, ControllerState state);
 
 private:
     ViewController          * m_pViewController;

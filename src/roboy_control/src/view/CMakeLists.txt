@@ -8,6 +8,7 @@ set(HDRS ${HDRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/playerView/RoboyMultiLaneModel.h
         ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/recorderView/RecorderView.h
 	${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/roboyView/RoboyView.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/roboyView/ControllerStateListModel.h
 PARENT_SCOPE)
 
 set(SRCS ${SRCS}
@@ -19,6 +20,7 @@ set(SRCS ${SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/playerView/RoboyMultiLaneModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/recorderView/RecorderView.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/roboyView/RoboyView.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/mainWindow/roboyView/ControllerStateListModel.cpp
 PARENT_SCOPE)
 
 set(RESOURCES ${RESOURCES}

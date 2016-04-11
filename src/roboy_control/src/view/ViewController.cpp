@@ -27,8 +27,8 @@ ViewController::ViewController(RoboyController * pRoboyController, IModelService
     qRegisterMetaType<ControllerState>("ControllerState");
     qRegisterMetaType<PlayerState>("PlayerState");
 
-    ViewController::connect(pRoboyController, SIGNAL(signalPlayerStatusUpdated(PlayerState)), this, SLOT(signalPlayerStatusUpdated(PlayerState)));
-    ViewController::connect(pRoboyController, SIGNAL(signalControllerStatusUpdated(qint32, ControllerState)), this, SLOT(signalControllerStatusUpdated(qint32, ControllerState)));
+    ViewController::connect(pRoboyController, SIGNAL(signalPlayerStatusUpdated(PlayerState)), this, SLOT(playerStatusUpdated(PlayerState)));
+    ViewController::connect(pRoboyController, SIGNAL(signalControllerStatusUpdated(qint32, ControllerState)), this, SLOT(controllerStatusUpdated(qint32, ControllerState)));
 }
 
 // PlayerView - Interface
@@ -79,9 +79,9 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
  * @brief ViewController::signalPlayerStatusUpdated slot to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void ViewController::signalPlayerStatusUpdated(PlayerState state) {
+void ViewController::playerStatusUpdated(PlayerState state) const {
     VIEW_DBG << "Received Player Status Update: " << state;
-    m_pMainWindow->signalPlayerStatusUpdated(state);
+    m_pMainWindow->playerStatusUpdated(state);
 }
 
 /**
@@ -89,7 +89,7 @@ void ViewController::signalPlayerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void ViewController::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
+void ViewController::controllerStatusUpdated(qint32 motorId, ControllerState state) const {
     VIEW_DBG << "Received Controller Status Update: " << motorId << "\t" << state;
-    m_pMainWindow->signalControllerStatusUpdated(motorId, state);
+    m_pMainWindow->controllerStatusUpdated(motorId, state);
 }

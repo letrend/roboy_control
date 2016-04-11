@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 
 #include "../BehaviorListModel.h"
+#include "ControllerStateListModel.h"
 #include "DataTypes.h"
 #include "IModelService.h"
 #include "IObserver.h"
@@ -21,15 +22,16 @@ public:
     ~RoboyView();
 
     void notify();
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void playerStatusUpdated(PlayerState state);
+    void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
     Q_INVOKABLE void initalizeButtonClicked();
 
 private:
-	ViewController          * m_pViewController;
-    IModelService           * m_pModelService;
-    QQmlApplicationEngine   * m_pAppEngine;
+    ControllerStateListModel * m_pStateModel;
+	ViewController           * m_pViewController;
+    IModelService            * m_pModelService;
+    QQmlApplicationEngine    * m_pAppEngine;
 
 };
 

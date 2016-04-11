@@ -44,8 +44,8 @@ public:
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 
 public slots:
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void playerStatusUpdated(PlayerState state) const;
+    void controllerStatusUpdated(qint32 motorId, ControllerState state) const;
 
 signals:
     void signalInitialize();

@@ -21,8 +21,8 @@ public:
     ~EditorView();
 
     void notify();
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signalControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void playerStatusUpdated(PlayerState state);
+    void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
     Q_INVOKABLE bool setSelectedBehaviorIndex(int index);
 

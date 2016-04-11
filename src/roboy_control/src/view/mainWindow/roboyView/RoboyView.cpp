@@ -6,11 +6,14 @@
  * @param parent non mandatory parent for the RoboyView
  */
 RoboyView::RoboyView(IModelService * pModelService, ViewController * pViewController, QQmlApplicationEngine * pAppEngine, QObject * pParent) : QObject(pParent) {
+	m_pStateModel             = new ControllerStateListModel();
     m_pViewController         = pViewController;
     m_pModelService           = pModelService;
     m_pAppEngine              = pAppEngine;
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
+
+    pQmlContext->setContextProperty("cpp_ControllerStateListModel", m_pStateModel);
 }
 
 /**
@@ -31,7 +34,7 @@ void RoboyView::notify() {
  * @brief RoboyView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void RoboyView::signalPlayerStatusUpdated(PlayerState state) {
+void RoboyView::playerStatusUpdated(PlayerState state) {
 
 }
 
@@ -40,8 +43,8 @@ void RoboyView::signalPlayerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void RoboyView::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
-
+void RoboyView::controllerStatusUpdated(qint32 motorId, ControllerState state) {
+	m_pStateModel->controllerStatusUpdated(motorId, state);
 }
 
 /**

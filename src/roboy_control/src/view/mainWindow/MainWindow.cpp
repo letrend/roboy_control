@@ -44,11 +44,11 @@ void MainWindow::notify() {
  * @brief MainWindow::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void MainWindow::signalPlayerStatusUpdated(PlayerState state) {
-    m_pEditorView->signalPlayerStatusUpdated(state);
-    m_pPlayerView->signalPlayerStatusUpdated(state);
-    m_pRecorderView->signalPlayerStatusUpdated(state);
-    m_pRoboyView->signalPlayerStatusUpdated(state);
+void MainWindow::playerStatusUpdated(PlayerState state) {
+    m_pEditorView->playerStatusUpdated(state);
+    m_pPlayerView->playerStatusUpdated(state);
+    m_pRecorderView->playerStatusUpdated(state);
+    m_pRoboyView->playerStatusUpdated(state);
 }
 
 /**
@@ -56,11 +56,11 @@ void MainWindow::signalPlayerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void MainWindow::signalControllerStatusUpdated(qint32 motorId, ControllerState state) {
-    m_pEditorView->signalControllerStatusUpdated(motorId, state);
-    m_pPlayerView->signalControllerStatusUpdated(motorId, state);
-    m_pRecorderView->signalControllerStatusUpdated(motorId, state);
-    m_pRoboyView->signalControllerStatusUpdated(motorId, state);
+void MainWindow::controllerStatusUpdated(qint32 motorId, ControllerState state) {
+    m_pEditorView->controllerStatusUpdated(motorId, state);
+    m_pPlayerView->controllerStatusUpdated(motorId, state);
+    m_pRecorderView->controllerStatusUpdated(motorId, state);
+    m_pRoboyView->controllerStatusUpdated(motorId, state);
 }
 
 /**
