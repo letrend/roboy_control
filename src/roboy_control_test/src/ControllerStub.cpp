@@ -34,7 +34,7 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, nodeName.toStdString());
     ros::NodeHandle n;
 
-    ros::AsyncSpinner spinner(1);
+    ros::AsyncSpinner spinner(2);
     spinner.start();
 
     QString statusTopic;

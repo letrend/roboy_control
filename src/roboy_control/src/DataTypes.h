@@ -11,13 +11,26 @@ class IModelService;
 class IMasterCommunication;
 class IControllerCommunication;
 
-enum PlayerState {  PLAYER_UNINITIALIZED,
-                    PLAYER_INITIALIZED,
+enum PlayerState {  PLAYER_NOT_READY,
+                    PLAYER_READY,
+                // Preprocessing: Success, Failures
                     PLAYER_PREPROCESSING,
+                    PLAYER_PREPROCESS_FAILED_EMPTY,
+                    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
+                    PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
+                    PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY,
+                    PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
+                    PLAYER_PREPROCESS_SUCCEEDED,
+                //
                     PLAYER_TRAJECTORY_READY,
-                    PLAYER_TRAJECTORY_FAILED,
-                    PLAYER_PAUSED,
-                    PLAYER_PLAYING};
+                    PLAYER_PLAYING,
+                    PLAYER_PAUSED };
+
+enum RecorderState {
+                    RECORDER_READY,
+                    RECORDER_RECORDING,
+                    RECORDER_FINISHED_RECORDING,
+};
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

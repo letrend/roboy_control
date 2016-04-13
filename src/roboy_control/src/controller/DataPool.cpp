@@ -13,25 +13,59 @@ DataPool * DataPool::getInstance() {
     return instance;
 }
 
-void DataPool::setControllerStatus(qint32 id, ControllerState state) {
+void DataPool::setPlayerState(PlayerState state) {
+    m_mutexData.lock();
+    m_playerState = state;
+    m_mutexData.unlock();
+    emit signalNotifyOnPlayerStateUpdated();
+}
+
+void DataPool::setRecorderState(RecorderState state) {
+    m_mutexData.lock();
+    m_recorderState = state;
+    m_mutexData.unlock();
+    emit signalNotifyOnRecorderStateUpdated();
+}
+
+void DataPool::setControllerState(qint32 id, ControllerState state) {
     m_mutexData.lock();
     if(m_controllerStates.contains(id))
         m_controllerStates[id] = state;
     else
         m_controllerStates.insert(id, state);
     m_mutexData.unlock();
-
-    qDebug() << "Emit 'ControllerStatusUpdated'";
-    emit signalNotifyOnControllerStateUpdated();
+    emit signalNotifyOnControllerStateUpdated(id);
 }
 
 
 void DataPool::setRecordResult(bool result, RoboyBehavior * pBehavior) {
     m_mutexData.lock();
-    m_result = result;
-    m_recordedBehavior = *pBehavior;
+    m_recordResult = result;
+    m_recordBehavior = *pBehavior;
     m_mutexData.unlock();
-
-    qDebug() << "Emit 'RecordResult'";
     emit signalNotifyOnRecordResult();
 }
+
+PlayerState DataPool::getPlayerState() {
+    return m_playerState;
+}
+
+RecorderState DataPool::getRecorderState() {
+    return m_recorderState;
+}
+
+ControllerState DataPool::getControllerState(qint32 motorId) {
+    if(m_controllerStates.contains(motorId))
+        return m_controllerStates[motorId];
+    else
+        return ControllerState::UNDEFINED;
+}
+
+bool DataPool::getRecordResult() {
+    return m_recordResult;
+}
+
+RoboyBehavior * DataPool::getRecordedBehavior() {
+    return &m_recordBehavior;
+}
+

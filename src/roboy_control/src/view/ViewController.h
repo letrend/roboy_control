@@ -22,12 +22,11 @@ class ViewController : public QObject {
 
 private:
     IModelService           * m_pModelSerivce;
-    RoboyController         * m_pRoboyController;
     MainWindow              * m_pMainWindow;
     QQmlApplicationEngine   * m_pApplicationEngine;
 
 public:
-    ViewController(RoboyController * pRoboyController, IModelService * pModelService);
+    ViewController(IModelService * pModelService);
 
     // PlayerView - Interface
     void triggerInit();
@@ -44,8 +43,10 @@ public:
     RoboyBehaviorMetaplan fromController_getCurrentRoboyPlan();
 
 public slots:
-    void playerStatusUpdated(PlayerState state) const;
-    void controllerStatusUpdated(qint32 motorId, ControllerState state) const;
+    void slotPlayerStateUpdated() const;
+    void slotRecorderStateUpdated() const;
+    void slotControllerStateUpdated(qint32 motorId) const;
+    void slotRecorderResultReceived() const;
 
 signals:
     void signalInitialize();

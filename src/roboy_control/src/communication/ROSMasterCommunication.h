@@ -37,8 +37,6 @@ private:
     ros::Publisher     m_recordSteerPublisher;
     ros::ServiceClient m_recordClient;
 
-    void callbackStatus(const common_utilities::StatusConstPtr & status);
-
 public:
     ROSMasterCommunication();
 
@@ -51,7 +49,9 @@ public:
     void startControllers(const QList<qint32> & controllers);
     void unloadControllers(const QList<qint32> & controllers);
 
-    void sendRecordingSteeringMessage(SteeringCommand command);
+private:
+    void callbackStatus(const common_utilities::StatusConstPtr & status);
+
 };
 
 #endif // ROSMESSAGETRANSCEIVERSERVICE_H

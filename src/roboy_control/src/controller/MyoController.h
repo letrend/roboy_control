@@ -20,8 +20,6 @@ class MyoController : public QObject {
     Q_OBJECT
 
 private:
-     const RoboyController      & m_roboyController;
-
     IMasterCommunication * m_myoMasterTransceiver;
     QMap<qint32, ROSController *>       m_mapControllers;
 
@@ -29,7 +27,7 @@ private:
     QWaitCondition        m_conditionStatusUpdated;
 
 public:
-    MyoController(const RoboyController & controller);
+    MyoController();
     ~MyoController();
 
     // RoboyController Interface

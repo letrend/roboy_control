@@ -9,8 +9,7 @@
 
 #define CONFIG_FILE_NAME "RoboyControlConfig.xml"
 
-class RoboyControlConfiguration
-{
+class RoboyControlConfiguration {
 private:
     QXmlStreamReader m_xmlReader;
 

@@ -52,14 +52,12 @@ void ROSMasterCommunication::eventHandle_recordBehavior() {
     for(auto controller : m_recordRequest) {
         controllerRequest.id = controller->m_id;
         controllerRequest.controlmode = controller->m_controlMode;
-
         message.request.controllers.push_back(controllerRequest);
     }
 
     message.request.samplingTime = 2.0;
 
     res = m_recordClient.call(message);
-
     if(res) {
         TRANSCEIVER_LOG << "Record successful";
         RoboyBehavior * behavior = new RoboyBehavior();

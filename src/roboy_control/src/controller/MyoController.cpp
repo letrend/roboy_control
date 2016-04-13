@@ -7,9 +7,7 @@
 #include "MyoController.h"
 #include "RoboyController.h"
 
-MyoController::MyoController(const RoboyController & controller) :
-    m_roboyController(controller)
-{
+MyoController::MyoController() {
     MYOCONTROLLER_DBG << "Initialize Myo-Controller";
 
     // Create Myo-Master Transceiver
@@ -31,6 +29,7 @@ MyoController::MyoController(const RoboyController & controller) :
         controller->m_communication = new ROSControllerCommunication(controller);
         controller->m_communication->start();
         m_mapControllers.insert(controller->m_id, controller);
+        DataPool::getInstance()->setControllerState(c.m_id, ControllerState::UNDEFINED);
         connect(controller->m_communication, SIGNAL(signalControllerStatusUpdated(qint32)), this, SLOT(slotControllerStatusUpdated(qint32)));
     }
 }
@@ -54,11 +53,11 @@ bool MyoController::handleEvent_initializeControllers() {
         MYOCONTROLLER_SUC << "Initialization Complete!";
         MYOCONTROLLER_DBG << "Start Controllers.";
         m_myoMasterTransceiver->startControllers(m_mapControllers.keys());
-        emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_INITIALIZED);
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_READY);
         result = true;
     } else {
         MYOCONTROLLER_WAR << "Initialization timed out.";
-        emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_UNINITIALIZED);
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_NOT_READY);
         result = false;
     }
 
@@ -69,7 +68,7 @@ bool MyoController::handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan & behavior
     bool result = false;
     MYOCONTROLLER_DBG << "Get Flattended Trajectories";
 
-    emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_PREPROCESSING);
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESSING);
 
     QMap<qint32, Trajectory> mapTrajectories = behaviorPlan.getTrajectories();
 
@@ -81,11 +80,11 @@ bool MyoController::handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan & behavior
 
     if(waitForControllerStatus(mapTrajectories.keys(), ControllerState::TRAJECTORY_READY)) {
         MYOCONTROLLER_SUC << "All Controllers ready to play Trajectory.";
-        emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_TRAJECTORY_READY);
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_SUCCEEDED);
         result = true;
     } else {
         MYOCONTROLLER_WAR << "Preprocessing of Trajectories timed out.";
-        emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_TRAJECTORY_FAILED);
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT);
         result = false;
     }
     return result;
@@ -93,35 +92,34 @@ bool MyoController::handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan & behavior
 
 bool MyoController::handleEvent_playPlanExecution() {
     m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
-    emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_PLAYING);
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PLAYING);
 }
 
 bool MyoController::handleEvent_pausePlanExecution() {
     m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PAUSE_TRAJECTORY);
-    emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_PAUSED);
-
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PAUSED);
 }
 
 bool MyoController::handleEvent_stopPlanExecution() {
     m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
-    emit m_roboyController.signalPlayerStatusUpdated(PlayerState::PLAYER_TRAJECTORY_READY);
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
 }
 
 bool MyoController::handleEvent_recordBehavior() {
     m_myoMasterTransceiver->startRecording(m_mapControllers.values());
+    DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_RECORDING);
 }
 
 bool MyoController::handleEvent_stopRecording() {
     m_myoMasterTransceiver->sendRecordSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
 }
 
-// Slots
+// Communication Feedback-Slots
 void MyoController::slotControllerStatusUpdated(qint32 motorId) {
     m_mutexCVController.lock();
     m_conditionStatusUpdated.wakeAll();
     m_mutexCVController.unlock();
-
-    emit m_roboyController.signalControllerStatusUpdated(motorId, m_mapControllers[motorId]->m_state);
+    DataPool::getInstance()->setControllerState(motorId, m_mapControllers[motorId]->m_state);
 }
 
 void MyoController::slotRecordFinished(bool result) {
@@ -131,6 +129,7 @@ void MyoController::slotRecordFinished(bool result) {
         MYOCONTROLLER_DBG << "Trajectory: " << "motor-id: " << id << " wp-count: " << behavior->m_mapMotorTrajectory[id].m_listWaypoints.size();
     }
 
+    DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_FINISHED_RECORDING);
     DataPool::getInstance()->setRecordResult(result, behavior);
 }
 

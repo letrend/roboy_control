@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roboybehavior name="TestBehavior2" behaviorid="100">
-    <motor motorid="2" controlmode="0" samplerate="100">
-        <waypoint id="0">0</waypoint>
-        <waypoint id="1">2</waypoint>
-        <waypoint id="2">6</waypoint>
-        <waypoint id="3">12</waypoint>
-        <waypoint id="4">20</waypoint>
-        <waypoint id="5">30</waypoint>
-        <waypoint id="6">42</waypoint>
-        <waypoint id="7">56</waypoint>
-        <waypoint id="8">72</waypoint>
-        <waypoint id="9">90</waypoint>
-        <waypoint id="10">110</waypoint>
-        <waypoint id="11">132</waypoint>
-        <waypoint id="12">156</waypoint>
-        <waypoint id="13">182</waypoint>
-        <waypoint id="14">210</waypoint>
-        <waypoint id="15">240</waypoint>
-        <waypoint id="16">272</waypoint>
-        <waypoint id="17">306</waypoint>
-        <waypoint id="18">342</waypoint>
-        <waypoint id="19">380</waypoint>
-    </motor>
+    <trajectory motorid="2" controlmode="1" samplerate="100">
+        <waypointlist>0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38</waypointlist>
+    </trajectory>
 </roboybehavior>

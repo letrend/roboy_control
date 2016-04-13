@@ -73,6 +73,7 @@ void RoboyControlConfiguration::readControllersConfig() {
                 ROSController controller;
                 controller.m_id = id;
                 controller.m_controlMode = controlMode;
+                controller.m_state = ControllerState ::UNDEFINED;
                 CONFIG_DBG << "Parsed Controller: " << controller.toString();
                 m_listControllerConfig.append(controller);
             }

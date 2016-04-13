@@ -49,7 +49,7 @@ bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, c
         nodeName.sprintf("controller_stub%i", req.idList[i]);
 
         QString serviceName;
-        serviceName.sprintf("roboy/trajectory_motor%i", req.idList[i]);
+        serviceName.sprintf("/roboy/trajectory_motor%i", req.idList[i]);
 
         controller.id = req.idList[i];
         controller.controlMode = (ControlMode) req.controlmode[i];

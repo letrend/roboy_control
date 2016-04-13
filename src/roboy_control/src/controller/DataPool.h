@@ -8,7 +8,7 @@
 #include "DataTypes.h"
 #include <QMutex>
 
-class DataPool : QObject {
+class DataPool : public QObject {
 
     Q_OBJECT
 
@@ -17,30 +17,38 @@ private:
 
     QMutex          m_mutexData;
 
-private:
     DataPool() { }
 
-    /*
-    RoboyState
-    PlayerState
-    RecordState
-    */
+private:
+    PlayerState     m_playerState = PlayerState::PLAYER_NOT_READY;
+    RecorderState   m_recorderState = RecorderState::RECORDER_READY;
 
     QMap<qint32, ControllerState> m_controllerStates;
 
     // Record Results
-    bool           m_result;
-    RoboyBehavior  m_recordedBehavior;
+    bool           m_recordResult;
+    RoboyBehavior  m_recordBehavior;
 
 public:
     static DataPool * getInstance();
 
-    void setControllerStatus(qint32 id, ControllerState state);
+    void setPlayerState(PlayerState state);
+    void setRecorderState(RecorderState state);
+    void setControllerState(qint32 id, ControllerState state);
 
     void setRecordResult(bool result, RoboyBehavior * pBehavior);
 
+    PlayerState getPlayerState();
+    RecorderState getRecorderState();
+    ControllerState getControllerState(qint32 motorId);
+
+    bool getRecordResult();
+    RoboyBehavior * getRecordedBehavior();
+
 signals:
-    void signalNotifyOnControllerStateUpdated();
+    void signalNotifyOnPlayerStateUpdated();
+    void signalNotifyOnRecorderStateUpdated();
+    void signalNotifyOnControllerStateUpdated(qint32 motorId);
     void signalNotifyOnRecordResult();
 };
 
