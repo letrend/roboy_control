@@ -28,6 +28,7 @@ ViewController::ViewController(IModelService * pModelService) {
             slotControllerStateUpdated(qint32)));
     connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecorderStateUpdated()), this, SLOT(slotRecorderStateUpdated()));
     connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecordResult()), this, SLOT(slotRecorderResultReceived()));
+    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnDataPoolReset()), this, SLOT(slotDataPoolReset()));
 }
 
 // PlayerView - Interface
@@ -57,6 +58,7 @@ void ViewController::pauseBehaviorPlan() {
 
 // RecorderView - Interface
 void ViewController::recordBehavior() {
+    DataPool::getInstance()->setSampleRate(100.0);
     emit signalRecord();
 }
 
@@ -115,4 +117,9 @@ void ViewController::slotRecorderResultReceived() const {
     } else {
         VIEW_DBG << "Record ERROR";
     }
+}
+
+void ViewController::slotDataPoolReset() const {
+    // TODO: Process
+    VIEW_DBG << "Received DataPool Reset";
 }

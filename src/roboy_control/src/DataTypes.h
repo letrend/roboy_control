@@ -43,7 +43,7 @@ struct RoboyWaypoint {
 
 struct Trajectory {
     ControlMode          m_controlMode;
-    float                m_sampleRate;
+    qint32                m_sampleRate;
     QList<RoboyWaypoint> m_listWaypoints;
     qint32 getDuration() {
         return m_listWaypoints.count() * m_sampleRate;
@@ -149,7 +149,9 @@ struct ROSController {
     ControlMode           m_controlMode;
     ControllerState       m_state;
 
-    IControllerCommunication * m_communication;
+    IControllerCommunication * m_communication = nullptr;
+
+    ~ROSController();
 
     QString toString() const {
         QString string;

@@ -47,6 +47,7 @@ public slots:
     void slotRecorderStateUpdated() const;
     void slotControllerStateUpdated(qint32 motorId) const;
     void slotRecorderResultReceived() const;
+    void slotDataPoolReset() const;
 
 signals:
     void signalInitialize();
