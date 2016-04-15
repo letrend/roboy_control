@@ -28,13 +28,19 @@ void DataPool::setRecorderState(RecorderState state) {
 }
 
 void DataPool::setControllerState(qint32 id, ControllerState state) {
+    bool update = false;
     m_mutexData.lock();
-    if(m_controllerStates.contains(id))
+    if(m_controllerStates.contains(id)) {
+        ControllerState previousState = m_controllerStates[id];
         m_controllerStates[id] = state;
-    else
+        update = previousState == state ? false : true;
+    } else {
         m_controllerStates.insert(id, state);
+    }
     m_mutexData.unlock();
-    emit signalNotifyOnControllerStateUpdated(id);
+
+    if(update)
+        emit signalNotifyOnControllerStateUpdated(id);
 }
 
 

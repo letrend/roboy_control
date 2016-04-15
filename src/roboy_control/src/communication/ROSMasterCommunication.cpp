@@ -50,12 +50,13 @@ void ROSMasterCommunication::eventHandle_recordBehavior() {
     QList<qint32> ids;
     QList<qint32> modes;
     for(auto controller : m_recordRequest) {
+        TRANSCEIVER_LOG << "Request Controller: " << controller->m_id;
         controllerRequest.id = controller->m_id;
         controllerRequest.controlmode = controller->m_controlMode;
         message.request.controllers.push_back(controllerRequest);
     }
 
-    message.request.samplingTime = 2.0;
+    message.request.samplingTime = 100.0;
 
     res = m_recordClient.call(message);
     if(res) {
@@ -68,8 +69,9 @@ void ROSMasterCommunication::eventHandle_recordBehavior() {
         for(auto t : message.response.trajectories) {
             TRANSCEIVER_LOG << "Trajectory : " << i++ << " motor-id: " << t.id << " waypoints: " << t.waypoints.size();
             trajectory.m_listWaypoints.clear();
-            trajectory.m_sampleRate = t.samplerate;
-            trajectory.m_controlMode = ControlMode::POSITION_CONTROL; // TODO ???
+            // TODO: Use response-sampleRate
+            trajectory.m_sampleRate = 100.0;
+            trajectory.m_controlMode = ControlMode::POSITION_CONTROL; // TODO:
             for(auto wp : t.waypoints) {
                 waypoint.m_ulValue = wp;
                 trajectory.m_listWaypoints.append(waypoint);
@@ -118,6 +120,26 @@ void ROSMasterCommunication::startControllers(const QList<qint32> & controllers)
     m_switchController.call(message);
     TRANSCEIVER_LOG << "Start Call returned";
 }
+
+void ROSMasterCommunication::stopControllers(const QList<qint32> & controllers) {
+    controller_manager_msgs::SwitchController message;
+
+    std::vector<std::string> resources;
+    for(qint8 id : controllers) {
+        QString name;
+        name.sprintf("motor%u", id);
+        resources.push_back(name.toStdString());
+    }
+
+    message.request.stop_controllers = resources;
+    message.request.strictness = 1;
+
+    ros::Duration duration(1);
+    duration.sleep();
+    m_switchController.call(message);
+    TRANSCEIVER_LOG << "Start Call returned";
+}
+
 
 void ROSMasterCommunication::unloadControllers(const QList<qint32> & controllers) {
     controller_manager_msgs::UnloadController message;

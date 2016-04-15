@@ -9,29 +9,7 @@
 
 MyoController::MyoController() {
     MYOCONTROLLER_DBG << "Initialize Myo-Controller";
-
-    // Create Myo-Master Transceiver
-    QString name;
-    name.sprintf("myomaster");
-    m_myoMasterTransceiver = new ROSMasterCommunication();
-    m_myoMasterTransceiver->start();
-
-    connect(m_myoMasterTransceiver, SIGNAL(signalRecordFinished(bool)), this, SLOT(slotRecordFinished(bool)));
-
-    // Create Controller Status Structs
-    MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
-    QList<ROSController> controllers = RoboyControlConfiguration::instance().getControllersConfig();
-    for(ROSController & c : controllers) {
-        ROSController * controller = new ROSController();
-        controller->m_id = c.m_id;
-        controller->m_state = ControllerState::UNDEFINED;
-        controller->m_controlMode = c.m_controlMode;
-        controller->m_communication = new ROSControllerCommunication(controller);
-        controller->m_communication->start();
-        m_mapControllers.insert(controller->m_id, controller);
-        DataPool::getInstance()->setControllerState(c.m_id, ControllerState::UNDEFINED);
-        connect(controller->m_communication, SIGNAL(signalControllerStatusUpdated(qint32)), this, SLOT(slotControllerStatusUpdated(qint32)));
-    }
+    initializeControllerMap();
 }
 
 MyoController::~MyoController() {
@@ -46,6 +24,10 @@ MyoController::~MyoController() {
 // RoboyController Interface
 bool MyoController::handleEvent_initializeControllers() {
     MYOCONTROLLER_DBG << "Send Initialize Request to Myo-Master";
+
+    if(m_bInitialized)
+        m_myoMasterTransceiver->stopControllers(m_mapControllers.keys());
+
     bool result = false;
     m_myoMasterTransceiver->sendInitializeRequest(m_mapControllers.values());
 
@@ -55,10 +37,12 @@ bool MyoController::handleEvent_initializeControllers() {
         m_myoMasterTransceiver->startControllers(m_mapControllers.keys());
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_READY);
         result = true;
+        m_bInitialized = true;
     } else {
         MYOCONTROLLER_WAR << "Initialization timed out.";
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_NOT_READY);
         result = false;
+        m_bInitialized = false;
     }
 
     return result;
@@ -134,6 +118,32 @@ void MyoController::slotRecordFinished(bool result) {
 }
 
 // private
+void MyoController::initializeControllerMap() {
+    // Create Myo-Master Transceiver
+    QString name;
+    name.sprintf("myomaster");
+    m_myoMasterTransceiver = new ROSMasterCommunication();
+    m_myoMasterTransceiver->start();
+
+    connect(m_myoMasterTransceiver, SIGNAL(signalRecordFinished(bool)), this, SLOT(slotRecordFinished(bool)));
+
+    // Create Controller Status Structs
+    MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
+    QList<ROSController> controllers = RoboyControlConfiguration::instance().getControllersConfig();
+    for(ROSController & c : controllers) {
+        ROSController * controller = new ROSController();
+        controller->m_id = c.m_id;
+        controller->m_state = ControllerState::UNDEFINED;
+        controller->m_controlMode = c.m_controlMode;
+        controller->m_communication = new ROSControllerCommunication(controller);
+        controller->m_communication->start();
+        m_mapControllers.insert(controller->m_id, controller);
+        DataPool::getInstance()->setControllerState(c.m_id, ControllerState::UNDEFINED);
+        connect(controller->m_communication, SIGNAL(signalControllerStatusUpdated(qint32)), this, SLOT(slotControllerStatusUpdated(qint32)));
+    }
+
+}
+
 bool MyoController::waitForControllerStatus(QList<qint32> idList, ControllerState state, quint32 timeout) {
     // TODO: Implement Timeout
     while(!checkControllersForState(idList, state)) {

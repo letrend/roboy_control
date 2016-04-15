@@ -43,7 +43,7 @@ struct RoboyWaypoint {
 
 struct Trajectory {
     ControlMode          m_controlMode;
-    qint32               m_sampleRate;
+    float                m_sampleRate;
     QList<RoboyWaypoint> m_listWaypoints;
     qint32 getDuration() {
         return m_listWaypoints.count() * m_sampleRate;

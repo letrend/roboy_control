@@ -107,6 +107,10 @@ void ViewController::slotRecorderResultReceived() const {
         RoboyBehavior * behavior = DataPool::getInstance()->getRecordedBehavior();
         behavior->m_metadata.m_sBehaviorName = "Record1";
         behavior->m_metadata.m_ulBehaviorId = 100;
+        for(auto id : behavior->m_mapMotorTrajectory.keys()) {
+            if(behavior->m_mapMotorTrajectory[id].m_listWaypoints.isEmpty())
+                behavior->m_mapMotorTrajectory.remove(id);
+        }
         m_pModelSerivce->createRoboyBehavior(*behavior);
     } else {
         VIEW_DBG << "Record ERROR";

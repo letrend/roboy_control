@@ -141,6 +141,7 @@ public:
     }
 
     virtual void startControllers(const QList<qint32> & controllers) = 0;
+    virtual void stopControllers(const QList<qint32> & contollers) = 0;
 
 protected:
     virtual void eventHandle_sendInitializeRequest() = 0;

@@ -104,6 +104,7 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior & behavior ) {
             readBehaviorHeader(behavior.m_metadata);
         } else if ( m_xmlReader.name() == "trajectory" ) {
             readTrajectories(behavior);
+            m_xmlReader.skipCurrentElement();
         } else {
             m_xmlReader.skipCurrentElement();
         }
@@ -147,16 +148,18 @@ bool RoboyBehaviorXmlParser::readTrajectories(RoboyBehavior &behavior) {
 
             QString valueList = m_xmlReader.readElementText();
             QChar separator(',');
-            qint64 id = 0;
             for (auto string : valueList.split(separator)) {
-                waypoint.m_ulValue = string.toLong();
+                waypoint.m_ulValue = string.toFloat();
                 trajectory.m_listWaypoints.append(waypoint);
             }
         }
 
         behavior.m_mapMotorTrajectory.insert(motor_id, trajectory);
 
-        MODEL_DBG << "\t- MOTOR ID: " << motor_id << " WAYPOINT COUNT: " << behavior.m_mapMotorTrajectory[motor_id].m_listWaypoints.count();
+        MODEL_DBG << "\t- MOTOR ID: " << motor_id <<
+                        " SampleRate: " << sampleRate <<
+                        " ControlMode: " << controlMode <<
+                        " WAYPOINT COUNT: " << behavior.m_mapMotorTrajectory[motor_id].m_listWaypoints.count();
 
         return true;
     }

@@ -20,6 +20,8 @@ class MyoController : public QObject {
     Q_OBJECT
 
 private:
+    bool                   m_bInitialized = false;
+
     IMasterCommunication * m_myoMasterTransceiver;
     QMap<qint32, ROSController *>       m_mapControllers;
 
@@ -47,6 +49,7 @@ public slots:
     void slotRecordFinished(bool result);
 
 private:
+    void initializeControllerMap();
     bool waitForControllerStatus(QList<qint32> idList, ControllerState state, quint32 timeout = 0);
     bool checkControllersForState(QList<qint32> idList, ControllerState state);
 };

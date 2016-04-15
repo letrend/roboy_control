@@ -45,6 +45,7 @@ void RoboyController::run() {
 void RoboyController::slotInitializeRoboy() {
     CONTROLLER_DBG << "\n\n";
     CONTROLLER_SUC << "---------------- EVENT: Initialize ------------------";
+
     if(m_pMyoController->handleEvent_initializeControllers())
         CONTROLLER_SUC << "Initialization Complete";
     else

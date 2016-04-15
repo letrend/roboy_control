@@ -47,6 +47,7 @@ public:
     void eventHandle_sendRecordSteeringMessage();
 
     void startControllers(const QList<qint32> & controllers);
+    void stopControllers(const QList<qint32> & contollers);
     void unloadControllers(const QList<qint32> & controllers);
 
 private:
