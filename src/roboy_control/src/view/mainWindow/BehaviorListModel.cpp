@@ -98,9 +98,11 @@ void BehaviorListModel::notify() {
  * @brief BehaviorListModel::updateBehaviorList method for triggering a update of the behavior list after a change in the data
  */
 void BehaviorListModel::updateBehaviorList() {
+	beginResetModel();
     m_BehaviorList = QList<RoboyBehavior>();
     QList<RoboyBehaviorMetadata> metaDataList = m_pModelService->getBehaviorList();
     for (RoboyBehaviorMetadata metaData : metaDataList) {
         m_BehaviorList.append(m_pModelService->retrieveRoboyBehavior(metaData));
     }
+    endResetModel();
 }

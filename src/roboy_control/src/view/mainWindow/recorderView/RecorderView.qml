@@ -29,6 +29,17 @@ View {
 
             Button {
                 elevation : 1
+                id        : pauseButton
+                onClicked : cpp_RecorderView.pauseButtonClicked()
+
+                Icon {
+                    anchors.centerIn : parent
+                    name             : "av/pause"
+                }
+            }
+
+            Button {
+                elevation : 1
                 id        : stopRecordButton
                 onClicked : cpp_RecorderView.stopRecordButtonClicked()
 

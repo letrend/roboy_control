@@ -42,8 +42,8 @@ void PlayerView::notify() {
  * @brief PlayerView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void PlayerView::playerStatusUpdated(PlayerState state) {
-    emit signalPlayerStatusUpdated(state);
+void PlayerView::playerStatusUpdated(PlayerState playerState) {
+    emit signalPlayerStatusUpdated(playerState);
 }
 
 /**
@@ -51,7 +51,7 @@ void PlayerView::playerStatusUpdated(PlayerState state) {
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
-void PlayerView::controllerStatusUpdated(qint32 motorId, ControllerState state) {
+void PlayerView::controllerStatusUpdated(qint32 motorId, ControllerState controllerState) {
 
 }
 

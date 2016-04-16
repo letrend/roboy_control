@@ -42,8 +42,8 @@ public:
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
 
 signals: 
-    void signalPlayerStatusUpdated(PlayerState state);
-    void signlaControllerStatusUpdated(qint32 motorId, ControllerState state);
+    void signalPlayerStatusUpdated(int playerState);
+    void signlaControllerStatusUpdated(qint32 motorId, int controllerState);
 
 private:
     ViewController          * m_pViewController;

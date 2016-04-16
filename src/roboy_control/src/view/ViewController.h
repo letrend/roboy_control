@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickItem>
 #include <QThread>
 
 #include "IModelService.h"
@@ -19,11 +20,6 @@ class MainWindow;
 class ViewController : public QObject {
 
     Q_OBJECT
-
-private:
-    IModelService           * m_pModelSerivce;
-    MainWindow              * m_pMainWindow;
-    QQmlApplicationEngine   * m_pApplicationEngine;
 
 public:
     ViewController(IModelService * pModelService);
@@ -57,6 +53,11 @@ signals:
 
     void signalRecord();
     void signalStopRecording();
+
+private:
+    IModelService           * m_pModelSerivce;
+    MainWindow              * m_pMainWindow;
+    QQmlApplicationEngine   * m_pApplicationEngine;
 };
 
 

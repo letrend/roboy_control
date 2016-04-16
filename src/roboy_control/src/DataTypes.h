@@ -11,26 +11,53 @@ class IModelService;
 class IMasterCommunication;
 class IControllerCommunication;
 
-enum PlayerState {  PLAYER_NOT_READY,
-                    PLAYER_READY,
-                // Preprocessing: Success, Failures
-                    PLAYER_PREPROCESSING,
-                    PLAYER_PREPROCESS_FAILED_EMPTY,
-                    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
-                    PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
-                    PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY,
-                    PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
-                    PLAYER_PREPROCESS_SUCCEEDED,
-                //
-                    PLAYER_TRAJECTORY_READY,
-                    PLAYER_PLAYING,
-                    PLAYER_PAUSED };
+enum PlayerState {  
+    PLAYER_NOT_READY,
+    PLAYER_READY,
+    // Preprocessing: Success, Failures
+    PLAYER_PREPROCESSING,
+    PLAYER_PREPROCESS_FAILED_EMPTY,
+    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
+    PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
+    PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY,
+    PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
+    PLAYER_PREPROCESS_SUCCEEDED,
+    //
+    PLAYER_TRAJECTORY_READY,
+    PLAYER_PLAYING,
+    PLAYER_PAUSED 
+};
+
+static const char * playerStateStrings [] = {   "PLAYER_NOT_READY", 
+                                                "PLAYER_READY", 
+                                                "PLAYER_PREPROCESSING",
+                                                "PLAYER_PREPROCESS_FAILED_EMPTY", 
+                                                "PLAYER_PREPROCESS_FAILED_OVERLAPPING", 
+                                                "PLAYER_PREPROCESS_FAILED_MODE_CONFLICT", 
+                                                "PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY", 
+                                                "PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT", 
+                                                "PLAYER_PREPROCESS_SUCCEEDED",
+                                                "PLAYER_TRAJECTORY_READY",
+                                                "PLAYER_PLAYING",
+                                                "PLAYER_PAUSED" };
+
+static const char * getPlayerStateString(PlayerState state) {
+    return playerStateStrings[static_cast<int>(state)];
+}
 
 enum RecorderState {
-                    RECORDER_READY,
-                    RECORDER_RECORDING,
-                    RECORDER_FINISHED_RECORDING,
+    RECORDER_READY,
+    RECORDER_RECORDING,
+    RECORDER_FINISHED_RECORDING
 };
+
+static const char * recorderStateStrings [] = { "RECORDER_READY", 
+                                                "RECORDER_RECORDING", 
+                                                "RECORDER_FINISHED_RECORDING" };
+
+static const char * getRecorderStateString(PlayerState state) {
+    return playerStateStrings[static_cast<int>(state)];
+}
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

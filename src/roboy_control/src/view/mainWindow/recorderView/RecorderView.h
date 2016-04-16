@@ -24,6 +24,7 @@ public:
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
 	Q_INVOKABLE void recordButtonClicked();
+    Q_INVOKABLE void pauseButtonClicked();
 	Q_INVOKABLE void stopRecordButtonClicked();
 
 private:

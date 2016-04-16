@@ -22,10 +22,8 @@ ViewController::ViewController(IModelService * pModelService) {
 
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnPlayerStateUpdated()), this, SLOT(
-            slotPlayerStateUpdated()));
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnControllerStateUpdated(qint32)), this, SLOT(
-            slotControllerStateUpdated(qint32)));
+    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnPlayerStateUpdated()), this, SLOT(slotPlayerStateUpdated()));
+    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnControllerStateUpdated(qint32)), this, SLOT(slotControllerStateUpdated(qint32)));
     connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecorderStateUpdated()), this, SLOT(slotRecorderStateUpdated()));
     connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecordResult()), this, SLOT(slotRecorderResultReceived()));
 }
@@ -91,7 +89,6 @@ void ViewController::slotRecorderStateUpdated() const {
 /**
  * @brief ViewController::controllerStateChanged slot to notify the gui about a when the state of a motor changed
  * @param motorId id of the motor of which the state changed
- * @param state state of the motor
  */
 void ViewController::slotControllerStateUpdated(qint32 motorId) const {
     ControllerState newState = DataPool::getInstance()->getControllerState(motorId);

@@ -52,6 +52,14 @@ void RecorderView::recordButtonClicked() {
 }
 
 /**
+ * @brief RecorderView::pauseButtonClicked click handler for the pause button
+ */
+void RecorderView::pauseButtonClicked() {
+	VIEW_DBG << "Pause Button Clicked";
+    //m_pViewController->pauseBehavior();
+}
+
+/**
  * @brief RecorderView::stopRecordButtonClicked click handler for the stop record button
  */
 void RecorderView::stopRecordButtonClicked() {
