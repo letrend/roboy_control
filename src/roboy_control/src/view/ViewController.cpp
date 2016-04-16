@@ -75,8 +75,7 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
 }
 
 /**
- * @brief ViewController::signalPlayerStatusUpdated slot to notfiy the gui when the players state changes
- * @param state state of the playerview
+ * @brief ViewController::signalPlayerStatusUpdated slot to notify the gui when the players state changes
  */
 void ViewController::slotPlayerStateUpdated() const {
     PlayerState newState = DataPool::getInstance()->getPlayerState();
@@ -84,8 +83,13 @@ void ViewController::slotPlayerStateUpdated() const {
     m_pMainWindow->playerStatusUpdated(newState);
 }
 
+/**
+ * @brief ViewController::slotRecorderStateUpdated slot to notify the gui when the recorder state changes
+ */
 void ViewController::slotRecorderStateUpdated() const {
-    // TODO
+    RecorderState newState = DataPool::getInstance()->getRecorderState();
+    VIEW_DBG << "Received Recorder Status Update: " << newState;
+    m_pMainWindow->recorderStatusUpdated(newState);
 }
 
 /**
@@ -98,10 +102,14 @@ void ViewController::slotControllerStateUpdated(qint32 motorId) const {
     m_pMainWindow->controllerStatusUpdated(motorId, newState);
 }
 
+/**
+ * ViewController::slotRecorderResultReceived
+ */
 void ViewController::slotRecorderResultReceived() const {
     VIEW_DBG << "Received Record Result";
 
     // TODO:
+    /*
     if(DataPool::getInstance()->getRecordResult()) {
         RoboyBehavior * behavior = DataPool::getInstance()->getRecordedBehavior();
         behavior->m_metadata.m_sBehaviorName = "Record1";
@@ -114,9 +122,14 @@ void ViewController::slotRecorderResultReceived() const {
     } else {
         VIEW_DBG << "Record ERROR";
     }
+    */
+    m_pMainWindow->recorderResultReceived();
 }
 
+/**
+ * ViewController::slotDataPoolReset slot for handling a reset of the data pool
+ */
 void ViewController::slotDataPoolReset() const {
-    // TODO: Process
     VIEW_DBG << "Received DataPool Reset";
+    m_pMainWindow->dataPoolReset();
 }

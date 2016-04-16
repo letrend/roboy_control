@@ -22,8 +22,8 @@ public:
     ~RoboyView();
 
     void notify();
-    void playerStatusUpdated(PlayerState state);
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
+    void dataPoolReset();
 
     Q_INVOKABLE void initalizeButtonClicked();
 

@@ -34,7 +34,9 @@ public:
 
     Q_INVOKABLE void addLaneButtonClicked();
 
-    /* MultiLaneView related slots */
+    Q_INVOKABLE int getCurrentPlayerState();
+
+    /* MultiLaneView related methods */
     Q_INVOKABLE void removeLaneHandler    (qint32 laneIndex);
     Q_INVOKABLE void removeItemHandler    (qint32 laneIndex, qint32 itemIndex);
     Q_INVOKABLE int  insertBehaviorHandler(qint32 behaviorIndex, qint32 laneIndex, qint64 lTimestamp);
@@ -43,14 +45,16 @@ public:
 
 signals: 
     void signalPlayerStatusUpdated(int playerState);
-    void signlaControllerStatusUpdated(qint32 motorId, int controllerState);
+    void signalControllerStatusUpdated(qint32 motorId, int controllerState);
 
 private:
-    ViewController          * m_pViewController;
-    IModelService           * m_pModelService;
-    IMultiLaneViewModel     * m_pMultiLaneViewModel;
-    QQmlApplicationEngine   * m_pAppEngine;
-    BehaviorListModel       * m_pBehaviorListModel;
+    PlayerState mPlayerState = PlayerState::PLAYER_NOT_READY;
+
+    ViewController        * m_pViewController;
+    IModelService         * m_pModelService;
+    IMultiLaneViewModel   * m_pMultiLaneViewModel;
+    QQmlApplicationEngine * m_pAppEngine;
+    BehaviorListModel     * m_pBehaviorListModel;
 };
 
 #endif // PLAYERVIEW_H

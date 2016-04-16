@@ -4,6 +4,40 @@ import QtQuick.Layouts 1.1
 import Material 0.2
 
 View {
+    Component.onCompleted : {
+        setupRecorderState(cpp_RecorderView.getCurrentRecorderState())
+    }
+
+    Connections {
+        target                      : cpp_RecorderView
+        onSignalRecorderStatusUpdated : {
+            setupRecorderState(recorderState)
+        }
+    }
+
+    Dialog {
+        id: behaviorNameDialog
+        title: "Insert a name for the recording"
+        hasActions: true
+
+        TextField {
+            id: nameTextField
+            width: parent.width
+            placeholderText: "NewBehavior"
+        }
+
+        onAccepted: {
+            cpp_RecorderView.saveRecorderBehavior(nameTextField.text)
+        }
+    }
+
+    Connections {
+        target                         : cpp_RecorderView
+        onSignalRecorderResultReceived : {
+            behaviorNameDialog.show()
+        }
+    }
+
     ColumnLayout {
         anchors.fill    : parent
         anchors.margins : Units.dp(32)
@@ -17,6 +51,7 @@ View {
 
             Button {
                 elevation : 1
+                enabled   : false
                 id        : recordButton
                 onClicked : cpp_RecorderView.recordButtonClicked()
 
@@ -29,6 +64,7 @@ View {
 
             Button {
                 elevation : 1
+                enabled   : false
                 id        : pauseButton
                 onClicked : cpp_RecorderView.pauseButtonClicked()
 
@@ -40,6 +76,7 @@ View {
 
             Button {
                 elevation : 1
+                enabled   : false
                 id        : stopRecordButton
                 onClicked : cpp_RecorderView.stopRecordButtonClicked()
 
@@ -54,6 +91,26 @@ View {
             elevation         : 1
             Layout.fillHeight : true
             Layout.fillWidth  : true
+        }
+    }
+
+    function setupRecorderState(recorderState) {
+        switch(recorderState) {
+            case 0: // RECORDER_READY
+                recordButton.enabled     = true
+                pauseButton.enabled      = false
+                stopRecordButton.enabled = false
+                break;
+            case 1: // RECORDER_RECORDING
+                recordButton.enabled     = false
+                pauseButton.enabled      = true
+                stopRecordButton.enabled = true
+                break;
+            case 2: // RECORDER_FINISHED_RECORDING
+                recordButton.enabled     = true
+                pauseButton.enabled      = false
+                stopRecordButton.enabled = false
+                break;
         }
     }
 }

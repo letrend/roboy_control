@@ -31,20 +31,19 @@ void RoboyView::notify() {
 }
 
 /**
- * @brief RoboyView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
- * @param state state of the playerview
- */
-void RoboyView::playerStatusUpdated(PlayerState state) {
-
-}
-
-/**
  * @brief RoboyView::controllerStateChanged method to notify the gui about a when the state of a motor changed
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor
  */
 void RoboyView::controllerStatusUpdated(qint32 motorId, ControllerState state) {
 	m_pStateModel->controllerStatusUpdated(motorId, state);
+}
+
+/**
+ * @brief RoboyView::dataPoolReset method for handling a reset of the data pool
+ */
+void RoboyView::dataPoolReset() {
+	m_pStateModel->dataPoolReset();
 }
 
 /**

@@ -19,6 +19,7 @@ public:
 
     ControllerStateListModel(QObject * parent = 0);
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
+    void dataPoolReset();
 
     // methods implemented from QAbstractListModel
     QVariant               data     (const QModelIndex & index, int role = Qt::DisplayRole) const;

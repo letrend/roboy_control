@@ -25,6 +25,16 @@ void ControllerStateListModel::controllerStatusUpdated(qint32 motorId, Controlle
 	endResetModel();
 }
 
+/**
+ * @brief ControllerStateListModel::dataPoolReset method for handling a reset of the data pool
+ */
+void ControllerStateListModel::dataPoolReset() {
+	beginResetModel();
+	m_states.clear();
+	m_states = QMap<qint32, QPair<qint32, ControllerState>>();
+	endResetModel();
+}
+
 // methods implemented from QAbstractListModel
 
 /**

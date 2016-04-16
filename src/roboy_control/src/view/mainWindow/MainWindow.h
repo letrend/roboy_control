@@ -27,8 +27,15 @@ public:
     ~MainWindow();
 
     void notify();
+    
     void playerStatusUpdated(PlayerState state);
+    void recorderStatusUpdated(RecorderState state);
+    
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
+    
+    void recorderResultReceived();
+
+    void dataPoolReset();
 
     RoboyBehaviorMetaplan fromMainWindow_getCurrentRoboyPlan();
 

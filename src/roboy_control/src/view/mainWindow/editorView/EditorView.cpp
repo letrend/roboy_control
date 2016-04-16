@@ -31,14 +31,6 @@ void EditorView::notify() {
 }
 
 /**
- * @brief EditorView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
- * @param state state of the playerview
- */
-void EditorView::playerStatusUpdated(PlayerState state) {
-
-}
-
-/**
  * @brief EditorView::controllerStateChanged method to notify the gui about a when the state of a motor changed
  * @param motorId id of the motor of which the state changed
  * @param state state of the motor

@@ -45,10 +45,14 @@ void MainWindow::notify() {
  * @param state state of the playerview
  */
 void MainWindow::playerStatusUpdated(PlayerState state) {
-    m_pEditorView->playerStatusUpdated(state);
     m_pPlayerView->playerStatusUpdated(state);
-    m_pRecorderView->playerStatusUpdated(state);
-    m_pRoboyView->playerStatusUpdated(state);
+}
+
+/**
+ * @brief MainWindow::recorderStatusUpdated method to notify the gui when the recorder state changes
+ */
+void MainWindow::recorderStatusUpdated(RecorderState state) {
+    m_pRecorderView->recorderStatusUpdated(state);
 }
 
 /**
@@ -61,6 +65,20 @@ void MainWindow::controllerStatusUpdated(qint32 motorId, ControllerState state) 
     m_pPlayerView->controllerStatusUpdated(motorId, state);
     m_pRecorderView->controllerStatusUpdated(motorId, state);
     m_pRoboyView->controllerStatusUpdated(motorId, state);
+}
+
+/**
+ * @brief MainWindow::recorderResultReceived handler for when a record result is received 
+ */
+void MainWindow::recorderResultReceived() {
+    m_pRecorderView->recorderResultReceived();
+}
+
+/**
+ * @brief MainWindow::dataPoolReset() method for handling a reset of the data pool
+ */
+void MainWindow::dataPoolReset() {
+    m_pRoboyView->dataPoolReset();
 }
 
 /**

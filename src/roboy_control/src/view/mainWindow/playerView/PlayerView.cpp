@@ -43,6 +43,7 @@ void PlayerView::notify() {
  * @param state state of the playerview
  */
 void PlayerView::playerStatusUpdated(PlayerState playerState) {
+    mPlayerState = playerState;
     emit signalPlayerStatusUpdated(playerState);
 }
 
@@ -88,6 +89,14 @@ void PlayerView::stopButtonClicked() {
  */
 void PlayerView::addLaneButtonClicked() {
     m_pMultiLaneViewModel->addLane();
+}
+
+/**
+ * @brief PlayerView::getCurrentPlayerState getter method for the current player state
+ * @return the current player state
+ */
+int PlayerView::getCurrentPlayerState() {
+    return mPlayerState;
 }
 
 /* MultiLaneView related slots */
