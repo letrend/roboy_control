@@ -6,11 +6,6 @@
 		<Controller id="0" controlmode="position">true</Controller>
 		<Controller id="1" controlmode="position">true</Controller>
 		<Controller id="2" controlmode="position">true</Controller>
-		<Controller id="4" controlmode="position">true</Controller>
 		<Controller id="5" controlmode="position">true</Controller>
-		<Controller id="6" controlmode="position">true</Controller>
-		<Controller id="8" controlmode="position">true</Controller>
-		<Controller id="9" controlmode="position">true</Controller>
-		<Controller id="10" controlmode="position">true</Controller>
 	</Controllers>
 </RoboyControlConfiguration>

@@ -6,8 +6,6 @@
 #include "common_utilities/Initialize.h"
 
 #include "common_utilities/ControllerState.h"
-//#include "common_utilities/InitializeRequest.h"
-
 #include "controller_manager_msgs/SwitchController.h"
 #include "controller_manager_msgs/UnloadController.h"
 
@@ -39,6 +37,7 @@ private:
 
 public:
     ROSMasterCommunication();
+    ~ROSMasterCommunication() {};
 
     void eventHandle_sendInitializeRequest();
     void eventHandle_sendSteeringMessage();

@@ -25,22 +25,31 @@ private:
 
     QMap<qint32, ControllerState> m_controllerStates;
 
+    // Record Request
+    qint32          m_sampleRate = 0;
+
     // Record Results
-    bool           m_recordResult;
+    bool           m_recordResult = false;
     RoboyBehavior  m_recordBehavior;
 
 public:
     static DataPool * getInstance();
 
+    void reset();
+
     void setPlayerState(PlayerState state);
     void setRecorderState(RecorderState state);
     void setControllerState(qint32 id, ControllerState state);
+
+    void setSampleRate(qint32 sampleRate);
 
     void setRecordResult(bool result, RoboyBehavior * pBehavior);
 
     PlayerState getPlayerState();
     RecorderState getRecorderState();
     ControllerState getControllerState(qint32 motorId);
+
+    float getSampleRate();
 
     bool getRecordResult();
     RoboyBehavior * getRecordedBehavior();
@@ -50,6 +59,7 @@ signals:
     void signalNotifyOnRecorderStateUpdated();
     void signalNotifyOnControllerStateUpdated(qint32 motorId);
     void signalNotifyOnRecordResult();
+    void signalNotifyOnDataPoolReset();
 };
 
 #endif //ROBOY_CONTROL_DATAPOOL_H

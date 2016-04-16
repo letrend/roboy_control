@@ -1,13 +1,24 @@
 #include "RoboyControlConfiguration.h"
 
 RoboyControlConfiguration::RoboyControlConfiguration() {
+    readConfig();
+}
+
+void RoboyControlConfiguration::update() {
+    readConfig();
+}
+
+void RoboyControlConfiguration::readConfig() {
+    m_listControllerConfig.clear();
+    m_mapModelConfig.clear();
+
     QString roboyControlHome = QProcessEnvironment::systemEnvironment().value("ROBOY_CONTROL_HOME");
     if (roboyControlHome == "") {
         CONFIG_DBG << " - ERROR: Environment Variable not set.";
         CONFIG_DBG << "Set the environment variable ROBOY_CONTROL_HOME to the installation"
-                      "directory of RoboyControl. Add the line\n"
-                      "\texport ROBOY_CONTROL_HOME=<path_to_roboy_control>"
-                      "to your ~/.bash_rc file.";
+                "directory of RoboyControl. Add the line\n"
+                "\texport ROBOY_CONTROL_HOME=<path_to_roboy_control>"
+                "to your ~/.bash_rc file.";
         exit(0);
     }
 
@@ -17,7 +28,7 @@ RoboyControlConfiguration::RoboyControlConfiguration() {
     if( !configFile.open(QFile::ReadOnly | QFile::Text) ) {
         CONFIG_DBG << " - ERROR opening file: " << filename;
         CONFIG_DBG << "Make sure your environment is set up correctly and the configuration file"
-                      "is placed in /etc of your <roboy_control_install_dir>.";
+                "is placed in /etc of your <roboy_control_install_dir>.";
     }
 
     CONFIG_DBG << "INFO open successful: " << filename;

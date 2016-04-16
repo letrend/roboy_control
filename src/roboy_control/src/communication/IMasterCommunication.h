@@ -19,12 +19,13 @@ class IMasterCommunication : public QThread {
 protected:
     QString         m_name;
 
-    QMutex                   m_mutexData;
-    QList<ROSController *>   m_initializationList;
-    SteeringCommand          m_steeringCommand;
-    QList<ROSController *>   m_recordRequest;
-    SteeringCommand          m_recordSteeringCommand;
-    RoboyBehavior *          m_pRecordedBehavior;
+    QMutex                          m_mutexData;
+    QList<ROSController *>          m_initializationList;
+    SteeringCommand                 m_steeringCommand;
+    QMap<qint32, ROSController *>   m_recordRequest;
+    qint32                           m_sampleRate = 0.0;
+    SteeringCommand                 m_recordSteeringCommand;
+    RoboyBehavior *                 m_pRecordedBehavior;
 
     QMutex          m_mutexCV;
     QWaitCondition  m_condition;
@@ -39,7 +40,10 @@ public:
         m_name = "transceiver";
     }
 
-    ~IMasterCommunication() {
+    // Virtual as it might be used in a polymorphic context.
+    // No need to delete Controller-Pointers as they point to instances handled MyoController
+    virtual ~IMasterCommunication() {
+        TRANSCEIVER_LOG << "IMasterCommunictation Destructor";
         m_mutexCV.lock();
         m_bTerminate = true;
         m_condition.wakeAll();
@@ -47,7 +51,9 @@ public:
 
         QThread::wait();
 
-        delete m_pRecordedBehavior;
+//        if(m_pRecordedBehavior != nullptr) {
+//            delete m_pRecordedBehavior;
+//        }
 
         TRANSCEIVER_LOG << "Thread terminated regularly";
     }
@@ -111,9 +117,10 @@ public:
         m_mutexCV.unlock();
     }
 
-    void startRecording(const QList<ROSController *> controllers) {
+    void startRecording(const QMap<qint32, ROSController *> controllers, qint32 sampleRate) {
         m_mutexData.lock();
         m_recordRequest = controllers;
+        m_sampleRate = sampleRate;
         m_mutexData.unlock();
 
         m_mutexCV.lock();

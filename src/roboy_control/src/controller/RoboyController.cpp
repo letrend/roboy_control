@@ -33,9 +33,6 @@ void RoboyController::run() {
     CONTROLLER_DBG << "Controller Thread Started";
     CONTROLLER_DBG << "ControllerThread-Id is: " << this->currentThreadId();
 
-    m_pMyoController = new MyoController();
-    msleep(1000);
-
     exec();
 
     CONTROLLER_DBG << "Controller Thread Interrupted. Quit.";
@@ -45,6 +42,13 @@ void RoboyController::run() {
 void RoboyController::slotInitializeRoboy() {
     CONTROLLER_DBG << "\n\n";
     CONTROLLER_SUC << "---------------- EVENT: Initialize ------------------";
+
+    if(m_pMyoController != nullptr)
+        delete m_pMyoController;
+
+    m_pMyoController = new MyoController();
+    msleep(1000);
+
 
     if(m_pMyoController->handleEvent_initializeControllers())
         CONTROLLER_SUC << "Initialization Complete";
@@ -92,6 +96,7 @@ void RoboyController::preprocessCurrentRoboyPlan() {
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
+    // Check if Plan is Empty
     if(metaplan.listExecutions.isEmpty()) {
         CONTROLLER_WAR << "Empty Execution-List. Nothing to execute. Abort.";
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_EMPTY);
@@ -100,7 +105,8 @@ void RoboyController::preprocessCurrentRoboyPlan() {
 
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
-    // TODO: Check ModeConflict, ControllerStates
+
+    // Check if Plan is Valid (Controllers in Respective States and Control Modes)
     if(plan.isValid()){
         if(m_pMyoController->handleEvent_preprocessRoboyPlan(plan)) {
             CONTROLLER_SUC << "Plan is ready to be executed on Roboy";
@@ -110,6 +116,5 @@ void RoboyController::preprocessCurrentRoboyPlan() {
         }
     } else {
         CONTROLLER_WAR << "Could not build valid plan. Abort.";
-        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_OVERLAPPING);
     }
 }

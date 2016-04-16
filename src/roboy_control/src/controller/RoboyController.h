@@ -20,10 +20,10 @@ class RoboyController : public QThread {
     Q_OBJECT
 
 private:
-    IModelService       * m_pModelService;
-    ViewController      * m_pViewController;
+    IModelService       * m_pModelService   = nullptr;
+    ViewController      * m_pViewController = nullptr;
 
-    MyoController       * m_pMyoController;
+    MyoController       * m_pMyoController  = nullptr;
 
 protected:
     void run();

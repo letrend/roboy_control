@@ -20,8 +20,6 @@ class MyoController : public QObject {
     Q_OBJECT
 
 private:
-    bool                   m_bInitialized = false;
-
     IMasterCommunication * m_myoMasterTransceiver;
     QMap<qint32, ROSController *>       m_mapControllers;
 

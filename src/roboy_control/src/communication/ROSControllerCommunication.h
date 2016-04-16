@@ -21,6 +21,7 @@ private:
 
 public:
     ROSControllerCommunication(ROSController * controller);
+    ~ROSControllerCommunication() {}
 
     void eventHandle_sendTrajectory();
 

@@ -51,6 +51,8 @@ int main(int argc, char ** argv) {
     setState(ControllerState::INITIALIZED);
 
     ros::spin();
+
+    setState(ControllerState::STOPPED);
 }
 
 bool callbackMotor(common_utilities::SetTrajectory::Request & req, common_utilities::SetTrajectory::Response & res){

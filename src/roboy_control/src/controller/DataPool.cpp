@@ -13,6 +13,16 @@ DataPool * DataPool::getInstance() {
     return instance;
 }
 
+void DataPool::reset() {
+    m_playerState = PlayerState::PLAYER_NOT_READY;
+    m_recorderState = RecorderState::RECORDER_READY;
+
+    m_controllerStates.clear();
+    m_recordResult = false;
+
+    emit signalNotifyOnDataPoolReset();
+}
+
 void DataPool::setPlayerState(PlayerState state) {
     m_mutexData.lock();
     m_playerState = state;
@@ -36,6 +46,7 @@ void DataPool::setControllerState(qint32 id, ControllerState state) {
         update = previousState == state ? false : true;
     } else {
         m_controllerStates.insert(id, state);
+        update = true;
     }
     m_mutexData.unlock();
 
@@ -43,6 +54,9 @@ void DataPool::setControllerState(qint32 id, ControllerState state) {
         emit signalNotifyOnControllerStateUpdated(id);
 }
 
+void DataPool::setSampleRate(qint32 sampleRate) {
+    m_sampleRate = sampleRate;
+}
 
 void DataPool::setRecordResult(bool result, RoboyBehavior * pBehavior) {
     m_mutexData.lock();
@@ -66,6 +80,11 @@ ControllerState DataPool::getControllerState(qint32 motorId) {
     else
         return ControllerState::UNDEFINED;
 }
+
+float DataPool::getSampleRate() {
+    return m_sampleRate;
+}
+
 
 bool DataPool::getRecordResult() {
     return m_recordResult;

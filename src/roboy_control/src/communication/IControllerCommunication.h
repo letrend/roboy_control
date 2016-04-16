@@ -40,7 +40,8 @@ public:
         this->m_name = name.sprintf("motor%u", m_id);
     }
 
-    ~IControllerCommunication() {
+    virtual ~IControllerCommunication() {
+        TRANSCEIVER_LOG << "IControllerCommunication Destructor";
         m_mutexCV.lock();
         m_bTerminate = true;
         m_condition.wakeAll();

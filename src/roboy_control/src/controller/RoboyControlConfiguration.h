@@ -23,10 +23,12 @@ public:
     }
 
     RoboyControlConfiguration();
+    void update();
     QString getModelConfig(const QString attributeName) const;
     const QList<ROSController> & getControllersConfig() const;
 
 private:
+    void readConfig();
     void readModelConfig();
     void readControllersConfig();
 

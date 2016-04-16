@@ -43,20 +43,19 @@ void ROSMasterCommunication::eventHandle_sendSteeringMessage() {
 }
 
 void ROSMasterCommunication::eventHandle_recordBehavior() {
+    TRANSCEIVER_LOG << "Start Recording: SampleRate: " << m_sampleRate;
     bool res = false;
 
     common_utilities::Record message;
+    message.request.sampleRate = m_sampleRate;
+
     common_utilities::ControllerRequest controllerRequest;
-    QList<qint32> ids;
-    QList<qint32> modes;
-    for(auto controller : m_recordRequest) {
+    for(auto controller : m_recordRequest.values()) {
         TRANSCEIVER_LOG << "Request Controller: " << controller->m_id;
         controllerRequest.id = controller->m_id;
         controllerRequest.controlmode = controller->m_controlMode;
         message.request.controllers.push_back(controllerRequest);
     }
-
-    message.request.samplingTime = 100.0;
 
     res = m_recordClient.call(message);
     if(res) {
@@ -64,19 +63,18 @@ void ROSMasterCommunication::eventHandle_recordBehavior() {
         RoboyBehavior * behavior = new RoboyBehavior();
         Trajectory trajectory;
         RoboyWaypoint waypoint;
-        std::vector<float> waypoints;
+
         qint32 i = 0;
         for(auto t : message.response.trajectories) {
-            TRANSCEIVER_LOG << "Trajectory : " << i++ << " motor-id: " << t.id << " waypoints: " << t.waypoints.size();
             trajectory.m_listWaypoints.clear();
-            // TODO: Use response-sampleRate
-            trajectory.m_sampleRate = 100.0;
-            trajectory.m_controlMode = ControlMode::POSITION_CONTROL; // TODO:
+            trajectory.m_sampleRate = (qint32) t.samplerate;
+            trajectory.m_controlMode = m_recordRequest[t.id]->m_controlMode;
             for(auto wp : t.waypoints) {
                 waypoint.m_ulValue = wp;
                 trajectory.m_listWaypoints.append(waypoint);
             }
             behavior->m_mapMotorTrajectory.insert(t.id, trajectory);
+            TRANSCEIVER_LOG << "Trajectory : " << i++ << " motor-id: " << t.id << " waypoints: " << t.waypoints.size() << " sampleRate: " << trajectory.m_sampleRate << " ControlMode: " << trajectory.m_controlMode;
         }
 
         m_mutexData.lock();

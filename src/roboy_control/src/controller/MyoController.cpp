@@ -16,17 +16,16 @@ MyoController::~MyoController() {
     delete m_myoMasterTransceiver;
 
     for(auto controller : m_mapControllers) {
-        delete controller->m_communication;
         delete controller;
     }
+
+    MYOCONTROLLER_WAR << "Reset DataPool";
+    DataPool::getInstance()->reset();
 }
 
 // RoboyController Interface
 bool MyoController::handleEvent_initializeControllers() {
     MYOCONTROLLER_DBG << "Send Initialize Request to Myo-Master";
-
-    if(m_bInitialized)
-        m_myoMasterTransceiver->stopControllers(m_mapControllers.keys());
 
     bool result = false;
     m_myoMasterTransceiver->sendInitializeRequest(m_mapControllers.values());
@@ -37,12 +36,10 @@ bool MyoController::handleEvent_initializeControllers() {
         m_myoMasterTransceiver->startControllers(m_mapControllers.keys());
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_READY);
         result = true;
-        m_bInitialized = true;
     } else {
         MYOCONTROLLER_WAR << "Initialization timed out.";
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_NOT_READY);
         result = false;
-        m_bInitialized = false;
     }
 
     return result;
@@ -90,7 +87,7 @@ bool MyoController::handleEvent_stopPlanExecution() {
 }
 
 bool MyoController::handleEvent_recordBehavior() {
-    m_myoMasterTransceiver->startRecording(m_mapControllers.values());
+    m_myoMasterTransceiver->startRecording(m_mapControllers, DataPool::getInstance()->getSampleRate());
     DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_RECORDING);
 }
 
@@ -129,6 +126,7 @@ void MyoController::initializeControllerMap() {
 
     // Create Controller Status Structs
     MYOCONTROLLER_DBG << "Instantiate ROSControllers:";
+    RoboyControlConfiguration::instance().update();
     QList<ROSController> controllers = RoboyControlConfiguration::instance().getControllersConfig();
     for(ROSController & c : controllers) {
         ROSController * controller = new ROSController();

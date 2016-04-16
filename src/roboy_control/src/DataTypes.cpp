@@ -4,6 +4,7 @@
 
 #include "DataTypes.h"
 
+#include "IControllerCommunication.h"
 #include "IModelService.h"
 
 RoboyBehaviorPlan::RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan) {
@@ -113,7 +114,6 @@ bool RoboyBehaviorPlan::doFlattening() {
     return true;
 }
 
-
 bool RoboyBehaviorPlan::insertExecution(RoboyBehaviorExecution & execution) {
     qint64 frontOffset = execution.lTimestamp - this->m_startTimestamp;
     qint64 backOffset = this->m_endTimestamp - execution.getEndTimestamp();
@@ -155,5 +155,11 @@ void RoboyBehaviorPlan::printMap() const {
             }
         }
         PLAN_DBG << line;
+    }
+}
+
+ROSController::~ROSController() {
+    if(m_communication != nullptr){
+        delete m_communication;
     }
 }
