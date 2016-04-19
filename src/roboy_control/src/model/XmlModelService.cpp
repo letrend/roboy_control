@@ -9,13 +9,8 @@ void XmlModelService::createRoboyBehavior ( const RoboyBehavior & behavior ) {
     this->notifyAll();
 }
 
-RoboyBehavior XmlModelService::retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata ) {
-    RoboyBehavior behavior;
-    behavior.m_metadata.m_sBehaviorName  = metadata.m_sBehaviorName;
-    behavior.m_metadata.m_ulBehaviorId   = metadata.m_ulBehaviorId;
-
-    m_xmlParser.readRoboyBehavior(behavior);
-    return behavior;
+bool XmlModelService::retrieveRoboyBehavior(RoboyBehavior &behavior) {
+    return m_xmlParser.readRoboyBehavior(behavior);
 };
 
 void XmlModelService::updateRoboyBehavior ( const RoboyBehavior & behavior ) {

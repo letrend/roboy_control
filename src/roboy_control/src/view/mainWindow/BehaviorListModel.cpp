@@ -105,7 +105,10 @@ void BehaviorListModel::updateBehaviorList() {
     m_BehaviorList = QList<RoboyBehavior>();
     QList<RoboyBehaviorMetadata> metaDataList = m_pModelService->getBehaviorList();
     for (RoboyBehaviorMetadata metaData : metaDataList) {
-        m_BehaviorList.append(m_pModelService->retrieveRoboyBehavior(metaData));
+		RoboyBehavior behavior;
+		behavior.m_metadata = metaData;
+		m_pModelService->retrieveRoboyBehavior(behavior);
+		m_BehaviorList.append(behavior);
     }
     endResetModel();
 }

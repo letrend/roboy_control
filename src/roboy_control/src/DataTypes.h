@@ -17,9 +17,11 @@ enum PlayerState {
     // Preprocessing: Success, Failures
     PLAYER_PREPROCESSING,
     PLAYER_PREPROCESS_FAILED_EMPTY,
-    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
+    PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR,
     PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
-    PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY,
+    PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT,
+    PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT,
+    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
     PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
     PLAYER_PREPROCESS_SUCCEEDED,
     //
@@ -28,36 +30,12 @@ enum PlayerState {
     PLAYER_PAUSED 
 };
 
-static const char * playerStateStrings [] = {   "PLAYER_NOT_READY", 
-                                                "PLAYER_READY", 
-                                                "PLAYER_PREPROCESSING",
-                                                "PLAYER_PREPROCESS_FAILED_EMPTY", 
-                                                "PLAYER_PREPROCESS_FAILED_OVERLAPPING", 
-                                                "PLAYER_PREPROCESS_FAILED_MODE_CONFLICT", 
-                                                "PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY", 
-                                                "PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT", 
-                                                "PLAYER_PREPROCESS_SUCCEEDED",
-                                                "PLAYER_TRAJECTORY_READY",
-                                                "PLAYER_PLAYING",
-                                                "PLAYER_PAUSED" };
-
-static const char * getPlayerStateString(PlayerState state) {
-    return playerStateStrings[static_cast<int>(state)];
-}
-
 enum RecorderState {
+    RECORDER_NOT_READY,
     RECORDER_READY,
     RECORDER_RECORDING,
     RECORDER_FINISHED_RECORDING
 };
-
-static const char * recorderStateStrings [] = { "RECORDER_READY", 
-                                                "RECORDER_RECORDING", 
-                                                "RECORDER_FINISHED_RECORDING" };
-
-static const char * getRecorderStateString(PlayerState state) {
-    return playerStateStrings[static_cast<int>(state)];
-}
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;
@@ -69,9 +47,9 @@ struct RoboyWaypoint {
 };
 
 struct Trajectory {
-    ControlMode          m_controlMode;
+    ControlMode           m_controlMode;
     qint32                m_sampleRate;
-    QList<RoboyWaypoint> m_listWaypoints;
+    QList<RoboyWaypoint>  m_listWaypoints;
     qint32 getDuration() {
         return m_listWaypoints.count() * m_sampleRate;
     }
@@ -88,7 +66,7 @@ struct Trajectory {
 
 struct RoboyBehavior {
     RoboyBehaviorMetadata       m_metadata;
-    QMap<qint32, Trajectory> m_mapMotorTrajectory;
+    QMap<qint32, Trajectory>    m_mapMotorTrajectory;
 
     QString toString() {
         QString string;
@@ -139,33 +117,31 @@ private:
     QList<RoboyBehaviorExecution>       m_listExecutions;
     QMap<qint32, Trajectory>            m_mapMotorTrajectories;
 
-    bool    m_isValid = false;
+    bool    m_bLoadedCompletely = false;
 
     qint64  m_startTimestamp = -1;
     qint64  m_endTimestamp = -1;
 
-    ControlMode m_controlMode;
     qint32      m_sampleRate;
 
 
 public:
     RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan);
 
-    bool isValid() const;
+    bool doFlattening();
+    bool isEmpty() const;
+    bool isLoadedCompletely() const;
 
     qint64 getStartTimestamp() const;
     qint64 getEndTimestamp() const;
     qint64 getDuration() const;
-
     const QList<RoboyBehaviorExecution> & getExecutionsList() const;
-
     QMap<qint32, Trajectory> getTrajectories() const;
 
 private:
     void setStartTimestamp();
     void setEndTimestamp();
 
-    bool doFlattening();
     bool insertExecution(RoboyBehaviorExecution & execution);
 
     void printMap() const;
@@ -173,8 +149,8 @@ private:
 
 struct ROSController {
     qint32                m_id;
-    ControlMode           m_controlMode;
-    ControllerState       m_state;
+    ControlMode           m_controlMode = ControlMode::UNDEFINED_CONTROL;
+    ControllerState       m_state = ControllerState::UNDEFINED;
 
     IControllerCommunication * m_communication = nullptr;
 

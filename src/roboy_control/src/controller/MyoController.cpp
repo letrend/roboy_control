@@ -35,10 +35,12 @@ bool MyoController::handleEvent_initializeControllers() {
         MYOCONTROLLER_DBG << "Start Controllers.";
         m_myoMasterTransceiver->startControllers(m_mapControllers.keys());
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_READY);
+        DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_READY);
         result = true;
     } else {
         MYOCONTROLLER_WAR << "Initialization timed out.";
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_NOT_READY);
+        DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_NOT_READY);
         result = false;
     }
 
@@ -48,8 +50,6 @@ bool MyoController::handleEvent_initializeControllers() {
 bool MyoController::handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan & behaviorPlan) {
     bool result = false;
     MYOCONTROLLER_DBG << "Get Flattended Trajectories";
-
-    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESSING);
 
     QMap<qint32, Trajectory> mapTrajectories = behaviorPlan.getTrajectories();
 
@@ -133,6 +133,7 @@ void MyoController::initializeControllerMap() {
         controller->m_id = c.m_id;
         controller->m_state = ControllerState::UNDEFINED;
         controller->m_controlMode = c.m_controlMode;
+        DataPool::getInstance()->insertController(*controller);
         controller->m_communication = new ROSControllerCommunication(controller);
         controller->m_communication->start();
         m_mapControllers.insert(controller->m_id, controller);

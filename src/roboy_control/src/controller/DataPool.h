@@ -21,9 +21,9 @@ private:
 
 private:
     PlayerState     m_playerState = PlayerState::PLAYER_NOT_READY;
-    RecorderState   m_recorderState = RecorderState::RECORDER_READY;
+    RecorderState   m_recorderState = RecorderState::RECORDER_NOT_READY;
 
-    QMap<qint32, ControllerState> m_controllerStates;
+    QMap<qint32, ROSController> m_controllerStates;
 
     // Record Request
     qint32          m_sampleRate = 0;
@@ -34,6 +34,8 @@ private:
 
 public:
     static DataPool * getInstance();
+
+    void insertController(const ROSController & controller);
 
     void reset();
 
@@ -47,7 +49,9 @@ public:
 
     PlayerState getPlayerState();
     RecorderState getRecorderState();
+
     ControllerState getControllerState(qint32 motorId);
+    ControlMode getControlMode(qint32 motorId);
 
     float getSampleRate();
 

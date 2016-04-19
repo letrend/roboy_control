@@ -9,34 +9,34 @@
 
 RoboyBehaviorPlan::RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan) {
     // Build full-size execution for every MetaExecution by fetching data from model
+    m_bLoadedCompletely = true;
     RoboyBehaviorExecution execution;
     for (RoboyBehaviorMetaExecution metaExecution : metaPlan.listExecutions) {
         execution.lId = metaExecution.lId;
         execution.lTimestamp = metaExecution.lTimestamp;
-        // TODO: Check result -> Whether Behavior exists
-        execution.behavior = modelService->retrieveRoboyBehavior(metaExecution.behaviorMetadata);
-        m_listExecutions.append(execution);
+        RoboyBehavior behavior;
+        behavior.m_metadata = metaExecution.behaviorMetadata;
+        if(modelService->retrieveRoboyBehavior(behavior)) {
+            execution.behavior = behavior;
+            m_listExecutions.append(execution);
+        } else {
+            PLAN_WAR << "Behavior: " << behavior.m_metadata.m_sBehaviorName << " not found.";
+            m_bLoadedCompletely = false;
+        }
     }
+
+    m_sampleRate = 100;
 
     setStartTimestamp();
     setEndTimestamp();
-
-    // TODO:
-    m_controlMode = ControlMode::POSITION_CONTROL;
-    m_sampleRate = 100;
-
-    if(doFlattening()){
-        PLAN_SUC << "Flattening of Plan successful";
-        m_isValid = true;
-    } else {
-        PLAN_WAR << "Flattening of Plan failed.";
-        m_isValid = false;
-    }
-    this->printMap();
 }
 
-bool RoboyBehaviorPlan::isValid() const {
-    return m_isValid;
+bool RoboyBehaviorPlan::isEmpty() const {
+    return m_listExecutions.isEmpty();
+}
+
+bool RoboyBehaviorPlan::isLoadedCompletely() const {
+    return m_bLoadedCompletely;
 }
 
 qint64 RoboyBehaviorPlan::getStartTimestamp() const {
@@ -91,13 +91,14 @@ bool RoboyBehaviorPlan::doFlattening() {
     PLAN_DBG << "\t- Waypoint Count:"   << waypointCount;
 
     Trajectory trajectory;
-    trajectory.m_controlMode = m_controlMode;
+    trajectory.m_controlMode = ControlMode::UNDEFINED_CONTROL;
     trajectory.m_sampleRate =  m_sampleRate;
 
     RoboyWaypoint waypoint;
     waypoint.m_ulValue = 0xffffffffffffffff;
 
     for(RoboyBehaviorExecution execution : m_listExecutions) {
+        // Initialize Motor-Trajectory Map with defaul Values 0xfffffffffffffffff
         for(qint32 motorId : execution.behavior.m_mapMotorTrajectory.keys()) {
             if(!m_mapMotorTrajectories.contains(motorId)){
                 trajectory.m_listWaypoints.clear();
@@ -107,10 +108,12 @@ bool RoboyBehaviorPlan::doFlattening() {
                 m_mapMotorTrajectories.insert(motorId, trajectory);
             }
         }
+        // Try to insert every execution
         if(!insertExecution(execution))
             return false;
     }
 
+    printMap();
     return true;
 }
 
@@ -125,9 +128,24 @@ bool RoboyBehaviorPlan::insertExecution(RoboyBehaviorExecution & execution) {
     PLAN_DBG << "\tBack Offset: "  << backOffset;
     PLAN_DBG << "\tDuration: "     << duration;
 
+    // Try to insert every Trajectory of execution
     for(qint32 motorId : execution.behavior.m_mapMotorTrajectory.keys()) {
+        // Check for conflicting ControlModes
+        auto currentExecutionMode = execution.behavior.m_mapMotorTrajectory[motorId].m_controlMode;
+        auto & globalTrajectoryMode = m_mapMotorTrajectories[motorId].m_controlMode;
+
+        if(globalTrajectoryMode == ControlMode::UNDEFINED_CONTROL) {
+            globalTrajectoryMode = currentExecutionMode;
+        } else if (globalTrajectoryMode != currentExecutionMode) {
+            PLAN_WAR << "ERROR: Conflicting ControlModes";
+            return false;
+        }
+
+        // Calculate Start Offset
         qint32 wpOffset = frontOffset / 100;
-        for(int i = 0; i < duration / 100; i++) {
+        qint32 waypointCount = execution.behavior.m_mapMotorTrajectory[motorId].m_listWaypoints.length();
+        // Try to insert every waypoint of trajectory
+        for(int i = 0; i < waypointCount; i++) {
             RoboyWaypoint & currentWaypoint = m_mapMotorTrajectories[motorId].m_listWaypoints[i+wpOffset];
             RoboyWaypoint & insertWaypoint = execution.behavior.m_mapMotorTrajectory[motorId].m_listWaypoints[i];
 
