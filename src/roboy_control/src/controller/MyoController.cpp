@@ -54,6 +54,14 @@ bool MyoController::handleEvent_preprocessRoboyPlan(RoboyBehaviorPlan & behavior
     QMap<qint32, Trajectory> mapTrajectories = behaviorPlan.getTrajectories();
 
     for(qint32 id : mapTrajectories.keys()) {
+        // Check ControlModes
+        if (m_mapControllers[id]->m_controlMode != mapTrajectories[id].m_controlMode) {
+            MYOCONTROLLER_WAR << "Controller " << id << " not in respective mode to execute behavior";
+            DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_MODE_CONFLICT);
+            return false;
+        }
+    }
+    for(qint32 id : mapTrajectories.keys()) {
         ROSController * controller = m_mapControllers[id];
         controller->m_state = ControllerState::PREPROCESS_TRAJECTORY;
         controller->m_communication->sendTrajectory(mapTrajectories.value(id));

@@ -111,11 +111,6 @@ void RoboyController::preprocessCurrentRoboyPlan() {
         DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR);
         return;
     }
-    // Check ControlModes of Controllers (Controllers in required state)
-
-    // Check Controller States (Controllers
-
-    // Check SampleRate
 
     // Try to do Flattening
     if(plan.doFlattening()) {

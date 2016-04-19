@@ -80,6 +80,7 @@ void RoboyBehaviorPlan::setEndTimestamp() {
 }
 
 bool RoboyBehaviorPlan::doFlattening() {
+    //TODO: SampleRate
     // Build MotorId - Trajectory Map for whole plan
     qint32 waypointCount = this->getDuration() / m_sampleRate;
 
