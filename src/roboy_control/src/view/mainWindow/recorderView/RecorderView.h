@@ -37,8 +37,6 @@ signals:
     void signalRecorderResultReceived();
 
 private:
-    RecorderState mRecorderState = RecorderState::RECORDER_READY;
-
 	ViewController          * m_pViewController;
     IModelService           * m_pModelService;
     QQmlApplicationEngine   * m_pAppEngine;

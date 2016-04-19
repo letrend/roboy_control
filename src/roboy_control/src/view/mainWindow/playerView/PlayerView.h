@@ -47,9 +47,7 @@ signals:
     void signalPlayerStatusUpdated(int playerState);
     void signalControllerStatusUpdated(qint32 motorId, int controllerState);
 
-private:
-    PlayerState mPlayerState = PlayerState::PLAYER_NOT_READY;
-
+private:    
     ViewController        * m_pViewController;
     IModelService         * m_pModelService;
     IMultiLaneViewModel   * m_pMultiLaneViewModel;

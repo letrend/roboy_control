@@ -1,5 +1,6 @@
 #include <QtQml>
 
+#include "DataPool.h"
 #include "LogDefines.h"
 #include "PlayerView.h"
 #include "RoboyMultiLaneModel.h"
@@ -43,7 +44,6 @@ void PlayerView::notify() {
  * @param state state of the playerview
  */
 void PlayerView::playerStatusUpdated(PlayerState playerState) {
-    mPlayerState = playerState;
     emit signalPlayerStatusUpdated(playerState);
 }
 
@@ -96,7 +96,7 @@ void PlayerView::addLaneButtonClicked() {
  * @return the current player state
  */
 int PlayerView::getCurrentPlayerState() {
-    return mPlayerState;
+    return DataPool::getInstance()->getPlayerState();
 }
 
 /* MultiLaneView related slots */

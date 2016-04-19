@@ -32,7 +32,6 @@ void RecorderView::notify() {
  * @param state state of the recorder
  */
 void RecorderView::recorderStatusUpdated(RecorderState recorderState) {
-    mRecorderState = recorderState;
     emit signalRecorderStatusUpdated(recorderState);
 }
 
@@ -81,7 +80,7 @@ void RecorderView::stopRecordButtonClicked() {
  * @return the current recorder state
  */
 int RecorderView::getCurrentRecorderState() {
-    return mRecorderState;
+    return DataPool::getInstance()->getRecorderState();
 }
 
 /**

@@ -1,7 +1,6 @@
 #include <QHash>
 #include <QModelIndex>
 
-#include "LogDefines.h"
 #include "ControllerStateListModel.h"
 
 // constructor
@@ -31,7 +30,6 @@ void ControllerStateListModel::controllerStatusUpdated(qint32 motorId, Controlle
 void ControllerStateListModel::dataPoolReset() {
 	beginResetModel();
 	m_states.clear();
-	m_states = QMap<qint32, QPair<qint32, ControllerState>>();
 	endResetModel();
 }
 

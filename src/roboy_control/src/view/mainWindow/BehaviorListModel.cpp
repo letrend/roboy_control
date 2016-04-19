@@ -53,7 +53,10 @@ QVariant BehaviorListModel::data(const QModelIndex & index, int role) const {
 		case BehaviorListRoles::MotorInfoRole: {
 			QList<QString> motorInfo;
 			for(u_int32_t iterator : m_BehaviorList[index.row()].m_mapMotorTrajectory.keys())
-				motorInfo.append(QString("motor %1: %2 waypoints").arg(iterator).arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count()));
+				motorInfo.append(QString("motor %1: %2 waypoints, mode: %3")
+					.arg(iterator)
+					.arg(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_listWaypoints.count())
+					.arg(getControlModeString(m_BehaviorList[index.row()].m_mapMotorTrajectory.value(iterator).m_controlMode)));
 			QVariant motorInfoVariant(motorInfo);
 			return motorInfoVariant;
 		}
