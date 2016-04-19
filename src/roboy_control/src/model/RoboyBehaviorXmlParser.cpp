@@ -83,7 +83,7 @@ void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata & 
         readBehaviorHeader(metadata);
 }
 
-void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior & behavior ) {
+bool RoboyBehaviorXmlParser::readRoboyBehavior(RoboyBehavior &behavior) {
     QString & name = behavior.m_metadata.m_sBehaviorName;
 
     MODEL_DBG << "READ BEHAVIOR " << name;
@@ -93,7 +93,7 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior & behavior ) {
 
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         MODEL_DBG << " - ERROR: Failed to open file: " << name + ".xml";
-        return;
+        return false;
     }
 
     m_xmlReader.setDevice(&file);
@@ -111,6 +111,7 @@ void RoboyBehaviorXmlParser::readRoboyBehavior( RoboyBehavior & behavior ) {
     }
 
     MODEL_DBG << " - INFO: Finishd reading successfully";
+    return true;
 }
 
 bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata & metadata ) {

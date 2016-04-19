@@ -93,28 +93,45 @@ void RoboyController::slotStopRecording() {
 
 // Private Interface
 void RoboyController::preprocessCurrentRoboyPlan() {
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESSING);
+
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
-
-    // Check if Plan is Empty
-    if(metaplan.listExecutions.isEmpty()) {
-        CONTROLLER_WAR << "Empty Execution-List. Nothing to execute. Abort.";
-        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_EMPTY);
-        return;
-    }
 
     CONTROLLER_DBG << "Build BehaviorPlan";
     RoboyBehaviorPlan plan(m_pModelService, metaplan);
 
-    // Check if Plan is Valid (Controllers in Respective States and Control Modes)
-    if(plan.isValid()){
+    // Check Empty (no behavior)
+    if(plan.isEmpty()) {
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_EMPTY);
+        return;
+    }
+    // Check if behaviors found in DB
+    if(!plan.isLoadedCompletely()) {
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR);
+        return;
+    }
+    // Check ControlModes of Controllers (Controllers in required state)
+
+    // Check Controller States (Controllers
+
+    // Check SampleRate
+
+    // Try to do Flattening
+    if(plan.doFlattening()) {
+        CONTROLLER_SUC << "Flattening of Plan successful";
         if(m_pMyoController->handleEvent_preprocessRoboyPlan(plan)) {
             CONTROLLER_SUC << "Plan is ready to be executed on Roboy";
-            DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
         } else {
             CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
+            DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT);
+            return;
         }
     } else {
-        CONTROLLER_WAR << "Could not build valid plan. Abort.";
+        CONTROLLER_WAR << "Flattening of Plan failed.";
+        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_OVERLAPPING);
+        return;
     }
+
+    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
 }

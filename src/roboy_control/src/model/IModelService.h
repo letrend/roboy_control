@@ -21,10 +21,10 @@ public:
      * - Delete Behavior
      * - Get List of all Behaviors
      */
-    virtual void            createRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
-    virtual RoboyBehavior   retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata ) = 0;
-    virtual void            updateRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
-    virtual void            deleteRoboyBehavior   ( const RoboyBehaviorMetadata & metadata ) = 0;
+    virtual void    createRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
+    virtual bool    retrieveRoboyBehavior(RoboyBehavior &behavior) = 0;
+    virtual void    updateRoboyBehavior   ( const RoboyBehavior & behavior ) = 0;
+    virtual void    deleteRoboyBehavior   ( const RoboyBehaviorMetadata & metadata ) = 0;
     virtual QList<RoboyBehaviorMetadata> getBehaviorList() = 0;
 
 };

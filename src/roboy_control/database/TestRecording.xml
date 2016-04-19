@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roboybehavior name="TestRecording" behaviorid="200">
-    <trajectory motorid="1" controlmode="1" samplerate="110">
+    <trajectory motorid="1" controlmode="2" samplerate="110">
         <waypointlist>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19</waypointlist>
     </trajectory>
     <trajectory motorid="2" controlmode="1" samplerate="110">

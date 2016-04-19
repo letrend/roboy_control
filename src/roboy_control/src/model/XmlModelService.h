@@ -14,7 +14,7 @@ public:
     ~XmlModelService();
 
     void            createRoboyBehavior   ( const RoboyBehavior & behavior );
-    RoboyBehavior   retrieveRoboyBehavior ( const RoboyBehaviorMetadata & metadata );
+    bool            retrieveRoboyBehavior ( RoboyBehavior & behavior );
     void            updateRoboyBehavior   ( const RoboyBehavior & behavior );
     void            deleteRoboyBehavior   ( const RoboyBehaviorMetadata & metadata );
     QList<RoboyBehaviorMetadata> getBehaviorList();

@@ -24,7 +24,7 @@ public:
     RoboyBehaviorXmlParser();
 
     void persistRoboyBehavior( const RoboyBehavior & behavior );
-    void readRoboyBehavior( RoboyBehavior & behavior );
+    bool readRoboyBehavior(RoboyBehavior &behavior);
     void readRoboyBehaviorMetadata( RoboyBehaviorMetadata & metadata );
 };
 

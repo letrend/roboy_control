@@ -13,9 +13,16 @@ DataPool * DataPool::getInstance() {
     return instance;
 }
 
+void DataPool::insertController(const ROSController & controller) {
+    if(!m_controllerStates.contains(controller.m_id)) {
+        m_controllerStates.insert(controller.m_id, controller);
+    }
+}
+
+
 void DataPool::reset() {
     m_playerState = PlayerState::PLAYER_NOT_READY;
-    m_recorderState = RecorderState::RECORDER_READY;
+    m_recorderState = RecorderState::RECORDER_NOT_READY;
 
     m_controllerStates.clear();
     m_recordResult = false;
@@ -41,11 +48,15 @@ void DataPool::setControllerState(qint32 id, ControllerState state) {
     bool update = false;
     m_mutexData.lock();
     if(m_controllerStates.contains(id)) {
-        ControllerState previousState = m_controllerStates[id];
-        m_controllerStates[id] = state;
+        ControllerState previousState = m_controllerStates[id].m_state;
+        m_controllerStates[id].m_state = state;
         update = previousState == state ? false : true;
     } else {
-        m_controllerStates.insert(id, state);
+        ROSController controller;
+        controller.m_id = id;
+        controller.m_state = state;
+        controller.m_controlMode = ControlMode::UNDEFINED_CONTROL;
+        m_controllerStates.insert(id, controller);
         update = true;
     }
     m_mutexData.unlock();
@@ -76,10 +87,18 @@ RecorderState DataPool::getRecorderState() {
 
 ControllerState DataPool::getControllerState(qint32 motorId) {
     if(m_controllerStates.contains(motorId))
-        return m_controllerStates[motorId];
+        return m_controllerStates[motorId].m_state;
     else
         return ControllerState::UNDEFINED;
 }
+
+ControlMode DataPool::getControlMode(qint32 motorId) {
+    if(m_controllerStates.contains(motorId))
+        return m_controllerStates[motorId].m_controlMode;
+    else
+        return ControlMode::UNDEFINED_CONTROL;
+}
+
 
 float DataPool::getSampleRate() {
     return m_sampleRate;
