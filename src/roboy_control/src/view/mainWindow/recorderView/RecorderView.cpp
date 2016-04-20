@@ -32,6 +32,7 @@ void RecorderView::notify() {
  * @param state state of the recorder
  */
 void RecorderView::recorderStatusUpdated(RecorderState recorderState) {
+    qDebug() << "Updated State in View: " << recorderState;
     emit signalRecorderStatusUpdated(recorderState);
 }
 

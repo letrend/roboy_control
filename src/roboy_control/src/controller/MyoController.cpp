@@ -95,8 +95,8 @@ bool MyoController::handleEvent_stopPlanExecution() {
 }
 
 bool MyoController::handleEvent_recordBehavior() {
-    m_myoMasterTransceiver->startRecording(m_mapControllers, DataPool::getInstance()->getSampleRate());
     DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_RECORDING);
+    m_myoMasterTransceiver->startRecording(m_mapControllers, DataPool::getInstance()->getSampleRate());
 }
 
 bool MyoController::handleEvent_stopRecording() {
