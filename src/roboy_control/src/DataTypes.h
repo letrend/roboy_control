@@ -31,7 +31,7 @@ enum PlayerState {
 };
 
 enum RecorderState {
-    RECORDER_NOT_READY,
+    RECORDER_NOT_READY = 0,
     RECORDER_READY,
     RECORDER_RECORDING,
     RECORDER_FINISHED_RECORDING

@@ -77,7 +77,7 @@ bool TestNode::callbackRecord(common_utilities::Record::Request & req, common_ut
 
     qCritical() << "Start Recording";
 
-    ros::Duration duration(1);
+    ros::Duration duration(20);
 
     common_utilities::Trajectory trajectory1;
     common_utilities::Trajectory trajectory2;

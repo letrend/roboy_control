@@ -38,6 +38,7 @@ void DataPool::setPlayerState(PlayerState state) {
 }
 
 void DataPool::setRecorderState(RecorderState state) {
+    qDebug() << "Update Recorder State:" << state;
     m_mutexData.lock();
     m_recorderState = state;
     m_mutexData.unlock();

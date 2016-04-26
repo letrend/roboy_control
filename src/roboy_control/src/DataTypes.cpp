@@ -2,10 +2,13 @@
 // Created by bruh on 1/7/16.
 //
 
+#include <cfloat>
 #include "DataTypes.h"
 
 #include "IControllerCommunication.h"
 #include "IModelService.h"
+
+#define WAYPOINT_DEFAULT 9999.9
 
 RoboyBehaviorPlan::RoboyBehaviorPlan(IModelService * modelService, const RoboyBehaviorMetaplan & metaPlan) {
     // Build full-size execution for every MetaExecution by fetching data from model
@@ -61,7 +64,7 @@ QMap<qint32, Trajectory> RoboyBehaviorPlan::getTrajectories() const {
 // Private Interface
 
 void RoboyBehaviorPlan::setStartTimestamp() {
-    m_startTimestamp = 0xffffffffffffff;
+    m_startTimestamp = 0xfffffffffffffff;
     qint64 currentTimestamp = 0;
     for (RoboyBehaviorExecution exec : m_listExecutions) {
         currentTimestamp = exec.lTimestamp;
@@ -80,6 +83,7 @@ void RoboyBehaviorPlan::setEndTimestamp() {
 }
 
 bool RoboyBehaviorPlan::doFlattening() {
+    //TODO: SampleRate
     // Build MotorId - Trajectory Map for whole plan
     qint32 waypointCount = this->getDuration() / m_sampleRate;
 
@@ -95,10 +99,10 @@ bool RoboyBehaviorPlan::doFlattening() {
     trajectory.m_sampleRate =  m_sampleRate;
 
     RoboyWaypoint waypoint;
-    waypoint.m_ulValue = 0xffffffffffffffff;
+    waypoint.m_ulValue = FLT_MAX;
 
     for(RoboyBehaviorExecution execution : m_listExecutions) {
-        // Initialize Motor-Trajectory Map with defaul Values 0xfffffffffffffffff
+        // Initialize Motor-Trajectory Map with defaul Values WAYPOINT_DEFAULT
         for(qint32 motorId : execution.behavior.m_mapMotorTrajectory.keys()) {
             if(!m_mapMotorTrajectories.contains(motorId)){
                 trajectory.m_listWaypoints.clear();
@@ -108,6 +112,7 @@ bool RoboyBehaviorPlan::doFlattening() {
                 m_mapMotorTrajectories.insert(motorId, trajectory);
             }
         }
+        printMap();
         // Try to insert every execution
         if(!insertExecution(execution))
             return false;
@@ -149,7 +154,7 @@ bool RoboyBehaviorPlan::insertExecution(RoboyBehaviorExecution & execution) {
             RoboyWaypoint & currentWaypoint = m_mapMotorTrajectories[motorId].m_listWaypoints[i+wpOffset];
             RoboyWaypoint & insertWaypoint = execution.behavior.m_mapMotorTrajectory[motorId].m_listWaypoints[i];
 
-            if(!(currentWaypoint.m_ulValue == 0xffffffffffffffff)) {
+            if(currentWaypoint.m_ulValue != FLT_MAX) {
                 PLAN_DBG << "ERROR: Overlapping Trajectories. Abort.";
                 return false;
             } else {
@@ -166,7 +171,7 @@ void RoboyBehaviorPlan::printMap() const {
         QString line;
         line.sprintf("M%i\t:", motorId);
         for(RoboyWaypoint wp : m_mapMotorTrajectories[motorId].m_listWaypoints) {
-            if(wp.m_ulValue == 0xffffffffffffffff) {
+            if(wp.m_ulValue == FLT_MAX) {
                 line.append(" - ");
             } else {
                 line.append(" X ");

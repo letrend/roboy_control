@@ -97,20 +97,25 @@ View {
     function setupRecorderState(recorderState) {
         console.log("recorder state" + recorderState)
         switch(recorderState) {
-            case 0: // RECORDER_READY
-                recordButton.enabled     = true
+            case 0: // RECORDER_NOT_READY
+                recordButton.enabled     = false
                 pauseButton.enabled      = false
                 stopRecordButton.enabled = false
                 break;
-            case 1: // RECORDER_RECORDING
+            case 1: // RECORDER_READY
+                recordButton.enabled     = true
+                pauseButton.enabled      = true
+                stopRecordButton.enabled = true
+                break;
+            case 2: // RECORDER_RECORDING
                 recordButton.enabled     = false
                 pauseButton.enabled      = true
                 stopRecordButton.enabled = true
                 break;
-            case 2: // RECORDER_FINISHED_RECORDING
+            case 3: // RECORDER_FINISHED_RECORDING
                 recordButton.enabled     = true
-                pauseButton.enabled      = false
-                stopRecordButton.enabled = false
+                pauseButton.enabled      = true
+                stopRecordButton.enabled = true
                 break;
         }
     }
