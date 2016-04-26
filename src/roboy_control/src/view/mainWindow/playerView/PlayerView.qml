@@ -156,7 +156,7 @@ View {
 
                         Layout.margins : 0
                         selected       : index === selectedBehaviorIndex
-                        subText        : "motor count: " + motorCount
+                        subText        : "Motor Count: " + motorCount
                         text           : title
 
                         MouseArea {
@@ -197,9 +197,9 @@ View {
 
                         onClicked : {
                             behaviorNameValueLabel.text     = title    
-                            idValueLabel.text               = "identifier: " + id
-                            durationValueLabel.text         = "duration: " + duration + " ms"
-                            motorCountValueLabel.text       = "motor count: " + motorCount
+                            idValueLabel.text               = "Identifier: " + id
+                            durationValueLabel.text         = "Duration: " + duration + " ms"
+                            motorCountValueLabel.text       = "Motor Count: " + motorCount
                             detailListView.model            = motorInfo 
                             selectedBehaviorIndex           = index
                             addToTimelineButton.enabled     = true
@@ -244,6 +244,7 @@ View {
                         anchors.bottomMargin : Units.dp(16)
                         anchors.fill         : parent
                         anchors.topMargin    : Units.dp(16)
+                        spacing              : Units.dp(-10)
                         id                   : detailTopColumn
 
                         Label {
@@ -263,7 +264,7 @@ View {
                         }
 
                         ListItem.Standard {
-                            id : idItem
+                            id     : idItem
 
                             action: Icon {
                                 anchors.centerIn : parent
@@ -401,28 +402,28 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = false
-                statusLabel.text         = "PLAYER_NOT_READY"
+                statusLabel.text         = "Player Not Ready"
                 break;
             case 1: // PLAYER_READY
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_READY"
+                statusLabel.text         = "Player Ready"
                 break;
             case 2: // PLAYER_PREPROCESSING
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = false
-                statusLabel.text         = "PLAYER_PREPROCESSING"
+                statusLabel.text         = "Player Preprocessing"
                 break;
             case 3: // PLAYER_PREPROCESS_FAILED_EMPTY
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_FAILED_EMPTY"
+                statusLabel.text         = "Player Preprocess Failed: Empty Timeline"
                 showError("Error while processing", 
                           "Your timeline is empty. You have to add behaviors to it before processing.", 
                           "ok")
@@ -432,7 +433,7 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_FAILED_OVERLAPPING"
+                statusLabel.text         = "Player Preprocess Failed: Overlapping Behaviors"
                 showError("Error while processing", 
                           "Two or more of the behaviors in your timeline overlap. Please fix this.", 
                           "ok")
@@ -442,7 +443,7 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_FAILED_MODE_CONFLICT"
+                statusLabel.text         = "Player Preprocess Failed: Conflict"
                 showError("Error while processing", 
                           "There seems to be a conflict between the behaviors you inserted into the timeline.", 
                           "ok")
@@ -452,7 +453,7 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY"
+                statusLabel.text         = "Player Preprocess Failed: Controllers Not Ready"
                 showError("Error while processing", 
                           "Roboy controllers are not ready. Please initialize them first by going to the Roboy tab and pressing initialize.", 
                           "ok")
@@ -462,7 +463,7 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT"
+                statusLabel.text         = "Player Preprocess Failed: Communication Timeout"
                 showError("Error while processing", 
                           "The connection to roboy timed out. Please verify your connection settings.", 
                           "ok")
@@ -472,14 +473,14 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PREPROCESS_SUCCEEDED"
+                statusLabel.text         = "Player Preprocess Succeeded"
                 break;
             case 9: // PLAYER_TRAJECTORY_READY
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_TRAJECTORY_READY"
+                statusLabel.text         = "Player Trajectory Ready"
                 break;
             case 10: // PLAYER_PLAYING:
                 playButton.enabled       = false
@@ -493,7 +494,7 @@ View {
                 pauseButton.enabled      = false
                 stopButton.enabled       = true
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PAUSED"
+                statusLabel.text         = "Player Paused"
                 break;
         }
     }

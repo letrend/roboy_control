@@ -95,6 +95,7 @@ View {
     }
 
     function setupRecorderState(recorderState) {
+        console.log("recorder state" + recorderState)
         switch(recorderState) {
             case 0: // RECORDER_READY
                 recordButton.enabled     = true

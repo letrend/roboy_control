@@ -49,23 +49,23 @@ QVariant ControllerStateListModel::data(const QModelIndex & index, int role) con
 		case BehaviorListRoles::MotorStateRole: {
 			switch(states_list[index.row()].second) {
 				case 0: // UNDEFINED
-					return "UNDEFINED";
+					return "Undefined";
 				case 1: // INITIALIZED
-					return "INITIALIZED";
+					return "Initialized";
 				case 2: // PREPROCESS_TRAJECTORY
-					return "PREPROCESS_TRAJECTORY";
+					return "Preprocess Trajectory";
 				case 3: // TRAJECTORY_READY
-					return "TRAJECTORY_READY";
+					return "Trajectory Ready";
 				case 4: // TRAJECTORY_FAILED
-					return "TRAJECTORY_FAILED";
+					return "Trajectory Failed";
 				case 5: // TRAJECTORY_PLAYING
-					return "TRAJECTORY_PLAYING";
+					return "Trajectory Playing";
 				case 6: // TRAJECTORY_PAUSED
-					return "TRAJECTORY_PAUSED";
+					return "Trajectory Pause";
 				case 7: // TRAJECTORY_DONE
-					return "TRAJECTORY_DONE";
+					return "Trajectory Done";
 				case 8: // INITIALIZE_ERROR
-					return "INITIALIZE_ERROR";
+					return "Initialize Error";
 				default:
 					return "";
 			}
