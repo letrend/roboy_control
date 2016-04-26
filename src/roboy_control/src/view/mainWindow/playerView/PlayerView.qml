@@ -428,14 +428,14 @@ View {
                           "Your timeline is empty. You have to add behaviors to it before processing.", 
                           "ok")
                 break;
-            case 4: // PLAYER_PREPROCESS_FAILED_OVERLAPPING
+            case 4: // PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "Player Preprocess Failed: Overlapping Behaviors"
+                statusLabel.text         = "Player Preprocess Failed: Loading Behavior Failed"
                 showError("Error while processing", 
-                          "Two or more of the behaviors in your timeline overlap. Please fix this.", 
+                          "One or more of the behaviors in your timeline could not be loaded.", 
                           "ok")
                 break;
             case 5: // PLAYER_PREPROCESS_FAILED_MODE_CONFLICT
@@ -448,48 +448,68 @@ View {
                           "There seems to be a conflict between the behaviors you inserted into the timeline.", 
                           "ok")
                 break;
-            case 6: // PLAYER_PREPROCESS_FAILED_CONTROLLERS_NOT_READY
+            case 6: // PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "Player Preprocess Failed: Controllers Not Ready"
+                statusLabel.text         = "Player Preprocess Failed: Controller State Conflict"
                 showError("Error while processing", 
-                          "Roboy controllers are not ready. Please initialize them first by going to the Roboy tab and pressing initialize.", 
+                          "There seems to be a conflict between the states of your controllers.", 
                           "ok")
                 break;
-            case 7: // PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT
+            case 7: // PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT
+                playButton.enabled       = false
+                pauseButton.enabled      = false
+                stopButton.enabled       = false
+                preprocessButton.enabled = true
+                statusLabel.text         = "Player Preprocess Failed: Samplerate Conflict"
+                showError("Error while processing", 
+                          "There seems to be a conflict with your samplerate.", 
+                          "ok")
+                break;
+            case 8: // PLAYER_PREPROCESS_FAILED_OVERLAPPING
+                playButton.enabled       = false
+                pauseButton.enabled      = false
+                stopButton.enabled       = false
+                preprocessButton.enabled = true
+                statusLabel.text         = "Player Preprocess Failed: Overlapping Behaviors"
+                showError("Error while processing", 
+                          "Two or more of the behaviors in your timeline overlap. Please fix this.", 
+                          "ok")
+                break;
+            case 9: // PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Communication Timeout"
                 showError("Error while processing", 
-                          "The connection to roboy timed out. Please verify your connection settings.", 
+                          "A timeout occured when trying to communicate with roboy.", 
                           "ok")
                 break;
-            case 8: // PLAYER_PREPROCESS_SUCCEEDED
+            case 10: // PLAYER_PREPROCESS_SUCCEEDED
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
-                statusLabel.text         = "Player Preprocess Succeeded"
+                statusLabel.text         = "Preprocess Succeeded"
                 break;
-            case 9: // PLAYER_TRAJECTORY_READY
+            case 11: // PLAYER_TRAJECTORY_READY
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Trajectory Ready"
                 break;
-            case 10: // PLAYER_PLAYING:
+            case 12: // PLAYER_PLAYING:
                 playButton.enabled       = false
                 pauseButton.enabled      = true
                 stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "PLAYER_PLAYING"
                 break;
-            case 11: // PLAYER_PAUSED:
+            case 13: // PLAYER_PAUSED:
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = true
