@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QtQuick.Layouts 1.1
 
 import Material 0.2
+import RecorderState 1.0
 
 View {
     Component.onCompleted : {
@@ -95,24 +96,23 @@ View {
     }
 
     function setupRecorderState(recorderState) {
-        console.log("recorder state" + recorderState)
         switch(recorderState) {
-            case 0: // RECORDER_NOT_READY
+            case RecorderState.RECORDER_NOT_READY:
                 recordButton.enabled     = false
                 pauseButton.enabled      = false
                 stopRecordButton.enabled = false
                 break;
-            case 1: // RECORDER_READY
+            case RecorderState.RECORDER_READY:
                 recordButton.enabled     = true
                 pauseButton.enabled      = true
                 stopRecordButton.enabled = true
                 break;
-            case 2: // RECORDER_RECORDING
+            case RecorderState.RECORDER_RECORDING:
                 recordButton.enabled     = false
                 pauseButton.enabled      = true
                 stopRecordButton.enabled = true
                 break;
-            case 3: // RECORDER_FINISHED_RECORDING
+            case RecorderState.RECORDER_FINISHED_RECORDING:
                 recordButton.enabled     = true
                 pauseButton.enabled      = true
                 stopRecordButton.enabled = true

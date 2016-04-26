@@ -6,36 +6,66 @@
 #include <QDebug>
 #include <QString>
 #include <QMap>
+#include <QObject>
+#include <QtQml>
 
 class IModelService;
 class IMasterCommunication;
 class IControllerCommunication;
 
-enum PlayerState {  
-    PLAYER_NOT_READY,
-    PLAYER_READY,
-    // Preprocessing: Success, Failures
-    PLAYER_PREPROCESSING,
-    PLAYER_PREPROCESS_FAILED_EMPTY,
-    PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR,
-    PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
-    PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT,
-    PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT,
-    PLAYER_PREPROCESS_FAILED_OVERLAPPING,
-    PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
-    PLAYER_PREPROCESS_SUCCEEDED,
-    //
-    PLAYER_TRAJECTORY_READY,
-    PLAYER_PLAYING,
-    PLAYER_PAUSED 
+class PlayerStateClass : public QObject
+{
+    Q_OBJECT
+
+    public:
+        enum PlayerState {  
+            PLAYER_NOT_READY = 0,
+            PLAYER_READY,
+            // Preprocessing: Success, Failures
+            PLAYER_PREPROCESSING,
+            PLAYER_PREPROCESS_FAILED_EMPTY,
+            PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR,
+            PLAYER_PREPROCESS_FAILED_MODE_CONFLICT,
+            PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT,
+            PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT,
+            PLAYER_PREPROCESS_FAILED_OVERLAPPING,
+            PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT,
+            PLAYER_PREPROCESS_SUCCEEDED,
+            //
+            PLAYER_TRAJECTORY_READY,
+            PLAYER_PLAYING,
+            PLAYER_PAUSED 
+        };
+
+        Q_ENUMS(PlayerState)
+
+        static void registerPlayerStates() {
+            qmlRegisterType<PlayerStateClass>("PlayerState", 1, 0, "PlayerState");
+        }
 };
 
-enum RecorderState {
-    RECORDER_NOT_READY = 0,
-    RECORDER_READY,
-    RECORDER_RECORDING,
-    RECORDER_FINISHED_RECORDING
+typedef PlayerStateClass::PlayerState PlayerState;
+
+class RecorderStateClass : public QObject
+{
+    Q_OBJECT
+
+    public:
+        enum RecorderState {
+            RECORDER_NOT_READY = 0,
+            RECORDER_READY,
+            RECORDER_RECORDING,
+            RECORDER_FINISHED_RECORDING
+        };
+
+        Q_ENUMS(RecorderState)
+
+        static void registerRecorderStates() {
+            qmlRegisterType<RecorderStateClass>("RecorderState", 1, 0, "RecorderState");
+        }
 };
+
+typedef RecorderStateClass::RecorderState RecorderState;
 
 struct RoboyBehaviorMetadata {
     quint64   m_ulBehaviorId;

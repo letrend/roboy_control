@@ -20,6 +20,9 @@ ViewController::ViewController(IModelService * pModelService) {
 
     m_pMainWindow = new MainWindow(m_pModelSerivce, this, m_pApplicationEngine);
 
+    PlayerStateClass::registerPlayerStates();
+    RecorderStateClass::registerRecorderStates();
+
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 
     connect(DataPool::getInstance(), SIGNAL(signalNotifyOnPlayerStateUpdated()), this, SLOT(slotPlayerStateUpdated()));

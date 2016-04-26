@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 import Material 0.2
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
+import PlayerState 1.0
 
 import "./dialogs"
 import "./multiLaneView"
@@ -87,7 +88,6 @@ View {
             }
 
             View {
-                elevation         : 1
                 height            : Units.dp(36)
                 Layout.fillWidth  : true
 
@@ -178,7 +178,9 @@ View {
                                     
                                     onTriggered : {
                                         if (multiLaneView.numLanes < 1) {
-                                            showError("No lane in timeline", "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", "ok")
+                                            showError("No lane in timeline", 
+                                                      "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", 
+                                                      "ok")
                                         } else {
                                             addBehaviorDialog.show()
                                         }
@@ -211,11 +213,15 @@ View {
                             onAccepted : {
                                 switch(cpp_PlayerView.insertBehaviorHandler(index, laneSelector.selectedIndex, timestampLabel.text)) {
                                 case -1: {
-                                    showError("Error while inserting behavior", "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", "ok")
+                                    showError("Error while inserting behavior", 
+                                              "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", 
+                                              "ok")
                                 }
                                     break;
                                 case -2: {
-                                    showError("Error while inserting behavior", "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", "ok")
+                                    showError("Error while inserting behavior", 
+                                              "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", 
+                                              "ok")
                                 }
                                     break;
                                 }
@@ -244,7 +250,7 @@ View {
                         anchors.bottomMargin : Units.dp(16)
                         anchors.fill         : parent
                         anchors.topMargin    : Units.dp(16)
-                        spacing              : Units.dp(-10)
+                        //spacing              : Units.dp(-10)
                         id                   : detailTopColumn
 
                         Label {
@@ -364,7 +370,9 @@ View {
                             id            : addToTimelineButton
                             onClicked     : {
                                 if (multiLaneView.numLanes < 1) {
-                                    showError("No lane in timeline", "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", "ok")
+                                    showError("No lane in timeline", 
+                                              "To add a behavior to the timeline you first have to add a lane by clicking the plus-button in the toolbar.", 
+                                              "ok")
                                 } else {
                                     addBehaviorDialog.show()
                                 }
@@ -380,11 +388,15 @@ View {
                         onAccepted : {
                             switch(cpp_PlayerView.insertBehaviorHandler(selectedBehaviorIndex, laneSelector.selectedIndex, timestampLabel.text)) {
                             case -1: {
-                                showError("Error while inserting behavior", "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", "ok")
+                                showError("Error while inserting behavior", 
+                                          "The timestamp of a behavior has to be a multiple of the sample rate which currently is 100.", 
+                                          "ok")
                             }
                                 break;
                             case -2: {
-                                showError("Error while inserting behavior", "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", "ok")
+                                showError("Error while inserting behavior", 
+                                          "With the given timestamp, the behavior does overlap with other behaviors already in the timeline.", 
+                                          "ok")
                             }
                                 break;
                             }
@@ -397,28 +409,28 @@ View {
 
     function setupPlayerState(playerState) {
         switch(playerState) {
-            case 0: // PLAYER_NOT_READY
+            case PlayerState.PLAYER_NOT_READY:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = false
                 statusLabel.text         = "Player Not Ready"
                 break;
-            case 1: // PLAYER_READY
+            case PlayerState.PLAYER_READY:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Ready"
                 break;
-            case 2: // PLAYER_PREPROCESSING
+            case PlayerState.PLAYER_PREPROCESSING:
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = false
                 statusLabel.text         = "Player Preprocessing"
                 break;
-            case 3: // PLAYER_PREPROCESS_FAILED_EMPTY
+            case PlayerState.PLAYER_PREPROCESS_FAILED_EMPTY:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -428,7 +440,7 @@ View {
                           "Your timeline is empty. You have to add behaviors to it before processing.", 
                           "ok")
                 break;
-            case 4: // PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR
+            case PlayerState.PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -438,7 +450,7 @@ View {
                           "One or more of the behaviors in your timeline could not be loaded.", 
                           "ok")
                 break;
-            case 5: // PLAYER_PREPROCESS_FAILED_MODE_CONFLICT
+            case PlayerState.PLAYER_PREPROCESS_FAILED_MODE_CONFLICT:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -448,7 +460,7 @@ View {
                           "There seems to be a conflict between the behaviors you inserted into the timeline.", 
                           "ok")
                 break;
-            case 6: // PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT
+            case PlayerState.PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -458,7 +470,7 @@ View {
                           "There seems to be a conflict between the states of your controllers.", 
                           "ok")
                 break;
-            case 7: // PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT
+            case PlayerState.PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -468,7 +480,7 @@ View {
                           "There seems to be a conflict with your samplerate.", 
                           "ok")
                 break;
-            case 8: // PLAYER_PREPROCESS_FAILED_OVERLAPPING
+            case PlayerState.PLAYER_PREPROCESS_FAILED_OVERLAPPING:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -478,7 +490,7 @@ View {
                           "Two or more of the behaviors in your timeline overlap. Please fix this.", 
                           "ok")
                 break;
-            case 9: // PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT
+            case PlayerState.PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT:
                 playButton.enabled       = false
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
@@ -488,28 +500,28 @@ View {
                           "A timeout occured when trying to communicate with roboy.", 
                           "ok")
                 break;
-            case 10: // PLAYER_PREPROCESS_SUCCEEDED
+            case PlayerState.PLAYER_PREPROCESS_SUCCEEDED:
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
                 statusLabel.text         = "Preprocess Succeeded"
                 break;
-            case 11: // PLAYER_TRAJECTORY_READY
+            case PlayerState.PLAYER_TRAJECTORY_READY:
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = false
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Trajectory Ready"
                 break;
-            case 12: // PLAYER_PLAYING:
+            case PlayerState.PLAYER_PLAYING:
                 playButton.enabled       = false
                 pauseButton.enabled      = true
                 stopButton.enabled       = true
                 preprocessButton.enabled = true
-                statusLabel.text         = "PLAYER_PLAYING"
+                statusLabel.text         = "Player Playing"
                 break;
-            case 13: // PLAYER_PAUSED:
+            case PlayerState.PLAYER_PAUSED:
                 playButton.enabled       = true
                 pauseButton.enabled      = false
                 stopButton.enabled       = true
