@@ -81,18 +81,14 @@ RoboyBehaviorMetaplan ViewController::fromController_getCurrentRoboyPlan() {
  * @brief ViewController::signalPlayerStatusUpdated slot to notify the gui when the players state changes
  */
 void ViewController::slotPlayerStateUpdated() const {
-    PlayerState newState = DataPool::getInstance()->getPlayerState();
-    VIEW_DBG << "Received Player Status Update: " << newState;
-    m_pMainWindow->playerStatusUpdated(newState);
+    m_pMainWindow->playerStatusUpdated();
 }
 
 /**
  * @brief ViewController::slotRecorderStateUpdated slot to notify the gui when the recorder state changes
  */
 void ViewController::slotRecorderStateUpdated() const {
-    RecorderState newState = DataPool::getInstance()->getRecorderState();
-    VIEW_DBG << "Received Recorder Status Update: " << newState;
-    m_pMainWindow->recorderStatusUpdated(newState);
+    m_pMainWindow->recorderStatusUpdated();
 }
 
 /**

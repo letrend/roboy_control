@@ -18,13 +18,13 @@ View {
     width   : 640
 
     Component.onCompleted : {
-        setupPlayerState(cpp_PlayerView.getCurrentPlayerState())
+        setupPlayerState()
     }
 
     Connections {
         target                      : cpp_PlayerView
         onSignalPlayerStatusUpdated : {
-            setupPlayerState(playerState)
+            setupPlayerState()
         }
     }
 
@@ -407,8 +407,8 @@ View {
         }
     }
 
-    function setupPlayerState(playerState) {
-        switch(playerState) {
+    function setupPlayerState() {
+        switch(cpp_PlayerView.getCurrentPlayerState()) {
             case PlayerState.PLAYER_NOT_READY:
                 playButton.enabled       = false
                 pauseButton.enabled      = false

@@ -44,15 +44,15 @@ void MainWindow::notify() {
  * @brief MainWindow::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void MainWindow::playerStatusUpdated(PlayerState state) {
-    m_pPlayerView->playerStatusUpdated(state);
+void MainWindow::playerStatusUpdated() {
+    m_pPlayerView->playerStatusUpdated();
 }
 
 /**
  * @brief MainWindow::recorderStatusUpdated method to notify the gui when the recorder state changes
  */
-void MainWindow::recorderStatusUpdated(RecorderState state) {
-    m_pRecorderView->recorderStatusUpdated(state);
+void MainWindow::recorderStatusUpdated() {
+    m_pRecorderView->recorderStatusUpdated();
 }
 
 /**

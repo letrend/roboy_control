@@ -28,8 +28,8 @@ public:
 
     void notify();
     
-    void playerStatusUpdated(PlayerState state);
-    void recorderStatusUpdated(RecorderState state);
+    void playerStatusUpdated();
+    void recorderStatusUpdated();
     
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
     

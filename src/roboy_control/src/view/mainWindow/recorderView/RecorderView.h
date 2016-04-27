@@ -20,7 +20,7 @@ public:
     ~RecorderView();
 
     void notify();
-    void recorderStatusUpdated(RecorderState recorderState);
+    void recorderStatusUpdated();
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
     void recorderResultReceived();
 
@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE void saveRecorderBehavior(QString behaviorName);
 
 signals:
-    void signalRecorderStatusUpdated(RecorderState recorderState);
+    void signalRecorderStatusUpdated();
     void signalRecorderResultReceived();
 
 private:

@@ -43,8 +43,8 @@ void PlayerView::notify() {
  * @brief PlayerView::signalPlayerStatusUpdated method to notfiy the gui when the players state changes
  * @param state state of the playerview
  */
-void PlayerView::playerStatusUpdated(PlayerState playerState) {
-    emit signalPlayerStatusUpdated(playerState);
+void PlayerView::playerStatusUpdated() {
+    emit signalPlayerStatusUpdated();
 }
 
 /**

@@ -22,7 +22,7 @@ public:
     ~PlayerView();
 
     void notify();
-    void playerStatusUpdated(PlayerState state);
+    void playerStatusUpdated();
     void controllerStatusUpdated(qint32 motorId, ControllerState state);
 
     // the following methods are defined as Q_INVOKABLE and 
@@ -44,7 +44,7 @@ public:
     RoboyBehaviorMetaplan fromPlayerView_getCurrentRoboyPlan();
 
 signals: 
-    void signalPlayerStatusUpdated(int playerState);
+    void signalPlayerStatusUpdated();
     void signalControllerStatusUpdated(qint32 motorId, int controllerState);
 
 private:    

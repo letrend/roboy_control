@@ -6,13 +6,13 @@ import RecorderState 1.0
 
 View {
     Component.onCompleted : {
-        setupRecorderState(cpp_RecorderView.getCurrentRecorderState())
+        setupRecorderState()
     }
 
     Connections {
         target                      : cpp_RecorderView
         onSignalRecorderStatusUpdated : {
-            setupRecorderState(recorderState)
+            setupRecorderState()
         }
     }
 
@@ -95,8 +95,8 @@ View {
         }
     }
 
-    function setupRecorderState(recorderState) {
-        switch(recorderState) {
+    function setupRecorderState() {
+        switch(cpp_RecorderView.getCurrentRecorderState()) {
             case RecorderState.RECORDER_NOT_READY:
                 recordButton.enabled     = false
                 pauseButton.enabled      = false
