@@ -4,8 +4,8 @@ ROSMasterCommunication::ROSMasterCommunication() {
     m_initializeClient = m_nodeHandle.serviceClient<common_utilities::Initialize>("/roboy/initialize");
     m_steerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer", 1000);
 
-    m_switchController = m_nodeHandle.serviceClient<controller_manager_msgs::SwitchController>("/controller_manager/switch_controller");
-    m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
+//    m_switchController = m_nodeHandle.serviceClient<controller_manager_msgs::SwitchController>("/controller_manager/switch_controller");
+//    m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
 
     m_recordClient = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
     m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_record", 1000);
