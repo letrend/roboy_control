@@ -101,52 +101,52 @@ void ROSMasterCommunication::eventHandle_sendRecordSteeringMessage() {
 }
 
 void ROSMasterCommunication::startControllers(const QList<qint32> & controllers) {
-    controller_manager_msgs::SwitchController message;
-
-    std::vector<std::string> resources;
-    for(qint8 id : controllers) {
-        QString name;
-        name.sprintf("motor%u", id);
-        resources.push_back(name.toStdString());
-    }
-
-    message.request.start_controllers = resources;
-    message.request.strictness = 1;
-
-    ros::Duration duration(1);
-    duration.sleep();
-    m_switchController.call(message);
-    TRANSCEIVER_LOG << "Start Call returned";
+//    controller_manager_msgs::SwitchController message;
+//
+//    std::vector<std::string> resources;
+//    for(qint8 id : controllers) {
+//        QString name;
+//        name.sprintf("motor%u", id);
+//        resources.push_back(name.toStdString());
+//    }
+//
+//    message.request.start_controllers = resources;
+//    message.request.strictness = 1;
+//
+//    ros::Duration duration(1);
+//    duration.sleep();
+//    m_switchController.call(message);
+//    TRANSCEIVER_LOG << "Start Call returned";
 }
 
 void ROSMasterCommunication::stopControllers(const QList<qint32> & controllers) {
-    controller_manager_msgs::SwitchController message;
-
-    std::vector<std::string> resources;
-    for(qint8 id : controllers) {
-        QString name;
-        name.sprintf("motor%u", id);
-        resources.push_back(name.toStdString());
-    }
-
-    message.request.stop_controllers = resources;
-    message.request.strictness = 1;
-
-    ros::Duration duration(1);
-    duration.sleep();
-    m_switchController.call(message);
-    TRANSCEIVER_LOG << "Start Call returned";
+//    controller_manager_msgs::SwitchController message;
+//
+//    std::vector<std::string> resources;
+//    for(qint8 id : controllers) {
+//        QString name;
+//        name.sprintf("motor%u", id);
+//        resources.push_back(name.toStdString());
+//    }
+//
+//    message.request.stop_controllers = resources;
+//    message.request.strictness = 1;
+//
+//    ros::Duration duration(1);
+//    duration.sleep();
+//    m_switchController.call(message);
+//    TRANSCEIVER_LOG << "Start Call returned";
 }
 
 
 void ROSMasterCommunication::unloadControllers(const QList<qint32> & controllers) {
-    controller_manager_msgs::UnloadController message;
-
-    for(qint8 id : controllers) {
-        QString name;
-        name.sprintf("motor%u", id);
-        message.request.name = name.toStdString();
-        m_unloadController.call(message);
-    }
-    TRANSCEIVER_LOG << "Unload Calls returned";
+//    controller_manager_msgs::UnloadController message;
+//
+//    for(qint8 id : controllers) {
+//        QString name;
+//        name.sprintf("motor%u", id);
+//        message.request.name = name.toStdString();
+//        m_unloadController.call(message);
+//    }
+//    TRANSCEIVER_LOG << "Unload Calls returned";
 }
