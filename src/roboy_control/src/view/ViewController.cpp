@@ -25,11 +25,11 @@ ViewController::ViewController(IModelService * pModelService) {
 
     m_pApplicationEngine->load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnPlayerStateUpdated()), this, SLOT(slotPlayerStateUpdated()));
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnControllerStateUpdated(qint32)), this, SLOT(slotControllerStateUpdated(qint32)));
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecorderStateUpdated()), this, SLOT(slotRecorderStateUpdated()));
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnRecordResult()), this, SLOT(slotRecorderResultReceived()));
-    connect(DataPool::getInstance(), SIGNAL(signalNotifyOnDataPoolReset()), this, SLOT(slotDataPoolReset()));
+    connect(&DataPool::instance(), SIGNAL(signalNotifyOnPlayerStateUpdated()), this, SLOT(slotPlayerStateUpdated()));
+    connect(&DataPool::instance(), SIGNAL(signalNotifyOnControllerStateUpdated(qint32)), this, SLOT(slotControllerStateUpdated(qint32)));
+    connect(&DataPool::instance(), SIGNAL(signalNotifyOnRecorderStateUpdated()), this, SLOT(slotRecorderStateUpdated()));
+    connect(&DataPool::instance(), SIGNAL(signalNotifyOnRecordResult()), this, SLOT(slotRecorderResultReceived()));
+    connect(&DataPool::instance(), SIGNAL(signalNotifyOnDataPoolReset()), this, SLOT(slotDataPoolReset()));
 }
 
 // PlayerView - Interface
@@ -59,7 +59,7 @@ void ViewController::pauseBehaviorPlan() {
 
 // RecorderView - Interface
 void ViewController::recordBehavior() {
-    DataPool::getInstance()->setSampleRate(100.0);
+//    DataPool::instance()->setSampleRate(100.0);
     emit signalRecord();
 }
 
@@ -96,7 +96,7 @@ void ViewController::slotRecorderStateUpdated() const {
  * @param motorId id of the motor of which the state changed
  */
 void ViewController::slotControllerStateUpdated(qint32 motorId) const {
-    ControllerState newState = DataPool::getInstance()->getControllerState(motorId);
+    ControllerState newState = DataPool::instance().getMotorControllerState(motorId);
     VIEW_DBG << "Received Controller Status Update: " << motorId << "\t" << newState;
     m_pMainWindow->controllerStatusUpdated(motorId, newState);
 }

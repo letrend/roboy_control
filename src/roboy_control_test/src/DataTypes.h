@@ -11,8 +11,8 @@
 
 #include "CommonDefinitions.h"
 
-struct ROSController {
-    qint8                 id;
+struct MotorController {
+    qint32                 id;
     ControlMode           controlMode;
     ControllerState                state;
     QProcess *            process;

@@ -1,11 +1,11 @@
 <RoboyControlConfiguration>
 	<DataModel
 			databaseType="xml"
-			databasePath="/home/bruh/workspace/roboy_control/src/roboy_control/database"/>
+			databasePath="/Users/PhilippBrunenberg/workspace/roboy_control/src/roboy_control/database"/>
 	<Controllers>
-		<Controller id="0" controlmode="position">true</Controller>
 		<Controller id="1" controlmode="position">true</Controller>
 		<Controller id="2" controlmode="position">true</Controller>
-		<Controller id="5" controlmode="position">true</Controller>
+		<Controller id="3" controlmode="position">true</Controller>
+		<Controller id="4" controlmode="position">true</Controller>
 	</Controllers>
 </RoboyControlConfiguration>

@@ -5,7 +5,7 @@
 #include <cfloat>
 #include "DataTypes.h"
 
-#include "IControllerCommunication.h"
+#include "myo/IMotorController.h"
 #include "IModelService.h"
 
 #define WAYPOINT_DEFAULT 9999.9
@@ -178,11 +178,5 @@ void RoboyBehaviorPlan::printMap() const {
             }
         }
         PLAN_DBG << line;
-    }
-}
-
-ROSController::~ROSController() {
-    if(m_communication != nullptr){
-        delete m_communication;
     }
 }

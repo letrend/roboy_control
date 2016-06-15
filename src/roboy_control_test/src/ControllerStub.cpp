@@ -9,6 +9,8 @@
 
 #include "ros/ros.h"
 
+#include <QFile>
+
 QString nodeName;
 QString serviceName;
 qint32 id;
@@ -17,6 +19,8 @@ ControllerState state;
 ros::ServiceServer trajectoryServer;
 ros::Subscriber steeringSubscriber;
 ros::Publisher statusPublisher;
+
+QTextStream * stream;
 
 bool callbackMotor(common_utilities::SetTrajectory::Request & req, common_utilities::SetTrajectory::Response & res);
 void callbackSteering(const common_utilities::Steer::ConstPtr & msg);
@@ -30,6 +34,19 @@ int main(int argc, char ** argv) {
     serviceName = argv[3];
     ROS_INFO("Start ControllerStub-Node: %s", nodeName.toLatin1().data());
     ROS_INFO("Service Name: %s", serviceName.toLatin1().data());
+
+    QString filename = nodeName + ".log";
+
+    QFile file(filename);
+
+    if(file.exists())
+        file.remove();
+
+    file.open(QFile::WriteOnly);
+    stream = new QTextStream(&file);
+
+    *stream << "Begin Logging of ControllerStub Node" << endl;
+    stream->flush();
 
     ros::init(argc, argv, nodeName.toStdString());
     ros::NodeHandle n;
@@ -45,8 +62,11 @@ int main(int argc, char ** argv) {
     statusPublisher = n.advertise<common_utilities::ControllerState>(statusTopic.toStdString(), 1000);
 
     ros::Duration duration(1);
-    while(statusPublisher.getNumSubscribers() == 0)
+    while(statusPublisher.getNumSubscribers() == 0) {
         duration.sleep();
+        *stream << "Wait for Subscribers ..." << endl;
+        stream->flush();
+    }
 
     setState(ControllerState::INITIALIZED);
 
@@ -88,5 +108,7 @@ void setState(ControllerState cs) {
     stateMessage.id = id;
     stateMessage.state = cs;
 
+    *stream << "Publish Status Message: " << state << endl;
+    stream->flush();
     statusPublisher.publish(stateMessage);
 }

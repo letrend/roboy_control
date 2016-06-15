@@ -1,49 +1,52 @@
-#include "ROSMasterCommunication.h"
+#include "ROSMyoMaster.h"
 
-ROSMasterCommunication::ROSMasterCommunication() {
-    m_initializeClient = m_nodeHandle.serviceClient<common_utilities::Initialize>("/roboy/initialize");
+#include "IMotorController.h"
+
+#include "common_utilities/ControllerRequest.h"
+#include "common_utilities/Initialize.h"
+#include "common_utilities/Steer.h"
+#include "common_utilities/Record.h"
+
+//#include "controller_manager_msgs/SwitchController.h"
+//#include "controller_manager_msgs/UnloadController.h"
+
+ROSMyoMaster::ROSMyoMaster() {
+
+    m_initializePublisher = m_nodeHandle.advertise<common_utilities::Initialize>("/roboy/initialize", 1000);
     m_steerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer", 1000);
+
+//    m_recordClient = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
+//    m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_record", 1000);
 
 //    m_switchController = m_nodeHandle.serviceClient<controller_manager_msgs::SwitchController>("/controller_manager/switch_controller");
 //    m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
-
-    m_recordClient = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
-    m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_record", 1000);
 }
 
-// MyoMaster Interface
-void ROSMasterCommunication::eventHandle_sendInitializeRequest() {
-    TRANSCEIVER_LOG << "Consume Service 'initialize'";
+void ROSMyoMaster::sendInitializeRequest(const QList<IMotorController *> initializationList) const {
+    TRANSCEIVER_LOG << "Trigger 'Send Initialize'";
 
     common_utilities::Initialize initialize;
-    for(auto controller : m_initializationList) {
-        initialize.request.idList.push_back(controller->m_id);
-        initialize.request.controlmode.push_back(controller->m_controlMode);
+    for(IMotorController * motor : initializationList) {
+        common_utilities::ControllerRequest request;
+        request.id = motor->getId();
+        request.controlmode = motor->getControlMode();
+        initialize.controllers.push_back(request);
     }
 
-    if(m_initializeClient.call(initialize)) {
-        TRANSCEIVER_SUC << "Service call successfull";
-    } else {
-        TRANSCEIVER_WAR << "Failed to call Service";
-    }
+    m_initializePublisher.publish(initialize);
 }
 
-void ROSMasterCommunication::eventHandle_sendSteeringMessage() {
+void ROSMyoMaster::sendSteeringMessage(const SteeringCommand command) const {
+    TRANSCEIVER_LOG << "Sending steering message: " << command << " to " << m_steerPublisher.getNumSubscribers() << " subscribers.";
+
     common_utilities::Steer steer;
-    steer.steeringCommand = m_steeringCommand;
+    steer.steeringCommand = command;
 
-    ros::Rate rollRate(10);
-    while(m_steerPublisher.getNumSubscribers() == 0) {
-        TRANSCEIVER_LOG << "Send Steering Message - Wait for subscribers";
-        rollRate.sleep();
-    }
-
-    TRANSCEIVER_LOG << "Sending steering message: " << m_steeringCommand << " to " << m_steerPublisher.getNumSubscribers() << " subscribers.";
     m_steerPublisher.publish(steer);
 }
 
-void ROSMasterCommunication::eventHandle_recordBehavior() {
-    TRANSCEIVER_LOG << "Start Recording: SampleRate: " << m_sampleRate;
+void ROSMyoMaster::startRecording(const QMap<qint32, IMotorController *> controllers, qint32 sampleRate) const {
+/*    TRANSCEIVER_LOG << "Start Recording: SampleRate: " << m_sampleRate;
     bool res = false;
 
     common_utilities::Record message;
@@ -89,18 +92,22 @@ void ROSMasterCommunication::eventHandle_recordBehavior() {
         m_mutexData.unlock();
         res = false;
     }
-    emit signalRecordFinished(res);
+    emit signalRecordFinished(res);*/
+
 }
 
-void ROSMasterCommunication::eventHandle_sendRecordSteeringMessage() {
-    TRANSCEIVER_LOG << "Send Steering Command " << m_recordSteeringCommand;
+void ROSMyoMaster::sendRecordSteeringMessage(SteeringCommand command) const {
+/*    TRANSCEIVER_LOG << "Send Steering Command " << m_recordSteeringCommand;
 
     common_utilities::Steer message;
     message.steeringCommand = m_recordSteeringCommand;
     m_recordSteerPublisher.publish(message);
+*/
 }
 
-void ROSMasterCommunication::startControllers(const QList<qint32> & controllers) {
+
+
+//void ROSMyoMaster::startControllers(const QList<qint32> & controllers) {
 //    controller_manager_msgs::SwitchController message;
 //
 //    std::vector<std::string> resources;
@@ -117,9 +124,9 @@ void ROSMasterCommunication::startControllers(const QList<qint32> & controllers)
 //    duration.sleep();
 //    m_switchController.call(message);
 //    TRANSCEIVER_LOG << "Start Call returned";
-}
+//}
 
-void ROSMasterCommunication::stopControllers(const QList<qint32> & controllers) {
+//void ROSMyoMaster::stopControllers(const QList<qint32> & controllers) {
 //    controller_manager_msgs::SwitchController message;
 //
 //    std::vector<std::string> resources;
@@ -136,10 +143,10 @@ void ROSMasterCommunication::stopControllers(const QList<qint32> & controllers) 
 //    duration.sleep();
 //    m_switchController.call(message);
 //    TRANSCEIVER_LOG << "Start Call returned";
-}
+//}
 
 
-void ROSMasterCommunication::unloadControllers(const QList<qint32> & controllers) {
+//void ROSMyoMaster::unloadControllers(const QList<qint32> & controllers) {
 //    controller_manager_msgs::UnloadController message;
 //
 //    for(qint8 id : controllers) {
@@ -149,4 +156,4 @@ void ROSMasterCommunication::unloadControllers(const QList<qint32> & controllers
 //        m_unloadController.call(message);
 //    }
 //    TRANSCEIVER_LOG << "Unload Calls returned";
-}
+//}

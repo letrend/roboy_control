@@ -96,7 +96,7 @@ void PlayerView::addLaneButtonClicked() {
  * @return the current player state
  */
 int PlayerView::getCurrentPlayerState() {
-    return DataPool::getInstance()->getPlayerState();
+    return DataPool::instance().getPlayerState();
 }
 
 /* MultiLaneView related slots */

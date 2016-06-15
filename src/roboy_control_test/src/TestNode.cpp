@@ -10,7 +10,7 @@ TestNode::TestNode() {
     ros::AsyncSpinner spinner(4);
     spinner.start();
 
-    m_initializeServer = m_nodeHandle.advertiseService("/roboy/initialize", &TestNode::callbackInitialize, this);
+    m_initializeSubscriber = m_nodeHandle.subscribe("/roboy/initialize", 1000, &TestNode::callbackInitialize, this);
     m_recordSteeringSubscriber = m_nodeHandle.subscribe("/roboy/steer_record", 1000, &TestNode::callbackSteerRecord, this);
 
     // Advertise Record Service
@@ -33,26 +33,26 @@ TestNode::TestNode() {
 }
 
 TestNode::~TestNode() {
-    for(ROSController & controller : m_listControllers) {
+    for(MotorController & controller : m_listControllers) {
         delete controller.process;
     }
 }
 
-bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, common_utilities::Initialize::Response & res){
+void TestNode::callbackInitialize(const common_utilities::Initialize & msg){
     qDebug() << "Process 'roboy/initialize' request";
 
-    ROSController controller;
-    common_utilities::ControllerState responseMessage;
+    MotorController controller;
+
     int i = 0;
-    for(int i = 0; i < req.idList.size(); i++) {
+    for(int i = 0; i < msg.controllers.size(); i++) {
         QString nodeName;
-        nodeName.sprintf("controller_stub%i", req.idList[i]);
+        nodeName.sprintf("controller_stub%i", msg.controllers[i].id);
 
         QString serviceName;
-        serviceName.sprintf("/roboy/trajectory_motor%i", req.idList[i]);
+        serviceName.sprintf("/roboy/trajectory_motor%i", msg.controllers[i].id);
 
-        controller.id = req.idList[i];
-        controller.controlMode = (ControlMode) req.controlmode[i];
+        controller.id = msg.controllers[i].id;
+        controller.controlMode = (ControlMode) msg.controllers[i].controlmode;
 
         if(startNode(controller.id, nodeName, serviceName, controller)){
             controller.state = ControllerState::INITIALIZED;
@@ -62,14 +62,8 @@ bool TestNode::callbackInitialize(common_utilities::Initialize::Request & req, c
 
         m_listControllers.append(controller);
 
-        responseMessage.id = req.idList[i];
-        responseMessage.state = controller.state;
-        res.states.push_back(responseMessage);
-
         qDebug() << "\t- Update Controller: " << controller.toString();
     }
-
-    return true;
 }
 
 bool TestNode::callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res) {
@@ -123,7 +117,7 @@ void TestNode::callbackSteerRecord(const common_utilities::Steer & msg) {
     m_mutexCV.unlock();
 }
 
-bool TestNode::startNode(qint32 id, QString nodeName, QString serviceName, ROSController & controller) {
+bool TestNode::startNode(qint32 id, QString nodeName, QString serviceName, MotorController & controller) {
     QString roboyControlHome = QProcessEnvironment::systemEnvironment().value("ROBOY_TEST_HOME");
     if(roboyControlHome.isEmpty()) {
         qDebug() << "Set environment variable 'ROBOY_TEST_HOME' to etc folder.";

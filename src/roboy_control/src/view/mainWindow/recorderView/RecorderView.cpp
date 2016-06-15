@@ -80,23 +80,23 @@ void RecorderView::stopRecordButtonClicked() {
  * @return the current recorder state
  */
 int RecorderView::getCurrentRecorderState() {
-    return DataPool::getInstance()->getRecorderState();
+//    return DataPool::instance()->getRecorderState();
 }
 
 /**
  * @brief RecorderView::saveRecorderBehavior method to save a recorder behavior to the database
  */
 void RecorderView::saveRecorderBehavior(QString behaviorName) {
-	if(DataPool::getInstance()->getRecordResult()) {
-        RoboyBehavior * behavior = DataPool::getInstance()->getRecordedBehavior();
-        behavior->m_metadata.m_sBehaviorName = behaviorName;
-        behavior->m_metadata.m_ulBehaviorId = 200;
-        for (auto id : behavior->m_mapMotorTrajectory.keys()) {
-            if(behavior->m_mapMotorTrajectory[id].m_listWaypoints.isEmpty())
-                behavior->m_mapMotorTrajectory.remove(id);
-        }
-        m_pModelService->createRoboyBehavior(*behavior);
-    } else {
-        VIEW_DBG << "Record ERROR";
-    }
+//	if(DataPool::getInstance()->getRecordResult()) {
+//        RoboyBehavior * behavior = DataPool::getInstance()->getRecordedBehavior();
+//        behavior->m_metadata.m_sBehaviorName = behaviorName;
+//        behavior->m_metadata.m_ulBehaviorId = 200;
+//        for (auto id : behavior->m_mapMotorTrajectory.keys()) {
+//            if(behavior->m_mapMotorTrajectory[id].m_listWaypoints.isEmpty())
+//                behavior->m_mapMotorTrajectory.remove(id);
+//        }
+//        m_pModelService->createRoboyBehavior(*behavior);
+//    } else {
+//        VIEW_DBG << "Record ERROR";
+//    }
 }

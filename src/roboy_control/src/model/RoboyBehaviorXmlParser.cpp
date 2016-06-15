@@ -1,6 +1,7 @@
 #include "RoboyBehaviorXmlParser.h"
 
 RoboyBehaviorXmlParser::RoboyBehaviorXmlParser() {
+    RoboyControlConfiguration::instance().reloadConfig();
     m_databasePath = RoboyControlConfiguration::instance().getModelConfig("databasePath");
     MODEL_DBG << "DATABASE PATH: " << m_databasePath;
 }
@@ -67,8 +68,6 @@ void RoboyBehaviorXmlParser::writeTrajectories(const RoboyBehavior &behavior) {
 void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata & metadata ) {
     QString name = metadata.m_sBehaviorName;
 
-    MODEL_DBG << "READ BEHAVIOR META " << name;
-
     QString path = m_databasePath + "/" + metadata.m_sBehaviorName + ".xml";
     QFile file(path);
 
@@ -86,8 +85,6 @@ void RoboyBehaviorXmlParser::readRoboyBehaviorMetadata( RoboyBehaviorMetadata & 
 bool RoboyBehaviorXmlParser::readRoboyBehavior(RoboyBehavior &behavior) {
     QString & name = behavior.m_metadata.m_sBehaviorName;
 
-    MODEL_DBG << "READ BEHAVIOR " << name;
-
     QString path = m_databasePath + "/" + behavior.m_metadata.m_sBehaviorName + ".xml";
     QFile file( path );
 
@@ -97,7 +94,6 @@ bool RoboyBehaviorXmlParser::readRoboyBehavior(RoboyBehavior &behavior) {
     }
 
     m_xmlReader.setDevice(&file);
-    MODEL_DBG << " - INFO: Read file" << name + ".xml";
 
     while ( m_xmlReader.readNextStartElement() ) {
         if ( m_xmlReader.name() == "roboybehavior" ) {
@@ -110,7 +106,8 @@ bool RoboyBehaviorXmlParser::readRoboyBehavior(RoboyBehavior &behavior) {
         }
     }
 
-    MODEL_DBG << " - INFO: Finishd reading successfully";
+    MODEL_DBG << "Loaded: " << behavior.toString();
+
     return true;
 }
 
@@ -121,9 +118,6 @@ bool RoboyBehaviorXmlParser::readBehaviorHeader( RoboyBehaviorMetadata & metadat
 
         metadata.m_sBehaviorName = m_xmlReader.attributes().value("name").toString();
         metadata.m_ulBehaviorId = m_xmlReader.attributes().value("behaviorid").toString().toULong();
-
-        MODEL_DBG << "\t- Name:\t" << metadata.m_sBehaviorName;
-        MODEL_DBG << "\t- Id:\t" << metadata.m_ulBehaviorId;
 
         return true;
     }
@@ -156,11 +150,6 @@ bool RoboyBehaviorXmlParser::readTrajectories(RoboyBehavior &behavior) {
         }
 
         behavior.m_mapMotorTrajectory.insert(motor_id, trajectory);
-
-        MODEL_DBG << "\t- MOTOR ID: " << motor_id <<
-                        " SampleRate: " << sampleRate <<
-                        " ControlMode: " << controlMode <<
-                        " WAYPOINT COUNT: " << behavior.m_mapMotorTrajectory[motor_id].m_listWaypoints.count();
 
         return true;
     }

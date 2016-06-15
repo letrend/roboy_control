@@ -2,8 +2,13 @@
 // Created by bruh on 30.11.15.
 //
 
+#include <ros/spinner.h>
 #include "RoboyController.h"
+
 #include "DataPool.h"
+#include "MyoController.h"
+#include "ViewController.h"
+#include "XmlModelService.h"
 
 RoboyController::RoboyController() {
     m_pModelService = new XmlModelService();
@@ -30,9 +35,9 @@ RoboyController::~RoboyController() {
 }
 
 void RoboyController::run() {
-    CONTROLLER_DBG << "Controller Thread Started";
-    CONTROLLER_DBG << "ControllerThread-Id is: " << this->currentThreadId();
+    CONTROLLER_DBG << "Controller Thread Started. ID=" << currentThreadId();
 
+    // RoboyController handles only events coming in as signals
     exec();
 
     CONTROLLER_DBG << "Controller Thread Interrupted. Quit.";
@@ -43,17 +48,10 @@ void RoboyController::slotInitializeRoboy() {
     CONTROLLER_DBG << "\n\n";
     CONTROLLER_SUC << "---------------- EVENT: Initialize ------------------";
 
-    if(m_pMyoController != nullptr)
-        delete m_pMyoController;
-
-    m_pMyoController = new MyoController();
+    DataPool::instance().initializeDataPool();
     msleep(1000);
+    DataPool::instance().getMyoMaster()->sendInitializeRequest(DataPool::instance().getMotorControllers());
 
-
-    if(m_pMyoController->handleEvent_initializeControllers())
-        CONTROLLER_SUC << "Initialization Complete";
-    else
-        CONTROLLER_WAR << "Initialization failed.";
     CONTROLLER_SUC << "------------------ /EVENT: Initialize -----------------\n\n";
 }
 
@@ -66,67 +64,83 @@ void RoboyController::slotPreprocessPlan() {
 
 void RoboyController::slotPlayPlan() {
     CONTROLLER_SUC << "---------------- EVENT: Play ------------------";
-    m_pMyoController->handleEvent_playPlanExecution();
+//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
+//     DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PLAYING);
     CONTROLLER_SUC << "<3";
     CONTROLLER_SUC << "------------------ /EVENT: Play -----------------\n\n";
 }
 
 void RoboyController::slotStopPlan() {
     CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
-    m_pMyoController->handleEvent_stopPlanExecution();
+//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
+//    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
 }
 
 void RoboyController::slotPausePlan() {
     CONTROLLER_DBG << "Triggered 'Pause Execution' from View";
-    m_pMyoController->handleEvent_pausePlanExecution();
+//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PAUSE_TRAJECTORY);
+//    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PAUSED);
 }
 
 void RoboyController::slotRecordBehavior() {
     CONTROLLER_DBG << "Triggered 'Record Behavior' from View";
-    m_pMyoController->handleEvent_recordBehavior();
+//    DataPool::getInstance()->setRecorderState(RecorderState::RECORDER_RECORDING);
+//    m_myoMasterTransceiver->startRecording(m_mapControllers, DataPool::getInstance()->getSampleRate());
 }
 
 void RoboyController::slotStopRecording() {
     CONTROLLER_DBG << "Triggered 'Stop Recording' from View";
-    m_pMyoController->handleEvent_stopRecording();
+//    m_myoMasterTransceiver->sendRecordSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
 }
 
 // Private Interface
 void RoboyController::preprocessCurrentRoboyPlan() {
-    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESSING);
+    DataPool::instance().setPlayerState(PlayerState::PLAYER_PREPROCESSING);
 
+    // TODO: Get Metaplan from DataPool
     CONTROLLER_DBG << "Get Metaplan from ViewController";
     RoboyBehaviorMetaplan metaplan = m_pViewController->fromController_getCurrentRoboyPlan();
 
     CONTROLLER_DBG << "Build BehaviorPlan";
-    RoboyBehaviorPlan plan(m_pModelService, metaplan);
+    RoboyBehaviorPlan * plan = new RoboyBehaviorPlan(m_pModelService, metaplan);
+
+    DataPool::instance().setCurrentBehaviorPlan(plan);
 
     // Check Empty (no behavior)
-    if(plan.isEmpty()) {
-        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_EMPTY);
-        return;
-    }
-    // Check if behaviors found in DB
-    if(!plan.isLoadedCompletely()) {
-        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR);
+    if(plan->isEmpty()) {
+        DataPool::instance().setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_EMPTY);
         return;
     }
 
-    // Try to do Flattening
-    if(plan.doFlattening()) {
-        CONTROLLER_SUC << "Flattening of Plan successful";
-        if(m_pMyoController->handleEvent_preprocessRoboyPlan(plan)) {
-            CONTROLLER_SUC << "Plan is ready to be executed on Roboy";
-        } else {
-            CONTROLLER_WAR << "Damn. Something went wrong sending the plan. See MyoController-Log";
-            DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT);
-            return;
+    // Check if behaviors found in DB
+    if(!plan->isLoadedCompletely()) {
+        DataPool::instance().setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR);
+        return;
+    }
+
+    // TODO: Check if Controllers exist
+
+    if(plan->doFlattening()) {
+        MYOCONTROLLER_DBG << "Get Flattended Trajectories";
+
+        QMap<qint32, Trajectory> mapTrajectories = plan->getTrajectories();
+
+        for(qint32 id : mapTrajectories.keys()) {
+            // Check ControlModes
+            if (DataPool::instance().getMotorControlMode(id) != mapTrajectories[id].m_controlMode) {
+                MYOCONTROLLER_WAR << "Controller " << id << " not in respective mode to execute behavior";
+                DataPool::instance().setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_MODE_CONFLICT);
+                return;
+            }
+        }
+
+        for(qint32 id : mapTrajectories.keys()) {
+            IMotorController * controller = DataPool::instance().getMotorController(id);
+            controller->sendTrajectory(mapTrajectories[id]);
         }
     } else {
         CONTROLLER_WAR << "Flattening of Plan failed.";
-        DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_OVERLAPPING);
+        DataPool::instance().setPlayerState(PlayerState::PLAYER_PREPROCESS_FAILED_OVERLAPPING);
         return;
     }
-
-    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
 }

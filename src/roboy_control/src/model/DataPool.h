@@ -6,6 +6,10 @@
 #define ROBOY_CONTROL_DATAPOOL_H
 
 #include "DataTypes.h"
+
+#include "IMotorController.h"
+#include "IMyoMaster.h"
+
 #include <QMutex>
 
 class DataPool : public QObject {
@@ -13,17 +17,24 @@ class DataPool : public QObject {
     Q_OBJECT
 
 private:
-    static DataPool * instance;
-
     QMutex          m_mutexData;
 
     DataPool() { }
 
-private:
     PlayerState     m_playerState = PlayerState::PLAYER_NOT_READY;
     RecorderState   m_recorderState = RecorderState::RECORDER_NOT_READY;
 
-    QMap<qint32, ROSController> m_controllerStates;
+    IMyoMaster * m_myoMaster;
+    QMap<qint32, IMotorController *> m_motorControllers;
+
+    const RoboyBehaviorPlan * m_currentRoboyPlan;
+
+
+
+
+
+
+
 
     // Record Request
     qint32          m_sampleRate = 0;
@@ -33,11 +44,42 @@ private:
     RoboyBehavior  m_recordBehavior;
 
 public:
-    static DataPool * getInstance();
+    static DataPool& instance() {
+        static DataPool _instance;
+        return _instance;
+    }
 
-    void insertController(const ROSController & controller);
+    void initializeDataPool();
 
+    void setMotorControllerState(qint32 id, ControllerState state);
+    ControllerState getMotorControllerState(qint32 id) const;
+
+    ControlMode getMotorControlMode(qint32 id) const;
+
+    IMyoMaster * getMyoMaster() const;
+    const QList<IMotorController *> getMotorControllers() const;
+    IMotorController * getMotorController(qint32 id) const;
+
+    void setPlayerState(PlayerState state);
+    PlayerState getPlayerState() const;
+
+    void setCurrentBehaviorPlan(const RoboyBehaviorPlan * plan);
+
+private:
     void reset();
+    void updateApplicationStates(ControllerState state);
+    bool checkControllersForState(const QList<qint32> idList, ControllerState state) const;
+
+signals:
+    void signalNotifyOnDataPoolReset();
+    void signalNotifyOnControllerStateUpdated(qint32 motorId);
+    void signalNotifyOnPlayerStateUpdated();
+
+
+/*
+
+
+
 
     void setPlayerState(PlayerState state);
     void setRecorderState(RecorderState state);
@@ -64,6 +106,8 @@ signals:
     void signalNotifyOnControllerStateUpdated(qint32 motorId);
     void signalNotifyOnRecordResult();
     void signalNotifyOnDataPoolReset();
+
+*/
 };
 
 #endif //ROBOY_CONTROL_DATAPOOL_H

@@ -5,15 +5,12 @@
 #ifndef ROBOYCONTROL_ROBOYCONTROLLER_H
 #define ROBOYCONTROL_ROBOYCONTROLLER_H
 
-#include "IMasterCommunication.h"
-#include "MyoController.h"
-#include "ROSMasterCommunication.h"
-#include "ViewController.h"
-#include "XmlModelService.h"
-
-#include <QMutex>
+#include <QObject>
 #include <QThread>
-#include <QWaitCondition>
+
+class IModelService;
+class ViewController;
+class MyoController;
 
 class RoboyController : public QThread {
 
@@ -22,7 +19,6 @@ class RoboyController : public QThread {
 private:
     IModelService       * m_pModelService   = nullptr;
     ViewController      * m_pViewController = nullptr;
-
     MyoController       * m_pMyoController  = nullptr;
 
 protected:

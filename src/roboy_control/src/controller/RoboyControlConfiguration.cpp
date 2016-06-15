@@ -1,13 +1,21 @@
 #include "RoboyControlConfiguration.h"
 
-RoboyControlConfiguration::RoboyControlConfiguration() {
+void RoboyControlConfiguration::reloadConfig() {
     readConfig();
 }
 
-void RoboyControlConfiguration::update() {
-    readConfig();
+QString RoboyControlConfiguration::getModelConfig(const QString attributeName) const {
+    if(m_mapModelConfig.contains(attributeName)) {
+        return m_mapModelConfig.value(attributeName);
+    }
+    return QString::null;
 }
 
+const QList<MotorControllerConfig> & RoboyControlConfiguration::getMotorConfig() const {
+    return m_listControllerConfig;
+}
+
+// private interface
 void RoboyControlConfiguration::readConfig() {
     m_listControllerConfig.clear();
     m_mapModelConfig.clear();
@@ -81,26 +89,14 @@ void RoboyControlConfiguration::readControllersConfig() {
             }
 
             if(enable) {
-                ROSController controller;
-                controller.m_id = id;
-                controller.m_controlMode = controlMode;
-                controller.m_state = ControllerState ::UNDEFINED;
-                CONFIG_DBG << "Parsed Controller: " << controller.toString();
-                m_listControllerConfig.append(controller);
+                MotorControllerConfig config;
+                config.id = id;
+                config.controlMode = controlMode;
+                m_listControllerConfig.append(config);
+                CONFIG_DBG << "Read Motor: id=" << config.id << ", controlMode=" << config.controlMode;
             }
         } else {
             m_xmlReader.skipCurrentElement();
         }
     }
-}
-
-QString RoboyControlConfiguration::getModelConfig(const QString attributeName) const {
-    if(m_mapModelConfig.contains(attributeName)) {
-        return m_mapModelConfig.value(attributeName);
-    }
-    return QString::null;
-}
-
-const QList<ROSController> & RoboyControlConfiguration::getControllersConfig() const {
-    return m_listControllerConfig;
 }

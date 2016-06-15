@@ -28,18 +28,18 @@ private:
 
     ros::NodeHandle      m_nodeHandle;
 
-    ros::ServiceServer   m_initializeServer;
+    ros::Subscriber   m_initializeSubscriber;
     ros::ServiceServer   m_recordServer;
 
     ros::Subscriber      m_recordSteeringSubscriber;
 
-    QList<ROSController> m_listControllers;
+    QList<MotorController> m_listControllers;
 
-    bool callbackInitialize(common_utilities::Initialize::Request & req, common_utilities::Initialize::Response & res);
+    void callbackInitialize(const common_utilities::Initialize & msg);
     bool callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res);
     void callbackSteerRecord(const common_utilities::Steer & msg);
 
-    bool startNode(qint32 id, QString nodeName, QString serviceName, ROSController & controller);
+    bool startNode(qint32 id, QString nodeName, QString serviceName, MotorController & controller);
 
 public:
     TestNode();

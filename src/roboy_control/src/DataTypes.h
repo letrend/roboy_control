@@ -10,8 +10,6 @@
 #include <QtQml>
 
 class IModelService;
-class IMasterCommunication;
-class IControllerCommunication;
 
 class PlayerStateClass : public QObject
 {
@@ -98,17 +96,6 @@ struct RoboyBehavior {
     RoboyBehaviorMetadata       m_metadata;
     QMap<qint32, Trajectory>    m_mapMotorTrajectory;
 
-    QString toString() {
-        QString string;
-        string.sprintf("ROBOY BEHAVIOR: "
-                    "%s\tId:%lu\tMotor Count:%i",
-                    m_metadata.m_sBehaviorName.toLatin1().data(),
-                    (unsigned long) m_metadata.m_ulBehaviorId,
-                    m_mapMotorTrajectory.count());
-
-        return string;
-    }
-
     quint64 getDuration() const {
         int maxDuration = 0;
         int currentDuration = 0;
@@ -119,6 +106,17 @@ struct RoboyBehavior {
         }
         return maxDuration;
     }
+
+    QString toString() {
+        QString string;
+        string.sprintf("RoboyBehavior={Id=%lu,Name=%s,Motor-Count=%i}",
+                       (unsigned long) m_metadata.m_ulBehaviorId,
+                       m_metadata.m_sBehaviorName.toLatin1().data(),
+                       m_mapMotorTrajectory.count());
+
+        return string;
+    }
+
 };
 
 struct RoboyBehaviorMetaExecution {
@@ -175,22 +173,6 @@ private:
     bool insertExecution(RoboyBehaviorExecution & execution);
 
     void printMap() const;
-};
-
-struct ROSController {
-    qint32                m_id;
-    ControlMode           m_controlMode = ControlMode::UNDEFINED_CONTROL;
-    ControllerState       m_state = ControllerState::UNDEFINED;
-
-    IControllerCommunication * m_communication = nullptr;
-
-    ~ROSController();
-
-    QString toString() const {
-        QString string;
-        string.sprintf("ROSController: [id:%i][controlMode:%i][state:%i]", m_id, m_controlMode, m_state);
-        return string;
-    }
 };
 
 #endif // DATATYPES_H

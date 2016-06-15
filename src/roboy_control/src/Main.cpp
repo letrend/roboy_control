@@ -38,13 +38,13 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, "roboy_control");
     ros::NodeHandle n;
 
+    ros::AsyncSpinner spinner(10);
+    spinner.start();
+
     QApplication app(argc, argv);
 
     RoboyController controller;
     controller.start();
-
-    //QQmlApplicationEngine engine;
-    //engine.load(QUrl(QStringLiteral("qrc:/mainWindow/MainWindow.qml")));
 
     return app.exec();
 }

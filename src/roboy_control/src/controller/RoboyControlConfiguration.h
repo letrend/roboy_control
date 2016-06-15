@@ -3,18 +3,25 @@
 
 #include "DataTypes.h"
 #include "LogDefines.h"
+
 #include <QFile>
 #include <QProcessEnvironment>
 #include <QXmlStreamReader>
 
 #define CONFIG_FILE_NAME "RoboyControlConfig.xml"
 
+struct MotorControllerConfig {
+    qint32 id;
+    ControlMode controlMode;
+};
+
 class RoboyControlConfiguration {
+
 private:
     QXmlStreamReader m_xmlReader;
 
     QMap<QString, QString> m_mapModelConfig;
-    QList<ROSController> m_listControllerConfig;
+    QList<MotorControllerConfig> m_listControllerConfig;
 
 public:
     static RoboyControlConfiguration& instance() {
@@ -22,12 +29,13 @@ public:
         return _instance;
     }
 
-    RoboyControlConfiguration();
-    void update();
+    void reloadConfig();
     QString getModelConfig(const QString attributeName) const;
-    const QList<ROSController> & getControllersConfig() const;
+    const QList<MotorControllerConfig> & getMotorConfig() const;
 
 private:
+    RoboyControlConfiguration() {};
+
     void readConfig();
     void readModelConfig();
     void readControllersConfig();
