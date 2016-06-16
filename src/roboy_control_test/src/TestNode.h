@@ -36,7 +36,7 @@ private:
     QList<MotorController> m_listControllers;
 
     void callbackInitialize(const common_utilities::Initialize & msg);
-    bool callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res);
+//    bool callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res);
     void callbackSteerRecord(const common_utilities::Steer & msg);
 
     bool startNode(qint32 id, QString nodeName, QString serviceName, MotorController & controller);

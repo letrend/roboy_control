@@ -1,12 +1,5 @@
 #include "ROSMyoMaster.h"
 
-#include "IMotorController.h"
-
-#include "common_utilities/ControllerRequest.h"
-#include "common_utilities/Initialize.h"
-#include "common_utilities/Steer.h"
-#include "common_utilities/Record.h"
-
 //#include "controller_manager_msgs/SwitchController.h"
 //#include "controller_manager_msgs/UnloadController.h"
 
@@ -25,12 +18,23 @@ ROSMyoMaster::ROSMyoMaster() {
 void ROSMyoMaster::sendInitializeRequest(const QList<IMotorController *> initializationList) const {
     TRANSCEIVER_LOG << "Trigger 'Send Initialize'";
 
+    // TODO: make this a counter for whoever is responsible in your crazy architecture (and by crazy I mean suuuuper nice of course)
+    static int idCounter = 1;
+
     common_utilities::Initialize initialize;
     for(IMotorController * motor : initializationList) {
         common_utilities::ControllerRequest request;
+        //request.id = idCounter;
         request.id = motor->getId();
         request.controlmode = motor->getControlMode();
+        char resource[20];
+        sprintf(resource, "motor%d", request.id);
+        request.resource = resource;
+        request.ganglion = 0;
+        request.motor = 0;
         initialize.controllers.push_back(request);
+
+        idCounter++;
     }
 
     m_initializePublisher.publish(initialize);
@@ -104,56 +108,3 @@ void ROSMyoMaster::sendRecordSteeringMessage(SteeringCommand command) const {
     m_recordSteerPublisher.publish(message);
 */
 }
-
-
-
-//void ROSMyoMaster::startControllers(const QList<qint32> & controllers) {
-//    controller_manager_msgs::SwitchController message;
-//
-//    std::vector<std::string> resources;
-//    for(qint8 id : controllers) {
-//        QString name;
-//        name.sprintf("motor%u", id);
-//        resources.push_back(name.toStdString());
-//    }
-//
-//    message.request.start_controllers = resources;
-//    message.request.strictness = 1;
-//
-//    ros::Duration duration(1);
-//    duration.sleep();
-//    m_switchController.call(message);
-//    TRANSCEIVER_LOG << "Start Call returned";
-//}
-
-//void ROSMyoMaster::stopControllers(const QList<qint32> & controllers) {
-//    controller_manager_msgs::SwitchController message;
-//
-//    std::vector<std::string> resources;
-//    for(qint8 id : controllers) {
-//        QString name;
-//        name.sprintf("motor%u", id);
-//        resources.push_back(name.toStdString());
-//    }
-//
-//    message.request.stop_controllers = resources;
-//    message.request.strictness = 1;
-//
-//    ros::Duration duration(1);
-//    duration.sleep();
-//    m_switchController.call(message);
-//    TRANSCEIVER_LOG << "Start Call returned";
-//}
-
-
-//void ROSMyoMaster::unloadControllers(const QList<qint32> & controllers) {
-//    controller_manager_msgs::UnloadController message;
-//
-//    for(qint8 id : controllers) {
-//        QString name;
-//        name.sprintf("motor%u", id);
-//        message.request.name = name.toStdString();
-//        m_unloadController.call(message);
-//    }
-//    TRANSCEIVER_LOG << "Unload Calls returned";
-//}

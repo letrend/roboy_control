@@ -31,6 +31,8 @@ public:
     virtual void startRecording(const QMap<qint32, IMotorController *> controllers, qint32 sampleRate) const = 0;
     virtual void sendRecordSteeringMessage(const SteeringCommand command) const = 0;
 
+    uint idCounter = 0;
+
 //    virtual void startControllers(const QList<qint32> & controllers) = 0;
 //    virtual void stopControllers(const QList<qint32> & contollers) = 0;
 };

@@ -1,7 +1,7 @@
 <RoboyControlConfiguration>
 	<DataModel
 			databaseType="xml"
-			databasePath="/Users/PhilippBrunenberg/workspace/roboy_control/src/roboy_control/database"/>
+			databasePath="/home/letrend/workspace/roboy_control/src/roboy_control/database"/>
 	<Controllers>
 		<Controller id="1" controlmode="position">true</Controller>
 		<Controller id="2" controlmode="position">true</Controller>

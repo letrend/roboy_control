@@ -5,6 +5,13 @@
 
 #include "ros/ros.h"
 
+#include "IMotorController.h"
+
+#include "common_utilities/ControllerRequest.h"
+#include "common_utilities/Initialize.h"
+#include "common_utilities/Steer.h"
+#include "common_utilities/Record.h"
+
 class ROSMyoMaster : public IMyoMaster {
 
 private:
@@ -26,9 +33,6 @@ public:
     void sendSteeringMessage(const SteeringCommand command) const;
     void startRecording(const QMap<qint32, IMotorController *> controllers, qint32 sampleRate) const;
     void sendRecordSteeringMessage(const SteeringCommand command) const;
-
-//    void startControllers(const QList<qint32> & controllers);
-//    void stopControllers(const QList<qint32> & contollers);
 };
 
 #endif // ROSMESSAGETRANSCEIVERSERVICE_H

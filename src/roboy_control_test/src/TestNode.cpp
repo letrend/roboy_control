@@ -29,7 +29,7 @@ TestNode::TestNode() {
 //    ros::AdvertiseServiceOptions options = ros::AdvertiseServiceOptions::create("/roboy/steer_record", &TestNode::callbackRecord, ros::VoidConstPtr(), queue);
 //    m_recordServer = m_nodeHandle.advertiseService(options);
 
-    m_recordServer = m_nodeHandle.advertiseService("/roboy/record", &TestNode::callbackRecord, this);
+//    m_recordServer = m_nodeHandle.advertiseService("/roboy/record", &TestNode::callbackRecord, this);
 }
 
 TestNode::~TestNode() {
@@ -66,49 +66,49 @@ void TestNode::callbackInitialize(const common_utilities::Initialize & msg){
     }
 }
 
-bool TestNode::callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res) {
-    m_bInterrupted = false;
-
-    qCritical() << "Start Recording";
-
-    ros::Duration duration(20);
-
-    common_utilities::Trajectory trajectory1;
-    common_utilities::Trajectory trajectory2;
-
-    trajectory1.id = 1;
-    trajectory2.id = 2;
-    trajectory1.samplerate = 110;
-    trajectory2.samplerate = 110;
-
-    res.trajectories.push_back(trajectory1);
-    res.trajectories.push_back(trajectory2);
-
-    double v1 = 0.0;
-    double v2 = 100.0;
-
-    for(int i = 0; i < 20; i++) {
-        res.trajectories[0].waypoints.push_back(v1);
-        res.trajectories[1].waypoints.push_back(v2);
-        v1 += 1;
-        v2 += 2;
-    }
-
-    duration.sleep();
-
-//    while(!m_bInterrupted) {
-//        qDebug() << "Wait.";
-//        duration.sleep();
+//bool TestNode::callbackRecord(common_utilities::Record::Request & req, common_utilities::Record::Response & res) {
+//    m_bInterrupted = false;
+//
+//    qCritical() << "Start Recording";
+//
+//    ros::Duration duration(20);
+//
+//    common_utilities::Trajectory trajectory1;
+//    common_utilities::Trajectory trajectory2;
+//
+//    trajectory1.id = 1;
+//    trajectory2.id = 2;
+//    trajectory1.samplerate = 110;
+//    trajectory2.samplerate = 110;
+//
+//    res.trajectories.push_back(trajectory1);
+//    res.trajectories.push_back(trajectory2);
+//
+//    double v1 = 0.0;
+//    double v2 = 100.0;
+//
+//    for(int i = 0; i < 20; i++) {
 //        res.trajectories[0].waypoints.push_back(v1);
 //        res.trajectories[1].waypoints.push_back(v2);
 //        v1 += 1;
 //        v2 += 2;
 //    }
-
-//    qDebug() << "Return " << res.trajectories.at(0).waypoints.size() << " Waypoints";
-
-    return true;
-}
+//
+//    duration.sleep();
+//
+////    while(!m_bInterrupted) {
+////        qDebug() << "Wait.";
+////        duration.sleep();
+////        res.trajectories[0].waypoints.push_back(v1);
+////        res.trajectories[1].waypoints.push_back(v2);
+////        v1 += 1;
+////        v2 += 2;
+////    }
+//
+////    qDebug() << "Return " << res.trajectories.at(0).waypoints.size() << " Waypoints";
+//
+//    return true;
+//}
 
 void TestNode::callbackSteerRecord(const common_utilities::Steer & msg) {
     qWarning() << "Received Record Steering Message";
