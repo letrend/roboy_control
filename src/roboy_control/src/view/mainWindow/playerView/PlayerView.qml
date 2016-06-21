@@ -41,7 +41,7 @@ View {
 
             Button {
                 elevation : 1
-                enabled   : false
+                enabled   : true
                 id        : playButton
                 onClicked : cpp_PlayerView.playButtonClicked()
 
@@ -53,7 +53,7 @@ View {
 
             Button {
                 elevation : 1
-                enabled   : false
+                enabled   : true
                 id        : pauseButton
                 onClicked : cpp_PlayerView.pauseButtonClicked()
 
@@ -65,7 +65,7 @@ View {
 
             Button {
                 elevation : 1
-                enabled   : false
+                enabled   : true
                 id        : stopButton
                 onClicked : cpp_PlayerView.stopButtonClicked()
 
@@ -77,7 +77,7 @@ View {
 
             Button {
                 elevation : 1
-                enabled   : false
+                enabled   : true
                 id        : preprocessButton
                 onClicked : cpp_PlayerView.preprocessButtonClicked()
 
@@ -410,30 +410,30 @@ View {
     function setupPlayerState() {
         switch(cpp_PlayerView.getCurrentPlayerState()) {
             case PlayerState.PLAYER_NOT_READY:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
-                preprocessButton.enabled = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
+                preprocessButton.enabled = true
                 statusLabel.text         = "Player Not Ready"
                 break;
             case PlayerState.PLAYER_READY:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Ready"
                 break;
             case PlayerState.PLAYER_PREPROCESSING:
                 playButton.enabled       = true
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
-                preprocessButton.enabled = false
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
+                preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocessing"
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_EMPTY:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Empty Timeline"
                 showError("Error while processing", 
@@ -441,9 +441,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_LOAD_BEHAVIOR:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Loading Behavior Failed"
                 showError("Error while processing", 
@@ -451,9 +451,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_MODE_CONFLICT:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Conflict"
                 showError("Error while processing", 
@@ -461,9 +461,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_CONTROLLER_STATE_CONFLICT:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Controller State Conflict"
                 showError("Error while processing", 
@@ -471,9 +471,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_SAMPLERATE_CONFLICT:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Samplerate Conflict"
                 showError("Error while processing", 
@@ -481,9 +481,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_OVERLAPPING:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Overlapping Behaviors"
                 showError("Error while processing", 
@@ -491,9 +491,9 @@ View {
                           "ok")
                 break;
             case PlayerState.PLAYER_PREPROCESS_FAILED_COMMUNICATION_TIMEOUT:
-                playButton.enabled       = false
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                playButton.enabled       = true
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Preprocess Failed: Communication Timeout"
                 showError("Error while processing", 
@@ -502,20 +502,20 @@ View {
                 break;
             case PlayerState.PLAYER_PREPROCESS_SUCCEEDED:
                 playButton.enabled       = true
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Preprocess Succeeded"
                 break;
             case PlayerState.PLAYER_TRAJECTORY_READY:
                 playButton.enabled       = true
-                pauseButton.enabled      = false
-                stopButton.enabled       = false
+                pauseButton.enabled      = true
+                stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Trajectory Ready"
                 break;
             case PlayerState.PLAYER_PLAYING:
-                playButton.enabled       = false
+                playButton.enabled       = true
                 pauseButton.enabled      = true
                 stopButton.enabled       = true
                 preprocessButton.enabled = true
@@ -523,7 +523,7 @@ View {
                 break;
             case PlayerState.PLAYER_PAUSED:
                 playButton.enabled       = true
-                pauseButton.enabled      = false
+                pauseButton.enabled      = true
                 stopButton.enabled       = true
                 preprocessButton.enabled = true
                 statusLabel.text         = "Player Paused"

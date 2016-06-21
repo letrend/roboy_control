@@ -10,9 +10,6 @@ ROSMyoMaster::ROSMyoMaster() {
 
 //    m_recordClient = m_nodeHandle.serviceClient<common_utilities::Record>("/roboy/record");
 //    m_recordSteerPublisher = m_nodeHandle.advertise<common_utilities::Steer>("/roboy/steer_record", 1000);
-
-//    m_switchController = m_nodeHandle.serviceClient<controller_manager_msgs::SwitchController>("/controller_manager/switch_controller");
-//    m_unloadController = m_nodeHandle.serviceClient<controller_manager_msgs::UnloadController>("/controller_manager/unload_controller");
 }
 
 void ROSMyoMaster::sendInitializeRequest(const QList<IMotorController *> initializationList) const {

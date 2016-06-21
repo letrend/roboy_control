@@ -64,7 +64,7 @@ void RoboyController::slotPreprocessPlan() {
 
 void RoboyController::slotPlayPlan() {
     CONTROLLER_SUC << "---------------- EVENT: Play ------------------";
-//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
+    DataPool::instance().getMyoMaster()->sendSteeringMessage(SteeringCommand::PLAY_TRAJECTORY);
 //     DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PLAYING);
     CONTROLLER_SUC << "<3";
     CONTROLLER_SUC << "------------------ /EVENT: Play -----------------\n\n";
@@ -72,13 +72,13 @@ void RoboyController::slotPlayPlan() {
 
 void RoboyController::slotStopPlan() {
     CONTROLLER_DBG << "Triggered 'Stop Execution' from View";
-//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
+    DataPool::instance().getMyoMaster()->sendSteeringMessage(SteeringCommand::STOP_TRAJECTORY);
 //    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_TRAJECTORY_READY);
 }
 
 void RoboyController::slotPausePlan() {
     CONTROLLER_DBG << "Triggered 'Pause Execution' from View";
-//    m_myoMasterTransceiver->sendSteeringMessage(SteeringCommand::PAUSE_TRAJECTORY);
+    DataPool::instance().getMyoMaster()->sendSteeringMessage(SteeringCommand::PAUSE_TRAJECTORY);
 //    DataPool::getInstance()->setPlayerState(PlayerState::PLAYER_PAUSED);
 }
 
