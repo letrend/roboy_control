@@ -1,14 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>mainWindow/MainWindow.qml</file>
-	<file>mainWindow/editorView/EditorView.qml</file>
+	    <file>mainWindow/editorView/EditorView.qml</file>
         <file>mainWindow/playerView/PlayerView.qml</file>
         <file>mainWindow/playerView/multiLaneView/MultiLaneView.qml</file>
         <file>mainWindow/playerView/multiLaneView/MultiLaneViewLane.qml</file>
         <file>mainWindow/playerView/multiLaneView/MultiLaneViewItem.qml</file>
         <file>mainWindow/playerView/dialogs/AddBehaviorDialog.qml</file>
         <file>mainWindow/recorderView/RecorderView.qml</file>
-	<file>mainWindow/roboyView/RoboyView.qml</file>
+	    <file>mainWindow/roboyView/RoboyView.qml</file>
+        <file>mainWindow/debugView/DebugView.qml</file>
         <file>mainWindow/settingsView/SettingsView.qml</file>
         <file>mainWindow/settingsView/settingsItems/GeneralSettings.qml</file>
         <file>mainWindow/settingsView/settingsItems/ThirdPartySettings.qml</file>

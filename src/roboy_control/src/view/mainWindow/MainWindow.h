@@ -11,12 +11,14 @@
 #include "playerView/PlayerView.h"
 #include "recorderView/RecorderView.h"
 #include "roboyView/RoboyView.h"
+#include "debugView/DebugView.h"
 
 class ViewController;
 class EditorView;
 class PlayerView;
 class RecorderView;
 class RoboyView;
+class DebugView;
 
 class MainWindow : public QObject, public IObserver {
     
@@ -45,7 +47,7 @@ private:
     PlayerView     * m_pPlayerView;
     RecorderView   * m_pRecorderView;
     RoboyView      * m_pRoboyView;
-
+    DebugView      * m_pDebugView;
 };
 
 #endif // MAINWINDOW_H

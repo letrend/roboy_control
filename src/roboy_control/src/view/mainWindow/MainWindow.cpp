@@ -12,12 +12,14 @@ MainWindow::MainWindow(IModelService *pModelService, ViewController * pViewContr
     m_pPlayerView   = new PlayerView   (pModelService, pViewController, pAppEngine);
     m_pRecorderView = new RecorderView (pModelService, pViewController, pAppEngine);
     m_pRoboyView    = new RoboyView    (pModelService, pViewController, pAppEngine);
+    m_pDebugView    = new DebugView    (pModelService, pViewController, pAppEngine);
 
     QQmlContext * pQmlContext = pAppEngine->rootContext();
     pQmlContext->setContextProperty("cpp_EditorView",   m_pEditorView  );
     pQmlContext->setContextProperty("cpp_PlayerView",   m_pPlayerView  );
     pQmlContext->setContextProperty("cpp_RecorderView", m_pRecorderView);
     pQmlContext->setContextProperty("cpp_RoboyView",    m_pRoboyView   );
+    pQmlContext->setContextProperty("cpp_DebugView",    m_pDebugView   );
 }
 
 /**
@@ -28,6 +30,7 @@ MainWindow::~MainWindow() {
     delete m_pPlayerView;
     delete m_pRecorderView;
     delete m_pRoboyView;
+    delete m_pDebugView;
 }
 
 /**
@@ -38,6 +41,7 @@ void MainWindow::notify() {
     m_pPlayerView->notify();
     m_pRecorderView->notify();
     m_pRoboyView->notify();
+    m_pDebugView->notify();
 }
 
 /**

@@ -5,6 +5,7 @@ import "./editorView"
 import "./playerView"
 import "./recorderView"
 import "./roboyView"
+import "./debugView"
 
 ApplicationWindow {
 
@@ -61,6 +62,14 @@ ApplicationWindow {
             title : "Recorder"
 
             RecorderView {
+
+            }
+        }
+
+        Tab {
+            title : "Debug"
+
+            DebugView {
 
             }
         }
