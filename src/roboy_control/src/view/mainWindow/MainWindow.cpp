@@ -69,6 +69,7 @@ void MainWindow::controllerStatusUpdated(qint32 motorId, ControllerState state) 
     m_pPlayerView->controllerStatusUpdated(motorId, state);
     m_pRecorderView->controllerStatusUpdated(motorId, state);
     m_pRoboyView->controllerStatusUpdated(motorId, state);
+    m_pDebugView->controllerStatusUpdated(motorId, state);
 }
 
 /**
