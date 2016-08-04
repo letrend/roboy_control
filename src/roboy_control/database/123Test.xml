@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<roboybehavior name="123Test" behaviorid="200">
-    <trajectory motorid="0" controlmode="1" samplerate="100">
-        <waypointlist>0,0.01,0.02,0.03,0.04,0.05,0,0.01,0.02,0.03,0.04,0.05,0,0.01,0.02,0.03,0.04,0.05,0,0.01,0.02,0.03,0.04,0.05,0,0.01,0.02,0.03,0.04,0.05,0,0.01,0.02,0.03,0.04,0.05,0</waypointlist>
-    </trajectory>
-</roboybehavior>
